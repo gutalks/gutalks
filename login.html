@@ -1,3 +1,4 @@
+```html
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -83,10 +84,16 @@
             opacity: 0.9;
         }
 
+        button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
         #mensagem {
             margin-top: 20px;
             text-align: center;
             font-size: 14px;
+            min-height: 20px;
         }
 
         .voltar {
@@ -95,6 +102,10 @@
             margin-top: 25px;
             color: #163075;
             text-decoration: none;
+        }
+
+        .voltar:hover {
+            text-decoration: underline;
         }
     </style>
 </head>
@@ -117,6 +128,7 @@
                 type="email"
                 id="email"
                 placeholder="Digite seu e-mail"
+                autocomplete="email"
                 required
             >
 
@@ -126,10 +138,11 @@
                 type="password"
                 id="senha"
                 placeholder="Digite sua senha"
+                autocomplete="current-password"
                 required
             >
 
-            <button type="submit">
+            <button type="submit" id="loginButton">
                 Entrar
             </button>
 
@@ -143,20 +156,64 @@
 
     </div>
 
+    <!-- Biblioteca oficial do Supabase -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <!-- Nossa configuração do Supabase -->
+    <script src="js/supabase.js"></script>
+
     <script>
-        <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="js/supabase.js"></script>
-        document.getElementById("loginForm").addEventListener("submit", function(event) {
+        const loginForm = document.getElementById("loginForm");
+        const loginButton = document.getElementById("loginButton");
+        const mensagem = document.getElementById("mensagem");
+
+        loginForm.addEventListener("submit", async function(event) {
+
             event.preventDefault();
 
-            const mensagem = document.getElementById("mensagem");
+            const email = document.getElementById("email").value.trim();
+            const senha = document.getElementById("senha").value;
 
+            mensagem.textContent = "Entrando...";
             mensagem.style.color = "#163075";
-            mensagem.textContent = "Conectando...";
-            
-            // O login do Supabase será conectado na próxima etapa.
+
+            loginButton.disabled = true;
+            loginButton.textContent = "Entrando...";
+
+            try {
+
+                const { data, error } =
+                    await supabaseClient.auth.signInWithPassword({
+                        email: email,
+                        password: senha
+                    });
+
+                if (error) {
+                    throw error;
+                }
+
+                mensagem.textContent = "Login realizado com sucesso!";
+                mensagem.style.color = "#163075";
+
+                // Redireciona para a área do aluno
+                window.location.href = "aluno.html";
+
+            } catch (error) {
+
+                console.error("Erro no login:", error);
+
+                mensagem.textContent =
+                    "E-mail ou senha incorretos.";
+
+                mensagem.style.color = "#c82623";
+
+                loginButton.disabled = false;
+                loginButton.textContent = "Entrar";
+            }
+
         });
     </script>
 
 </body>
 </html>
+```
