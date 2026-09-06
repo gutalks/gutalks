@@ -343,8 +343,20 @@
                 return;
             }
 
-            document.getElementById("emailAluno").textContent =
-                session.user.email;
+            const { data: aluno, error } = await supabaseClient
+    .from("alunos")
+    .select("nome")
+    .eq("user_id", session.user.id)
+    .single();
+
+if (error) {
+    console.error("Erro ao buscar aluno:", error);
+    document.getElementById("emailAluno").textContent =
+        session.user.email;
+} else {
+    document.getElementById("emailAluno").textContent =
+        aluno.nome;
+}
         }
 
 
