@@ -22,7 +22,6 @@
             color: #163075;
         }
 
-        /* CABEÇALHO */
         header {
             background: #163075;
             color: white;
@@ -59,7 +58,6 @@
             font-weight: bold;
         }
 
-        /* CONTEÚDO */
         main {
             max-width: 1150px;
             margin: 0 auto;
@@ -80,7 +78,6 @@
             font-size: 16px;
         }
 
-        /* CARDS */
         .cards {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
@@ -126,7 +123,6 @@
             font-weight: bold;
         }
 
-        /* DESTAQUE */
         .progress-card {
             border-top: 5px solid #c82623;
         }
@@ -151,7 +147,6 @@
             color: #666;
         }
 
-        /* RODAPÉ */
         footer {
             text-align: center;
             padding: 30px 20px;
@@ -159,7 +154,6 @@
             font-size: 14px;
         }
 
-        /* CELULAR */
         @media (max-width: 700px) {
 
             header {
@@ -212,7 +206,7 @@
 
         <section class="welcome">
 
-            <h1>
+            <h1 id="nomeAluno">
                 Olá, aluno! 👋
             </h1>
 
@@ -224,7 +218,6 @@
 
 
         <section class="cards">
-
 
             <div class="card">
 
@@ -316,7 +309,6 @@
 
             </div>
 
-
         </section>
 
     </main>
@@ -333,30 +325,44 @@
 
         async function verificarAluno() {
 
-            const { data: { session } } =
+            const { data: { session }, error: sessionError } =
                 await supabaseClient.auth.getSession();
 
-            if (!session) {
+            if (sessionError || !session) {
 
                 window.location.href = "login.html";
 
                 return;
             }
 
-            const { data: aluno, error } = await supabaseClient
-    .from("alunos")
-    .select("nome")
-    .eq("user_id", session.user.id)
-    .single();
 
-if (error) {
-    console.error("Erro ao buscar aluno:", error);
-    document.getElementById("emailAluno").textContent =
-        session.user.email;
-} else {
-    document.getElementById("emailAluno").textContent =
-        aluno.nome;
-}
+            const { data: aluno, error: alunoError } =
+                await supabaseClient
+                    .from("alunos")
+                    .select("nome, email")
+                    .eq("user_id", session.user.id)
+                    .single();
+
+
+            if (alunoError) {
+
+                console.error("Erro ao buscar aluno:", alunoError);
+
+                document.getElementById("nomeAluno").textContent =
+                    "Olá, aluno! 👋";
+
+                document.getElementById("emailAluno").textContent =
+                    session.user.email;
+
+                return;
+            }
+
+
+            document.getElementById("nomeAluno").textContent =
+                "Olá, " + aluno.nome + "! 👋";
+
+            document.getElementById("emailAluno").textContent =
+                aluno.email;
         }
 
 
