@@ -128,6 +128,11 @@
             color: white;
         }
 
+        .avaliacoes button:disabled {
+            opacity: 0.6;
+            cursor: wait;
+        }
+
         .again {
             background: #c82623;
         }
@@ -154,6 +159,10 @@
             padding: 30px;
             font-size: 18px;
             color: #666;
+        }
+
+        .erro {
+            color: #c82623;
         }
 
         @media (max-width: 600px) {
@@ -254,7 +263,7 @@
                 console.error("Erro ao buscar flashcards:", error);
 
                 document.getElementById("conteudo").innerHTML = `
-                    <div class="mensagem">
+                    <div class="mensagem erro">
                         Não foi possível carregar os flashcards.
                     </div>
                 `;
@@ -322,25 +331,25 @@
 
                         <button
                             class="again"
-                            onclick="proximoCard()">
+                            onclick="avaliarCard('again')">
                             Again
                         </button>
 
                         <button
                             class="hard"
-                            onclick="proximoCard()">
+                            onclick="avaliarCard('hard')">
                             Hard
                         </button>
 
                         <button
                             class="good"
-                            onclick="proximoCard()">
+                            onclick="avaliarCard('good')">
                             Good
                         </button>
 
                         <button
                             class="easy"
-                            onclick="proximoCard()">
+                            onclick="avaliarCard('easy')">
                             Easy
                         </button>
 
@@ -366,6 +375,170 @@
             document.getElementById("verso").style.display = "block";
 
             document.getElementById("avaliacoes").style.display = "flex";
+
+        }
+
+
+        async function avaliarCard(avaliacao) {
+
+            const card = flashcards[indiceAtual];
+
+
+            // Desabilitar os botões durante a atualização
+            const botoes =
+                document.querySelectorAll(".avaliacoes button");
+
+            botoes.forEach(botao => {
+                botao.disabled = true;
+            });
+
+
+            // Valores atuais
+            let intervalo =
+                Number(card.intervalo) || 0;
+
+            let facilidade =
+                Number(card.facilidade) || 2.5;
+
+            let revisoes =
+                Number(card.revisoes) || 0;
+
+
+            // Calcular novo intervalo
+            if (avaliacao === "again") {
+
+                intervalo = 0.007;
+
+                facilidade = Math.max(
+                    1.3,
+                    facilidade - 0.20
+                );
+
+            }
+
+
+            else if (avaliacao === "hard") {
+
+                if (intervalo <= 0) {
+
+                    intervalo = 1;
+
+                } else {
+
+                    intervalo = intervalo * 1.2;
+
+                }
+
+                facilidade = Math.max(
+                    1.3,
+                    facilidade - 0.15
+                );
+
+            }
+
+
+            else if (avaliacao === "good") {
+
+                if (intervalo <= 0) {
+
+                    intervalo = 1;
+
+                } else {
+
+                    intervalo = intervalo * facilidade;
+
+                }
+
+            }
+
+
+            else if (avaliacao === "easy") {
+
+                if (intervalo <= 0) {
+
+                    intervalo = 4;
+
+                } else {
+
+                    intervalo =
+                        intervalo *
+                        facilidade *
+                        1.3;
+
+                }
+
+                facilidade = Math.min(
+                    3.0,
+                    facilidade + 0.15
+                );
+
+            }
+
+
+            // Limitar o intervalo máximo a 365 dias
+            intervalo = Math.min(
+                intervalo,
+                365
+            );
+
+
+            // Aumentar número de revisões
+            revisoes++;
+
+
+            // Calcular próxima revisão
+            const proximaRevisao =
+                new Date(
+                    Date.now() +
+                    intervalo * 24 * 60 * 60 * 1000
+                );
+
+
+            // Atualizar no Supabase
+            const { error } =
+                await supabaseClient
+                    .from("flashcards")
+                    .update({
+                        intervalo: intervalo,
+                        facilidade: facilidade,
+                        revisoes: revisoes,
+                        proxima_revisao: proximaRevisao.toISOString()
+                    })
+                    .eq("id", card.id);
+
+
+            if (error) {
+
+                console.error(
+                    "Erro ao atualizar flashcard:",
+                    error
+                );
+
+
+                alert(
+                    "Não foi possível salvar sua revisão. Tente novamente."
+                );
+
+
+                botoes.forEach(botao => {
+                    botao.disabled = false;
+                });
+
+                return;
+
+            }
+
+
+            // Atualizar o card localmente
+            card.intervalo = intervalo;
+            card.facilidade = facilidade;
+            card.revisoes = revisoes;
+            card.proxima_revisao =
+                proximaRevisao.toISOString();
+
+
+            // Ir para o próximo card
+            proximoCard();
 
         }
 
