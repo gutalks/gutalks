@@ -277,13 +277,15 @@
             // BUSCAR SOMENTE OS FLASHCARDS DO ALUNO
             // ==========================================
 
-            const { data, error } =
-                await supabaseClient
-                    .from("flashcards")
-                    .select("*")
-                    .eq("user_id", usuarioLogado.id)
-                    .order("id", { ascending: true });
+const agora = new Date().toISOString();
 
+const { data, error } =
+    await supabaseClient
+        .from("flashcards")
+        .select("*")
+        .eq("user_id", usuarioLogado.id)
+        .lte("proxima_revisao", agora)
+        .order("id", { ascending: true });
 
             // Mostrar resultado no console
             console.log(
