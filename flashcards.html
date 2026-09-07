@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Flashcards | Gutalks</title>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="js/supabase.js"></script>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #f5f7fb;
+            color: #163075;
+        }
+
+        header {
+            background: #163075;
+            color: white;
+            padding: 20px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        header h1 {
+            font-size: 24px;
+        }
+
+        .voltar {
+            color: white;
+            text-decoration: none;
+            font-size: 15px;
+        }
+
+        main {
+            max-width: 900px;
+            margin: 50px auto;
+            padding: 20px;
+            text-align: center;
+        }
+
+        h2 {
+            font-size: 32px;
+            margin-bottom: 10px;
+        }
+
+        .descricao {
+            color: #666;
+            margin-bottom: 35px;
+        }
+
+        .flashcard {
+            background: white;
+            max-width: 700px;
+            min-height: 300px;
+            margin: 0 auto 25px;
+            border-radius: 16px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+            padding: 50px 30px;
+
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .label {
+            font-size: 14px;
+            color: #888;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .frente {
+            font-size: 30px;
+            font-weight: bold;
+            color: #163075;
+            margin-bottom: 30px;
+        }
+
+        .verso {
+            font-size: 24px;
+            color: #333;
+            margin-top: 20px;
+            display: none;
+        }
+
+        .mostrar {
+            background: #163075;
+            color: white;
+            border: none;
+            padding: 14px 30px;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        .mostrar:hover {
+            opacity: 0.9;
+        }
+
+        .avaliacoes {
+            display: none;
+            gap: 10px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 25px;
+        }
+
+        .avaliacoes button {
+            border: none;
+            padding: 12px 22px;
+            border-radius: 8px;
+            font-size: 15px;
+            cursor: pointer;
+            color: white;
+        }
+
+        .again {
+            background: #c82623;
+        }
+
+        .hard {
+            background: #d97900;
+        }
+
+        .good {
+            background: #163075;
+        }
+
+        .easy {
+            background: #218838;
+        }
+
+        .contador {
+            margin-top: 20px;
+            color: #777;
+            font-size: 14px;
+        }
+
+        .mensagem {
+            padding: 30px;
+            font-size: 18px;
+            color: #666;
+        }
+
+        @media (max-width: 600px) {
+
+            header {
+                padding: 18px 20px;
+            }
+
+            main {
+                margin: 30px auto;
+            }
+
+            h2 {
+                font-size: 26px;
+            }
+
+            .frente {
+                font-size: 24px;
+            }
+
+            .verso {
+                font-size: 20px;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+    <header>
+
+        <h1>GUTALKS</h1>
+
+        <a href="aluno.html" class="voltar">
+            ← Voltar
+        </a>
+
+    </header>
+
+
+    <main>
+
+        <h2>🧠 Flashcards</h2>
+
+        <p class="descricao">
+            Revise o conteúdo das suas aulas e fortaleça sua memória.
+        </p>
+
+
+        <div id="conteudo">
+
+            <div class="mensagem">
+                Carregando flashcards...
+            </div>
+
+        </div>
+
+    </main>
+
+
+    <script>
+
+        let flashcards = [];
+        let indiceAtual = 0;
+
+
+        async function carregarFlashcards() {
+
+            // Verificar login
+            const {
+                data: { session },
+                error: sessionError
+            } = await supabaseClient.auth.getSession();
+
+
+            if (sessionError || !session) {
+
+                window.location.href = "login.html";
+                return;
+
+            }
+
+
+            // Buscar flashcards
+            const { data, error } =
+                await supabaseClient
+                    .from("flashcards")
+                    .select("*")
+                    .order("id", { ascending: true });
+
+
+            if (error) {
+
+                console.error("Erro ao buscar flashcards:", error);
+
+                document.getElementById("conteudo").innerHTML = `
+                    <div class="mensagem">
+                        Não foi possível carregar os flashcards.
+                    </div>
+                `;
+
+                return;
+
+            }
+
+
+            flashcards = data || [];
+
+
+            if (flashcards.length === 0) {
+
+                document.getElementById("conteudo").innerHTML = `
+                    <div class="mensagem">
+                        Ainda não existem flashcards cadastrados.
+                    </div>
+                `;
+
+                return;
+
+            }
+
+
+            mostrarFlashcard();
+
+        }
+
+
+        function mostrarFlashcard() {
+
+            const card = flashcards[indiceAtual];
+
+
+            document.getElementById("conteudo").innerHTML = `
+
+                <div class="flashcard">
+
+                    <div class="label">
+                        Flashcard
+                    </div>
+
+                    <div class="frente">
+                        ${card.frente}
+                    </div>
+
+                    <button
+                        class="mostrar"
+                        onclick="mostrarResposta()">
+                        Mostrar resposta
+                    </button>
+
+                    <div
+                        id="verso"
+                        class="verso">
+
+                        ${card.verso}
+
+                    </div>
+
+                    <div
+                        id="avaliacoes"
+                        class="avaliacoes">
+
+                        <button
+                            class="again"
+                            onclick="proximoCard()">
+                            Again
+                        </button>
+
+                        <button
+                            class="hard"
+                            onclick="proximoCard()">
+                            Hard
+                        </button>
+
+                        <button
+                            class="good"
+                            onclick="proximoCard()">
+                            Good
+                        </button>
+
+                        <button
+                            class="easy"
+                            onclick="proximoCard()">
+                            Easy
+                        </button>
+
+                    </div>
+
+                </div>
+
+                <div class="contador">
+
+                    Card ${indiceAtual + 1}
+                    de
+                    ${flashcards.length}
+
+                </div>
+
+            `;
+
+        }
+
+
+        function mostrarResposta() {
+
+            document.getElementById("verso").style.display = "block";
+
+            document.getElementById("avaliacoes").style.display = "flex";
+
+        }
+
+
+        function proximoCard() {
+
+            indiceAtual++;
+
+
+            if (indiceAtual >= flashcards.length) {
+
+                indiceAtual = 0;
+
+            }
+
+
+            mostrarFlashcard();
+
+        }
+
+
+        carregarFlashcards();
+
+    </script>
+
+</body>
+
+</html>
