@@ -24,6 +24,7 @@
             color: #163075;
         }
 
+
         /* ==========================================
            HEADER
         ========================================== */
@@ -218,7 +219,7 @@
 
 
         /* ==========================================
-           PROGRAMAÇÃO DA SEMANA
+           RESUMO DA SEMANA
         ========================================== */
 
         .semana-resumo {
@@ -255,6 +256,11 @@
             font-size: 14px;
             color: #666;
         }
+
+
+        /* ==========================================
+           PROGRAMACAO DA SEMANA
+        ========================================== */
 
         .semana-lista {
             display: grid;
@@ -605,11 +611,6 @@
             background: #218838;
         }
 
-        .modal-botao.cinza {
-            background: #e9edf7;
-            color: #163075;
-        }
-
 
         /* ==========================================
            FOOTER
@@ -755,6 +756,7 @@
 
             </p>
 
+
             <div
                 id="atividadesHoje"
                 class="atividades-hoje">
@@ -838,8 +840,6 @@
         <section class="cards">
 
 
-            <!-- AULAS -->
-
             <div class="card">
 
                 <div class="icon">
@@ -865,8 +865,6 @@
 
             </div>
 
-
-            <!-- FLASHCARDS -->
 
             <div class="card flashcards-card">
 
@@ -894,8 +892,6 @@
             </div>
 
 
-            <!-- EXERCÍCIOS -->
-
             <div class="card">
 
                 <div class="icon">
@@ -918,8 +914,6 @@
             </div>
 
 
-            <!-- MATERIAIS -->
-
             <div class="card">
 
                 <div class="icon">
@@ -941,8 +935,6 @@
 
             </div>
 
-
-            <!-- PROGRESSO -->
 
             <div class="card progress-card">
 
@@ -1061,16 +1053,14 @@
 
     <script>
 
+
         // ==========================================
-        // USUÁRIO LOGADO
+        // USUÁRIO E SEMANA ATUAL
         // ==========================================
 
         let usuarioLogado = null;
 
-
-        // ==========================================
-        // CACHE DAS ATIVIDADES
-        // ==========================================
+        let semanaAtualAluno = 1;
 
         let programacaoCache = {};
 
@@ -1089,7 +1079,6 @@
                 return "";
 
             }
-
 
             return String(texto)
                 .replace(/&/g, "&amp;")
@@ -1118,6 +1107,34 @@
             ).format(
                 new Date()
             );
+
+        }
+
+
+        // ==========================================
+        // DIA DA SEMANA
+        //
+        // 1 = Segunda
+        // 2 = Terça
+        // ...
+        // 7 = Domingo
+        // ==========================================
+
+        function obterDiaSemanaAtual() {
+
+            const hoje =
+                criarDataLocal(
+                    obterDataHoje()
+                );
+
+
+            const dia =
+                hoje.getDay();
+
+
+            return dia === 0
+                ? 7
+                : dia;
 
         }
 
@@ -1166,97 +1183,34 @@
 
 
         // ==========================================
-        // SEGUNDA-FEIRA
+        // NOME DO DIA
         // ==========================================
 
-        function obterSegundaFeira(
-            dataTexto
+        function obterNomeDia(
+            numeroDia
         ) {
 
-            const data =
-                criarDataLocal(
-                    dataTexto
-                );
+            const nomes = {
+
+                1: "Segunda-feira",
+                2: "Terça-feira",
+                3: "Quarta-feira",
+                4: "Quinta-feira",
+                5: "Sexta-feira",
+                6: "Sábado",
+                7: "Domingo"
+
+            };
 
 
-            const dia =
-                data.getDay();
-
-
-            const diferenca =
-                dia === 0
-                    ? -6
-                    : 1 - dia;
-
-
-            data.setDate(
-                data.getDate() + diferenca
-            );
-
-
-            return data;
+            return nomes[numeroDia] ||
+                "Dia";
 
         }
 
 
         // ==========================================
-        // FORMATAR ISO
-        // ==========================================
-
-        function formatarISO(
-            data
-        ) {
-
-            const ano =
-                data.getFullYear();
-
-
-            const mes =
-                String(
-                    data.getMonth() + 1
-                ).padStart(
-                    2,
-                    "0"
-                );
-
-
-            const dia =
-                String(
-                    data.getDate()
-                ).padStart(
-                    2,
-                    "0"
-                );
-
-
-            return `${ano}-${mes}-${dia}`;
-
-        }
-
-
-        // ==========================================
-        // CAPITALIZAR
-        // ==========================================
-
-        function capitalizar(
-            texto
-        ) {
-
-            if (!texto) {
-
-                return "";
-
-            }
-
-
-            return texto.charAt(0).toUpperCase()
-                + texto.slice(1);
-
-        }
-
-
-        // ==========================================
-        // NOME DO TIPO
+        // TIPO DA ATIVIDADE
         // ==========================================
 
         function nomeTipo(
@@ -1305,10 +1259,7 @@
                     new URL(link);
 
 
-                // ==========================================
                 // YOUTUBE
-                // ==========================================
-
                 if (
                     url.hostname === "www.youtube.com" ||
                     url.hostname === "youtube.com" ||
@@ -1322,11 +1273,16 @@
                     if (videoId) {
 
                         return {
+
                             tipo: "youtube",
+
                             url:
                                 "https://www.youtube.com/embed/" +
-                                encodeURIComponent(videoId) +
+                                encodeURIComponent(
+                                    videoId
+                                ) +
                                 "?rel=0"
+
                         };
 
                     }
@@ -1342,11 +1298,16 @@
                     ) {
 
                         return {
+
                             tipo: "youtube",
+
                             url:
                                 "https://www.youtube.com/embed/" +
-                                encodeURIComponent(partes[2]) +
+                                encodeURIComponent(
+                                    partes[2]
+                                ) +
                                 "?rel=0"
+
                         };
 
                     }
@@ -1354,10 +1315,7 @@
                 }
 
 
-                // ==========================================
-                // YOUTUBE SHORT LINK
-                // ==========================================
-
+                // YOUTUBE CURTO
                 if (
                     url.hostname === "youtu.be"
                 ) {
@@ -1371,11 +1329,16 @@
                     if (videoId) {
 
                         return {
+
                             tipo: "youtube",
+
                             url:
                                 "https://www.youtube.com/embed/" +
-                                encodeURIComponent(videoId) +
+                                encodeURIComponent(
+                                    videoId
+                                ) +
                                 "?rel=0"
+
                         };
 
                     }
@@ -1383,10 +1346,7 @@
                 }
 
 
-                // ==========================================
                 // INSTAGRAM
-                // ==========================================
-
                 if (
                     url.hostname === "instagram.com" ||
                     url.hostname === "www.instagram.com"
@@ -1401,13 +1361,16 @@
                     if (match) {
 
                         return {
+
                             tipo: "instagram",
+
                             url:
                                 "https://www.instagram.com/" +
                                 match[1] +
                                 "/" +
                                 match[2] +
                                 "/embed/"
+
                         };
 
                     }
@@ -1415,10 +1378,7 @@
                 }
 
 
-                // ==========================================
                 // QUALQUER OUTRO SITE
-                // ==========================================
-
                 return {
 
                     tipo: "pagina",
@@ -1451,7 +1411,7 @@
 
 
         // ==========================================
-        // RENDERIZAR ATIVIDADES DE HOJE
+        // RENDERIZAR HOJE
         // ==========================================
 
         function renderizarAtividadesHoje(
@@ -1618,8 +1578,8 @@
                                         <span>
                                             📅
                                             ${capitalizar(
-                                                formatarData(
-                                                    atividade.data_atividade
+                                                obterNomeDia(
+                                                    atividade.dia_semana
                                                 )
                                             )}
                                         </span>
@@ -1675,7 +1635,7 @@
 
         function renderizarSemana(
             atividades,
-            hoje
+            diaAtual
         ) {
 
             const container =
@@ -1684,56 +1644,26 @@
                 );
 
 
-            const segunda =
-                obterSegundaFeira(
-                    hoje
-                );
-
-
-            const dias = [];
-
-
-            for (
-                let i = 0;
-                i < 7;
-                i++
-            ) {
-
-                const data =
-                    new Date(
-                        segunda
-                    );
-
-
-                data.setDate(
-                    segunda.getDate() + i
-                );
-
-
-                dias.push(
-                    formatarISO(
-                        data
-                    )
-                );
-
-            }
+            const dias =
+                [1, 2, 3, 4, 5, 6, 7];
 
 
             container.innerHTML =
                 dias
                     .map(
-                        data => {
+                        dia => {
 
                             const atividadesDoDia =
                                 atividades.filter(
                                     atividade =>
-                                        atividade.data_atividade ===
-                                        data
+                                        Number(
+                                            atividade.dia_semana
+                                        ) === dia
                                 );
 
 
                             const estaHoje =
-                                data === hoje;
+                                dia === diaAtual;
 
 
                             const todasConcluidas =
@@ -1741,21 +1671,6 @@
                                 atividadesDoDia.every(
                                     atividade =>
                                         atividade.concluida
-                                );
-
-
-                            const nomeDia =
-                                capitalizar(
-                                    new Intl.DateTimeFormat(
-                                        "pt-BR",
-                                        {
-                                            weekday: "long"
-                                        }
-                                    ).format(
-                                        criarDataLocal(
-                                            data
-                                        )
-                                    )
                                 );
 
 
@@ -1924,9 +1839,7 @@
                                             class="dia-nome"
                                         >
 
-                                            ${escaparHTML(
-                                                nomeDia
-                                            )}
+                                            ${obterNomeDia(dia)}
 
                                         </div>
 
@@ -1995,9 +1908,7 @@
             document.getElementById(
                 "semanaNome"
             ).textContent =
-                atividades.length > 0
-                    ? `📚 Semana ${atividades[0].semana}`
-                    : "📚 Programação da semana";
+                `📚 Semana ${semanaAtualAluno}`;
 
 
             document.getElementById(
@@ -2021,7 +1932,7 @@
             document.getElementById(
                 "progressText"
             ).textContent =
-                `${percentual}% da programação desta semana concluída.`;
+                `${percentual}% da programação da Semana ${semanaAtualAluno} concluída.`;
 
         }
 
@@ -2050,10 +1961,7 @@
             }
 
 
-            // ==========================================
             // FLASHCARDS
-            // ==========================================
-
             if (
                 atividade.link ===
                 "flashcards.html"
@@ -2067,9 +1975,7 @@
             }
 
 
-            // ==========================================
-            // MODAL
-            // ==========================================
+            // PREENCHER MODAL
 
             document.getElementById(
                 "modalTipo"
@@ -2124,9 +2030,7 @@
             acoes.innerHTML = "";
 
 
-            // ==========================================
             // COM LINK
-            // ==========================================
 
             if (
                 atividade.link
@@ -2177,11 +2081,9 @@
 
                     aviso.innerHTML = `
 
-                        <strong>Conteúdo incorporado</strong><br>
-
-                        O Gutalks está tentando carregar este conteúdo
-                        dentro da plataforma. Alguns sites externos podem
-                        bloquear incorporação por motivos de segurança.
+                        O conteúdo está sendo carregado
+                        dentro do Gutalks. Alguns sites externos
+                        podem bloquear a incorporação.
 
                     `;
 
@@ -2234,9 +2136,7 @@
 
             else {
 
-                // ==========================================
                 // SEM LINK
-                // ==========================================
 
                 acoes.innerHTML = `
 
@@ -2280,31 +2180,19 @@
 
         function fecharModal() {
 
-            const modal =
-                document.getElementById(
-                    "modalAtividade"
-                );
+            document.getElementById(
+                "modalEmbed"
+            ).innerHTML = "";
 
 
-            const embed =
-                document.getElementById(
-                    "modalEmbed"
-                );
-
-
-            embed.innerHTML = "";
-
-
-            modal.classList.remove(
+            document.getElementById(
+                "modalAtividade"
+            ).classList.remove(
                 "ativo"
             );
 
         }
 
-
-        // ==========================================
-        // FECHAR CLICANDO FORA
-        // ==========================================
 
         function fecharModalFora(
             event
@@ -2323,7 +2211,7 @@
 
 
         // ==========================================
-        // ALTERNAR CONCLUSÃO
+        // ALTERAR CONCLUSÃO
         // ==========================================
 
         async function alternarConclusao(
@@ -2398,58 +2286,40 @@
 
 
         // ==========================================
-        // CARREGAR PROGRAMAÇÃO
+        // CARREGAR PROGRAMAÇÃO DA SEMANA DO ALUNO
         // ==========================================
 
         async function carregarProgramacao() {
 
-            if (!usuarioLogado) {
+            if (
+                !usuarioLogado
+            ) {
 
                 return;
 
             }
 
 
-            const hoje =
-                obterDataHoje();
+            const diaAtual =
+                obterDiaSemanaAtual();
 
 
             document.getElementById(
                 "dataHoje"
             ).textContent =
                 capitalizar(
-                    formatarData(
-                        hoje
+                    new Intl.DateTimeFormat(
+                        "pt-BR",
+                        {
+                            timeZone:
+                                "America/Sao_Paulo",
+                            weekday: "long",
+                            day: "2-digit",
+                            month: "long"
+                        }
+                    ).format(
+                        new Date()
                     )
-                );
-
-
-            const segunda =
-                obterSegundaFeira(
-                    hoje
-                );
-
-
-            const inicioSemana =
-                formatarISO(
-                    segunda
-                );
-
-
-            const domingo =
-                new Date(
-                    segunda
-                );
-
-
-            domingo.setDate(
-                segunda.getDate() + 6
-            );
-
-
-            const fimSemana =
-                formatarISO(
-                    domingo
                 );
 
 
@@ -2465,16 +2335,12 @@
                     "user_id",
                     usuarioLogado.id
                 )
-                .gte(
-                    "data_atividade",
-                    inicioSemana
-                )
-                .lte(
-                    "data_atividade",
-                    fimSemana
+                .eq(
+                    "semana",
+                    semanaAtualAluno
                 )
                 .order(
-                    "data_atividade",
+                    "dia_semana",
                     {
                         ascending: true
                     }
@@ -2531,11 +2397,14 @@
             );
 
 
+            // ATIVIDADES DE HOJE
+
             const atividadesHoje =
                 atividades.filter(
                     atividade =>
-                        atividade.data_atividade ===
-                        hoje
+                        Number(
+                            atividade.dia_semana
+                        ) === diaAtual
                 );
 
 
@@ -2544,11 +2413,15 @@
             );
 
 
+            // SEMANA
+
             renderizarSemana(
                 atividades,
-                hoje
+                diaAtual
             );
 
+
+            // PROGRESSO
 
             atualizarProgressoSemana(
                 atividades
@@ -2590,6 +2463,10 @@
                 session.user;
 
 
+            // ==========================================
+            // BUSCAR NOME, EMAIL E SEMANA ATUAL
+            // ==========================================
+
             const {
                 data: aluno,
                 error: alunoError
@@ -2598,7 +2475,7 @@
                     "Alunos"
                 )
                 .select(
-                    "nome, email"
+                    "nome, email, semana_atual"
                 )
                 .eq(
                     "user_id",
@@ -2626,24 +2503,32 @@
                 ).textContent =
                     session.user.email;
 
-            }
 
-            else {
-
-                document.getElementById(
-                    "nomeAluno"
-                ).textContent =
-                    "Olá, " +
-                    aluno.nome +
-                    "! 👋";
-
-
-                document.getElementById(
-                    "emailAluno"
-                ).textContent =
-                    aluno.email;
+                return;
 
             }
+
+
+            document.getElementById(
+                "nomeAluno"
+            ).textContent =
+                "Olá, " +
+                aluno.nome +
+                "! 👋";
+
+
+            document.getElementById(
+                "emailAluno"
+            ).textContent =
+                aluno.email;
+
+
+            // SEMANA ATUAL DO ALUNO
+
+            semanaAtualAluno =
+                Number(
+                    aluno.semana_atual
+                ) || 1;
 
 
             await carregarProgramacao();
@@ -2669,7 +2554,7 @@
 
 
         // ==========================================
-        // ESC PARA FECHAR
+        // ESC PARA FECHAR MODAL
         // ==========================================
 
         document.addEventListener(
