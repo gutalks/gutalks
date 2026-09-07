@@ -273,39 +273,90 @@
 
 
             // ==========================================
-            // BUSCAR SOMENTE OS CARDS QUE JÁ ESTÃO
-            // DISPONÍVEIS PARA REVISÃO
+            // DATA DE HOJE
             // ==========================================
 
-            const agora = new Date().toISOString();
+            const hoje =
+                new Date().toISOString().split("T")[0];
 
 
-            const { data, error } =
+            const agora =
+                new Date().toISOString();
+
+
+            // ==========================================
+            // BUSCAR CARDS DE REVISÃO
+            // ==========================================
+
+            const { data: cardsRevisao, error: erroRevisao } =
                 await supabaseClient
                     .from("flashcards")
                     .select("*")
                     .eq("user_id", usuarioLogado.id)
+                    .gt("revisoes", 0)
                     .lte("proxima_revisao", agora)
                     .order("id", { ascending: true });
 
 
-            console.log(
-                "Flashcards encontrados:",
-                data
-            );
+            // ==========================================
+            // BUSCAR CARDS JÁ INTRODUZIDOS HOJE
+            // ==========================================
+
+            const { data: cardsIntroduzidosHoje, error: erroHoje } =
+                await supabaseClient
+                    .from("flashcards")
+                    .select("*")
+                    .eq("user_id", usuarioLogado.id)
+                    .eq("data_introducao", hoje)
+                    .eq("revisoes", 0)
+                    .order("id", { ascending: true });
 
 
-            console.log(
-                "Quantidade:",
-                data ? data.length : 0
-            );
+            // ==========================================
+            // BUSCAR CARDS NOVOS
+            // ==========================================
+
+            let cardsNovos = [];
 
 
-            if (error) {
+            if (!cardsIntroduzidosHoje || cardsIntroduzidosHoje.length === 0) {
+
+                const { data, error } =
+                    await supabaseClient
+                        .from("flashcards")
+                        .select("*")
+                        .eq("user_id", usuarioLogado.id)
+                        .eq("revisoes", 0)
+                        .is("data_introducao", null)
+                        .order("id", { ascending: true })
+                        .limit(20);
+
+
+                if (error) {
+
+                    console.error(
+                        "Erro ao buscar novos cards:",
+                        error
+                    );
+
+                } else {
+
+                    cardsNovos = data || [];
+
+                }
+
+            }
+
+
+            // ==========================================
+            // VERIFICAR ERROS
+            // ==========================================
+
+            if (erroRevisao || erroHoje) {
 
                 console.error(
                     "Erro ao buscar flashcards:",
-                    error
+                    erroRevisao || erroHoje
                 );
 
 
@@ -320,7 +371,86 @@
             }
 
 
-            flashcards = data || [];
+            // ==========================================
+            // MARCAR NOVOS CARDS COMO INTRODUZIDOS HOJE
+            // ==========================================
+
+            if (cardsNovos.length > 0) {
+
+                const idsNovos =
+                    cardsNovos.map(card => card.id);
+
+
+                const { error: erroIntroducao } =
+                    await supabaseClient
+                        .from("flashcards")
+                        .update({
+                            data_introducao: hoje
+                        })
+                        .in("id", idsNovos)
+                        .eq("user_id", usuarioLogado.id);
+
+
+                if (erroIntroducao) {
+
+                    console.error(
+                        "Erro ao marcar cards como introduzidos:",
+                        erroIntroducao
+                    );
+
+
+                    document.getElementById("conteudo").innerHTML = `
+                        <div class="mensagem erro">
+                            Não foi possível preparar os novos flashcards.
+                        </div>
+                    `;
+
+                    return;
+
+                }
+
+
+                // Atualizar os objetos locais
+                cardsNovos.forEach(card => {
+                    card.data_introducao = hoje;
+                });
+
+            }
+
+
+            // ==========================================
+            // CARDS DA SESSÃO
+            // ==========================================
+
+            const novosDaSessao =
+                cardsIntroduzidosHoje &&
+                cardsIntroduzidosHoje.length > 0
+                    ? cardsIntroduzidosHoje
+                    : cardsNovos;
+
+
+            flashcards = [
+                ...(cardsRevisao || []),
+                ...(novosDaSessao || [])
+            ];
+
+
+            console.log(
+                "Cards de revisão:",
+                cardsRevisao
+            );
+
+
+            console.log(
+                "Cards novos da sessão:",
+                novosDaSessao
+            );
+
+
+            console.log(
+                "Total de cards:",
+                flashcards.length
+            );
 
 
             // ==========================================
@@ -333,7 +463,7 @@
                     <div class="mensagem">
                         🎉 Você concluiu suas revisões por hoje!
                         <br><br>
-                        Volte mais tarde para continuar estudando.
+                        Volte amanhã para novos flashcards.
                     </div>
                 `;
 
@@ -353,7 +483,8 @@
 
         function mostrarFlashcard() {
 
-            const card = flashcards[indiceAtual];
+            const card =
+                flashcards[indiceAtual];
 
 
             document.getElementById("conteudo").innerHTML = `
@@ -449,7 +580,8 @@
 
         async function avaliarCard(avaliacao) {
 
-            const card = flashcards[indiceAtual];
+            const card =
+                flashcards[indiceAtual];
 
 
             // ==========================================
@@ -712,7 +844,7 @@
                     <div class="mensagem">
                         🎉 Você concluiu suas revisões por hoje!
                         <br><br>
-                        Volte mais tarde para continuar estudando.
+                        Volte amanhã para novos flashcards.
                     </div>
                 `;
 
