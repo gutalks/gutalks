@@ -1,839 +1,596 @@
-
 <!DOCTYPE html>
+
 <html lang="pt-BR">
 
 <head>
 
-    <meta charset="UTF-8">
+```
+<meta charset="UTF-8">
 
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0"
-    >
+<meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+>
 
-    <title>Gutalks | Login</title>
-
-
-    <style>
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: Arial, sans-serif;
-        }
+<title>Gutalks | Login</title>
 
 
-        body {
+<style>
 
-            min-height: 100vh;
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: Arial, sans-serif;
+    }
 
-            background: #163075;
+    body {
+        min-height: 100vh;
+        background: #163075;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 20px;
+    }
 
-            display: flex;
+    .login-container {
+        background: #ffffff;
+        width: 100%;
+        max-width: 460px;
+        padding: 45px 35px;
+        border-radius: 16px;
+        box-shadow:
+            0 10px 30px rgba(0, 0, 0, 0.2);
+    }
 
-            align-items: center;
+    .logo {
+        text-align: center;
+        color: #163075;
+        font-size: 32px;
+        font-weight: bold;
+        margin-bottom: 10px;
+    }
 
-            justify-content: center;
+    .subtitle {
+        text-align: center;
+        color: #666;
+        margin-bottom: 30px;
+    }
 
-            padding: 20px;
+    .perfil-titulo {
+        text-align: center;
+        color: #163075;
+        font-weight: bold;
+        margin-bottom: 15px;
+    }
 
-        }
+    .perfil-opcoes {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 12px;
+        margin-bottom: 25px;
+    }
 
+    .perfil-opcao {
+        border: 2px solid #e1e4eb;
+        background: white;
+        border-radius: 12px;
+        padding: 18px 10px;
+        text-align: center;
+        cursor: pointer;
+        transition: 0.2s;
+    }
+
+    .perfil-opcao:hover {
+        border-color: #163075;
+    }
+
+    .perfil-opcao.selecionado {
+        border-color: #163075;
+        background: #eef1f8;
+    }
+
+    .perfil-icone {
+        font-size: 30px;
+        margin-bottom: 8px;
+    }
+
+    .perfil-nome {
+        color: #163075;
+        font-weight: bold;
+    }
+
+    label {
+        display: block;
+        margin-bottom: 8px;
+        color: #163075;
+        font-weight: bold;
+    }
+
+    input {
+        width: 100%;
+        padding: 14px;
+        margin-bottom: 20px;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        font-size: 16px;
+    }
+
+    input:focus {
+        outline: none;
+        border-color: #163075;
+    }
+
+    #loginButton {
+        width: 100%;
+        padding: 15px;
+        border: none;
+        border-radius: 8px;
+        background: #c82623;
+        color: white;
+        font-size: 17px;
+        font-weight: bold;
+        cursor: pointer;
+    }
+
+    #loginButton:hover {
+        opacity: 0.9;
+    }
+
+    #loginButton:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+    }
+
+    #mensagem {
+        margin-top: 20px;
+        text-align: center;
+        font-size: 14px;
+        line-height: 1.5;
+        min-height: 20px;
+    }
+
+    .voltar {
+        display: block;
+        text-align: center;
+        margin-top: 25px;
+        color: #163075;
+        text-decoration: none;
+    }
+
+    .voltar:hover {
+        text-decoration: underline;
+    }
+
+    @media (max-width: 500px) {
 
         .login-container {
-
-            background: #ffffff;
-
-            width: 100%;
-
-            max-width: 460px;
-
-            padding: 45px 35px;
-
-            border-radius: 16px;
-
-            box-shadow:
-                0 10px 30px rgba(0, 0, 0, 0.20);
-
+            padding: 35px 22px;
         }
 
+    }
 
-        .logo {
-
-            text-align: center;
-
-            color: #163075;
-
-            font-size: 32px;
-
-            font-weight: bold;
-
-            margin-bottom: 10px;
-
-        }
-
-
-        .subtitle {
-
-            text-align: center;
-
-            color: #666666;
-
-            margin-bottom: 28px;
-
-        }
-
-
-        /* ==========================================
-           SELEÇÃO DE PERFIL
-        ========================================== */
-
-        .perfil-titulo {
-
-            text-align: center;
-
-            color: #163075;
-
-            font-weight: bold;
-
-            margin-bottom: 15px;
-
-        }
-
-
-        .perfil-opcoes {
-
-            display: grid;
-
-            grid-template-columns: 1fr 1fr;
-
-            gap: 12px;
-
-            margin-bottom: 25px;
-
-        }
-
-
-        .perfil-opcao {
-
-            border: 2px solid #e1e4eb;
-
-            background: #ffffff;
-
-            border-radius: 12px;
-
-            padding: 18px 10px;
-
-            text-align: center;
-
-            cursor: pointer;
-
-            transition:
-                border-color 0.2s,
-                background 0.2s,
-                transform 0.2s;
-
-        }
-
-
-        .perfil-opcao:hover {
-
-            transform: translateY(-2px);
-
-            border-color: #163075;
-
-        }
-
-
-        .perfil-opcao.selecionado {
-
-            border-color: #163075;
-
-            background: #eef1f8;
-
-        }
-
-
-        .perfil-icone {
-
-            font-size: 30px;
-
-            margin-bottom: 8px;
-
-        }
-
-
-        .perfil-nome {
-
-            color: #163075;
-
-            font-weight: bold;
-
-            font-size: 15px;
-
-        }
-
-
-        label {
-
-            display: block;
-
-            margin-bottom: 8px;
-
-            color: #163075;
-
-            font-weight: bold;
-
-        }
-
-
-        input {
-
-            width: 100%;
-
-            padding: 14px;
-
-            margin-bottom: 20px;
-
-            border: 1px solid #dddddd;
-
-            border-radius: 8px;
-
-            font-size: 16px;
-
-        }
-
-
-        input:focus {
-
-            outline: none;
-
-            border-color: #163075;
-
-        }
-
-
-        .login-button {
-
-            width: 100%;
-
-            padding: 15px;
-
-            border: none;
-
-            border-radius: 8px;
-
-            background: #c82623;
-
-            color: #ffffff;
-
-            font-size: 17px;
-
-            font-weight: bold;
-
-            cursor: pointer;
-
-        }
-
-
-        .login-button:hover {
-
-            opacity: 0.9;
-
-        }
-
-
-        .login-button:disabled {
-
-            opacity: 0.6;
-
-            cursor: not-allowed;
-
-        }
-
-
-        #mensagem {
-
-            margin-top: 20px;
-
-            text-align: center;
-
-            font-size: 14px;
-
-            line-height: 1.5;
-
-            min-height: 20px;
-
-        }
-
-
-        .voltar {
-
-            display: block;
-
-            text-align: center;
-
-            margin-top: 25px;
-
-            color: #163075;
-
-            text-decoration: none;
-
-        }
-
-
-        .voltar:hover {
-
-            text-decoration: underline;
-
-        }
-
-
-        /* ==========================================
-           MOBILE
-        ========================================== */
-
-        @media (max-width: 500px) {
-
-            .login-container {
-
-                padding: 35px 22px;
-
-            }
-
-
-            .perfil-opcoes {
-
-                grid-template-columns: 1fr;
-
-            }
-
-        }
-
-    </style>
+</style>
+```
 
 </head>
 
-
 <body>
 
+```
+<div class="login-container">
 
-    <div class="login-container">
+    <div class="logo">
+        GUTALKS
+    </div>
 
-
-        <div class="logo">
-            GUTALKS
-        </div>
-
-
-        <p class="subtitle">
-            Acesse sua área na plataforma
-        </p>
+    <p class="subtitle">
+        Acesse sua área na plataforma
+    </p>
 
 
-        <!-- ==========================================
-             PERFIL
-        ========================================== -->
-
-        <div class="perfil-titulo">
-            Como você deseja entrar?
-        </div>
+    <div class="perfil-titulo">
+        Como você deseja entrar?
+    </div>
 
 
-        <div class="perfil-opcoes">
+    <div class="perfil-opcoes">
 
-
-            <div
-                class="perfil-opcao selecionado"
-                id="perfilAluno"
-                onclick="selecionarPerfil('aluno')"
-            >
-
-                <div class="perfil-icone">
-                    👨‍🎓
-                </div>
-
-                <div class="perfil-nome">
-                    Aluno
-                </div>
-
-            </div>
-
-
-            <div
-                class="perfil-opcao"
-                id="perfilProfessor"
-                onclick="selecionarPerfil('professor')"
-            >
-
-                <div class="perfil-icone">
-                    👨‍🏫
-                </div>
-
-                <div class="perfil-nome">
-                    Professor
-                </div>
-
-            </div>
-
-        </div>
-
-
-        <!-- ==========================================
-             LOGIN
-        ========================================== -->
-
-        <form id="loginForm">
-
-
-            <label for="email">
-                E-mail
-            </label>
-
-
-            <input
-                type="email"
-                id="email"
-                placeholder="Digite seu e-mail"
-                autocomplete="email"
-                required
-            >
-
-
-            <label for="senha">
-                Senha
-            </label>
-
-
-            <input
-                type="password"
-                id="senha"
-                placeholder="Digite sua senha"
-                autocomplete="current-password"
-                required
-            >
-
-
-            <button
-                type="submit"
-                id="loginButton"
-                class="login-button"
-            >
-
-                Entrar
-
-            </button>
-
-        </form>
-
-
-        <div id="mensagem"></div>
-
-
-        <a
-            href="index.html"
-            class="voltar"
+        <div
+            id="perfilAluno"
+            class="perfil-opcao selecionado"
+            onclick="selecionarPerfil('aluno')"
         >
 
-            ← Voltar para a página inicial
+            <div class="perfil-icone">
+                👨‍🎓
+            </div>
 
-        </a>
+            <div class="perfil-nome">
+                Aluno
+            </div>
+
+        </div>
+
+
+        <div
+            id="perfilProfessor"
+            class="perfil-opcao"
+            onclick="selecionarPerfil('professor')"
+        >
+
+            <div class="perfil-icone">
+                👨‍🏫
+            </div>
+
+            <div class="perfil-nome">
+                Professor
+            </div>
+
+        </div>
 
     </div>
 
 
-    <!-- ==========================================
-         SUPABASE
-    ========================================== -->
+    <form id="loginForm">
 
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+        <label for="email">
+            E-mail
+        </label>
 
-    <script src="js/supabase.js"></script>
-
-
-    <script>
-
-
-        // ==========================================
-        // ELEMENTOS
-        // ==========================================
-
-        const loginForm =
-            document.getElementById(
-                "loginForm"
-            );
+        <input
+            type="email"
+            id="email"
+            placeholder="Digite seu e-mail"
+            autocomplete="email"
+            required
+        >
 
 
-        const loginButton =
-            document.getElementById(
-                "loginButton"
-            );
+        <label for="senha">
+            Senha
+        </label>
+
+        <input
+            type="password"
+            id="senha"
+            placeholder="Digite sua senha"
+            autocomplete="current-password"
+            required
+        >
 
 
-        const mensagem =
-            document.getElementById(
-                "mensagem"
-            );
+        <button
+            type="submit"
+            id="loginButton"
+        >
+            Entrar
+        </button>
+
+    </form>
 
 
-        // ==========================================
-        // PERFIL SELECIONADO
-        // ==========================================
-
-        let perfilSelecionado =
-            "aluno";
+    <div id="mensagem"></div>
 
 
-        // ==========================================
-        // SELECIONAR PERFIL
-        // ==========================================
+    <a
+        href="index.html"
+        class="voltar"
+    >
+        ← Voltar para a página inicial
+    </a>
 
-        function selecionarPerfil(
-            perfil
-        ) {
-
-            perfilSelecionado =
-                perfil;
+</div>
 
 
-            document
-                .getElementById("perfilAluno")
-                .classList.remove(
-                    "selecionado"
-                );
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script src="js/supabase.js"></script>
 
 
-            document
-                .getElementById("perfilProfessor")
-                .classList.remove(
-                    "selecionado"
-                );
+<script>
+
+    let perfilSelecionado = "aluno";
 
 
-            if (
+    function selecionarPerfil(perfil) {
+
+        perfilSelecionado = perfil;
+
+        document
+            .getElementById("perfilAluno")
+            .classList.toggle(
+                "selecionado",
                 perfil === "aluno"
-            ) {
+            );
 
+        document
+            .getElementById("perfilProfessor")
+            .classList.toggle(
+                "selecionado",
+                perfil === "professor"
+            );
+    }
+
+
+    const loginForm =
+        document.getElementById("loginForm");
+
+    const loginButton =
+        document.getElementById("loginButton");
+
+    const mensagem =
+        document.getElementById("mensagem");
+
+
+    loginForm.addEventListener(
+        "submit",
+        async function(event) {
+
+            event.preventDefault();
+
+
+            const email =
                 document
-                    .getElementById("perfilAluno")
-                    .classList.add(
-                        "selecionado"
+                    .getElementById("email")
+                    .value
+                    .trim();
+
+
+            const senha =
+                document
+                    .getElementById("senha")
+                    .value;
+
+
+            mensagem.textContent =
+                "Entrando...";
+
+            mensagem.style.color =
+                "#163075";
+
+
+            loginButton.disabled =
+                true;
+
+            loginButton.textContent =
+                "Entrando...";
+
+
+            try {
+
+                /*
+                ==========================================
+                1. AUTENTICAÇÃO
+                ==========================================
+                */
+
+                const {
+                    data,
+                    error
+                } =
+                    await supabaseClient
+                        .auth
+                        .signInWithPassword({
+
+                            email: email,
+
+                            password: senha
+
+                        });
+
+
+                if (error) {
+
+                    throw new Error(
+                        "E-mail ou senha incorretos."
                     );
 
-            }
+                }
 
-            else {
 
-                document
-                    .getElementById("perfilProfessor")
-                    .classList.add(
-                        "selecionado"
+                if (
+                    !data ||
+                    !data.user
+                ) {
+
+                    throw new Error(
+                        "Usuário não encontrado."
                     );
 
-            }
-
-        }
+                }
 
 
-        // ==========================================
-        // LOGIN
-        // ==========================================
-
-        loginForm.addEventListener(
-            "submit",
-            async function(event) {
-
-                event.preventDefault();
+                const userId =
+                    data.user.id;
 
 
-                const email =
-                    document
-                        .getElementById("email")
-                        .value
-                        .trim();
+                /*
+                ==========================================
+                2. ALUNO
+                ==========================================
+                */
 
-
-                const senha =
-                    document
-                        .getElementById("senha")
-                        .value;
-
-
-                mensagem.textContent =
-                    "Entrando...";
-
-
-                mensagem.style.color =
-                    "#163075";
-
-
-                loginButton.disabled =
-                    true;
-
-
-                loginButton.textContent =
-                    "Entrando...";
-
-
-                try {
-
-
-                    // ==========================================
-                    // AUTENTICAÇÃO
-                    // ==========================================
+                if (
+                    perfilSelecionado ===
+                    "aluno"
+                ) {
 
                     const {
-                        data,
-                        error
+                        data: aluno,
+                        error: alunoError
                     } =
                         await supabaseClient
-                            .auth
-                            .signInWithPassword({
-
-                                email:
-                                    email,
-
-                                password:
-                                    senha
-
-                            });
+                            .from("Alunos")
+                            .select("id")
+                            .eq(
+                                "user_id",
+                                userId
+                            )
+                            .maybeSingle();
 
 
-                    if (error) {
+                    console.log(
+                        "Resultado aluno:",
+                        aluno
+                    );
 
-                        throw error;
+                    console.log(
+                        "Erro aluno:",
+                        alunoError
+                    );
 
-                    }
 
-
-                    if (
-                        !data ||
-                        !data.user
-                    ) {
+                    if (alunoError) {
 
                         throw new Error(
-                            "Usuário não encontrado."
+                            "O login foi realizado, mas não foi possível verificar seu cadastro de aluno. Erro: " +
+                            alunoError.message
                         );
 
                     }
 
 
-                    const userId =
-                        data.user.id;
+                    if (!aluno) {
 
-
-                    // ==========================================
-                    // VERIFICAR PERFIL DE ALUNO
-                    // ==========================================
-
-                    if (
-                        perfilSelecionado ===
-                        "aluno"
-                    ) {
-
-                        const {
-                            data: aluno,
-                            error: alunoError
-                        } =
-                            await supabaseClient
-
-                                .from(
-                                    "Alunos"
-                                )
-
-                                .select(
-                                    "id"
-                                )
-
-                                .eq(
-                                    "user_id",
-                                    userId
-                                )
-
-                                .maybeSingle();
-
-
-                        if (
-                            alunoError
-                        ) {
-
-                            console.error(
-                                "Erro ao verificar aluno:",
-                                alunoError
-                            );
-
-                            await supabaseClient
-                                .auth
-                                .signOut();
-
-                            throw new Error(
-                                "Não foi possível verificar seu acesso de aluno."
-                            );
-
-                        }
-
-
-                        if (!aluno) {
-
-                            await supabaseClient
-                                .auth
-                                .signOut();
-
-                            throw new Error(
-                                "Esta conta não está cadastrada como aluno."
-                            );
-
-                        }
-
-
-                        mensagem.textContent =
-                            "Login realizado com sucesso!";
-
-
-                        mensagem.style.color =
-                            "#218838";
-
-
-                        window.location.href =
-                            "aluno.html";
-
-
-                        return;
+                        throw new Error(
+                            "Esta conta não está cadastrada como aluno."
+                        );
 
                     }
-
-
-                    // ==========================================
-                    // VERIFICAR PERFIL DE PROFESSOR
-                    // ==========================================
-
-                    if (
-                        perfilSelecionado ===
-                        "professor"
-                    ) {
-
-                        const {
-                            data: professor,
-                            error: professorError
-                        } =
-                            await supabaseClient
-
-                                .from(
-                                    "Professores"
-                                )
-
-                                .select(
-                                    "id, ativo"
-                                )
-
-                                .eq(
-                                    "user_id",
-                                    userId
-                                )
-
-                                .maybeSingle();
-
-
-                        if (
-                            professorError
-                        ) {
-
-                            console.error(
-                                "Erro ao verificar professor:",
-                                professorError
-                            );
-
-                            await supabaseClient
-                                .auth
-                                .signOut();
-
-                            throw new Error(
-                                "Não foi possível verificar seu acesso de professor."
-                            );
-
-                        }
-
-
-                        if (
-                            !professor
-                        ) {
-
-                            await supabaseClient
-                                .auth
-                                .signOut();
-
-                            throw new Error(
-                                "Esta conta não está cadastrada como professor."
-                            );
-
-                        }
-
-
-                        if (
-                            professor.ativo !== true
-                        ) {
-
-                            await supabaseClient
-                                .auth
-                                .signOut();
-
-                            throw new Error(
-                                "Seu acesso de professor está desativado."
-                            );
-
-                        }
-
-
-                        mensagem.textContent =
-                            "Login realizado com sucesso!";
-
-
-                        mensagem.style.color =
-                            "#218838";
-
-
-                        window.location.href =
-                            "professor.html";
-
-
-                        return;
-
-                    }
-
-
-                }
-
-                catch (error) {
-
-                    console.error(
-                        "Erro no login:",
-                        error
-                    );
 
 
                     mensagem.textContent =
-                        error.message ||
-                        "E-mail ou senha incorretos.";
+                        "Login realizado com sucesso!";
 
 
                     mensagem.style.color =
-                        "#c82623";
+                        "#218838";
 
 
-                    loginButton.disabled =
-                        false;
+                    window.location.href =
+                        "aluno.html";
 
 
-                    loginButton.textContent =
-                        "Entrar";
+                    return;
+                }
 
+
+                /*
+                ==========================================
+                3. PROFESSOR
+                ==========================================
+                */
+
+                if (
+                    perfilSelecionado ===
+                    "professor"
+                ) {
+
+                    const {
+                        data: professor,
+                        error: professorError
+                    } =
+                        await supabaseClient
+                            .from("Professores")
+                            .select(
+                                "id, ativo"
+                            )
+                            .eq(
+                                "user_id",
+                                userId
+                            )
+                            .maybeSingle();
+
+
+                    console.log(
+                        "Resultado professor:",
+                        professor
+                    );
+
+                    console.log(
+                        "Erro professor:",
+                        professorError
+                    );
+
+
+                    if (professorError) {
+
+                        throw new Error(
+                            "O login foi realizado, mas não foi possível verificar seu cadastro de professor. Erro: " +
+                            professorError.message
+                        );
+
+                    }
+
+
+                    if (!professor) {
+
+                        throw new Error(
+                            "Esta conta não está cadastrada como professor."
+                        );
+
+                    }
+
+
+                    if (
+                        professor.ativo !== true
+                    ) {
+
+                        throw new Error(
+                            "Seu acesso de professor está desativado."
+                        );
+
+                    }
+
+
+                    mensagem.textContent =
+                        "Login realizado com sucesso!";
+
+
+                    mensagem.style.color =
+                        "#218838";
+
+
+                    window.location.href =
+                        "professor.html";
+
+
+                    return;
                 }
 
             }
-        );
 
-    </script>
+            catch (error) {
+
+                console.error(
+                    "Erro completo no login:",
+                    error
+                );
+
+
+                mensagem.textContent =
+                    error.message ||
+                    "Não foi possível entrar.";
+
+
+                mensagem.style.color =
+                    "#c82623";
+
+
+                loginButton.disabled =
+                    false;
+
+                loginButton.textContent =
+                    "Entrar";
+
+            }
+
+        }
+    );
+
+</script>
+```
 
 </body>
 
