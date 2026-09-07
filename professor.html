@@ -1,0 +1,2692 @@
+```html
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Gutalks | Painel do Professor</title>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <script src="js/supabase.js"></script>
+
+
+    <style>
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+
+        body {
+            background: #f5f7fb;
+            color: #163075;
+        }
+
+
+        /* ==========================================
+           HEADER
+        ========================================== */
+
+        header {
+            background: #163075;
+            color: white;
+            padding: 18px 7%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 20px;
+        }
+
+
+        .logo {
+            font-size: 28px;
+            font-weight: bold;
+            letter-spacing: 1px;
+        }
+
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 18px;
+        }
+
+
+        .professor-name {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+
+
+        .logout {
+            background: #c82623;
+            color: white;
+            border: none;
+            padding: 10px 18px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+
+        .logout:hover {
+            opacity: 0.9;
+        }
+
+
+        /* ==========================================
+           LAYOUT
+        ========================================== */
+
+        .layout {
+            max-width: 1250px;
+            margin: 0 auto;
+            padding: 35px 25px;
+        }
+
+
+        .welcome {
+            margin-bottom: 30px;
+        }
+
+
+        .welcome h1 {
+            font-size: 32px;
+            margin-bottom: 8px;
+        }
+
+
+        .welcome p {
+            color: #666;
+        }
+
+
+        /* ==========================================
+           MENU
+        ========================================== */
+
+        .menu {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 10px;
+            margin-bottom: 25px;
+        }
+
+
+        .menu button {
+            border: none;
+            background: white;
+            padding: 15px 10px;
+            border-radius: 10px;
+            color: #163075;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 3px 12px rgba(0, 0, 0, 0.05);
+        }
+
+
+        .menu button:hover {
+            background: #eef1f8;
+        }
+
+
+        .menu button.ativo {
+            background: #163075;
+            color: white;
+        }
+
+
+        /* ==========================================
+           SEÇÃO
+        ========================================== */
+
+        .secao {
+            display: none;
+        }
+
+
+        .secao.ativa {
+            display: block;
+        }
+
+
+        .painel {
+            background: white;
+            border-radius: 16px;
+            padding: 25px;
+            box-shadow: 0 4px 18px rgba(0, 0, 0, 0.06);
+            margin-bottom: 20px;
+        }
+
+
+        .painel h2 {
+            margin-bottom: 18px;
+        }
+
+
+        .subtitulo {
+            color: #666;
+            margin-bottom: 20px;
+        }
+
+
+        /* ==========================================
+           ALUNOS
+        ========================================== */
+
+        .alunos-lista {
+            display: grid;
+            gap: 12px;
+        }
+
+
+        .aluno-item {
+            border: 1px solid #e4e7ee;
+            border-radius: 12px;
+            padding: 18px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+        }
+
+
+        .aluno-info {
+            min-width: 0;
+        }
+
+
+        .aluno-nome {
+            font-weight: bold;
+            font-size: 17px;
+            margin-bottom: 5px;
+        }
+
+
+        .aluno-email {
+            color: #777;
+            font-size: 14px;
+        }
+
+
+        .aluno-status {
+            color: #163075;
+            font-size: 13px;
+            background: #eef1f8;
+            padding: 5px 9px;
+            border-radius: 20px;
+            margin-top: 8px;
+            display: inline-block;
+        }
+
+
+        .botao-principal {
+            background: #163075;
+            color: white;
+            border: none;
+            padding: 11px 18px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+
+        .botao-principal:hover {
+            opacity: 0.9;
+        }
+
+
+        .botao-verde {
+            background: #218838;
+            color: white;
+        }
+
+
+        .botao-vermelho {
+            background: #c82623;
+            color: white;
+        }
+
+
+        /* ==========================================
+           CAMPOS
+        ========================================== */
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 18px;
+        }
+
+
+        .campo {
+            display: flex;
+            flex-direction: column;
+        }
+
+
+        .campo.full {
+            grid-column: 1 / -1;
+        }
+
+
+        .campo label {
+            font-weight: bold;
+            margin-bottom: 7px;
+            color: #163075;
+        }
+
+
+        .campo input,
+        .campo select,
+        .campo textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #dfe3eb;
+            border-radius: 8px;
+            font-size: 15px;
+        }
+
+
+        .campo textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+
+        .campo input:focus,
+        .campo select:focus,
+        .campo textarea:focus {
+            outline: none;
+            border-color: #163075;
+        }
+
+
+        .acoes-formulario {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-top: 20px;
+        }
+
+
+        /* ==========================================
+           ALUNO SELECIONADO
+        ========================================== */
+
+        .aluno-selecionado {
+            background: #eef1f8;
+            border-radius: 12px;
+            padding: 18px;
+            margin-bottom: 20px;
+        }
+
+
+        .aluno-selecionado strong {
+            display: block;
+            margin-bottom: 5px;
+        }
+
+
+        .aluno-selecionado span {
+            color: #666;
+            font-size: 14px;
+        }
+
+
+        /* ==========================================
+           ATIVIDADES
+        ========================================== */
+
+        .atividades-lista {
+            display: grid;
+            gap: 12px;
+        }
+
+
+        .atividade-item {
+            border: 1px solid #e4e7ee;
+            border-radius: 12px;
+            padding: 17px;
+        }
+
+
+        .atividade-cabecalho {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 15px;
+        }
+
+
+        .atividade-titulo {
+            font-weight: bold;
+            font-size: 16px;
+        }
+
+
+        .atividade-meta {
+            color: #777;
+            font-size: 13px;
+            margin-top: 7px;
+        }
+
+
+        .atividade-descricao {
+            color: #666;
+            margin-top: 10px;
+            line-height: 1.5;
+            white-space: pre-wrap;
+        }
+
+
+        .atividade-acoes {
+            display: flex;
+            gap: 8px;
+            margin-top: 13px;
+            flex-wrap: wrap;
+        }
+
+
+        .botao-pequeno {
+            border: none;
+            padding: 8px 12px;
+            border-radius: 7px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+
+        .botao-editar {
+            background: #eef1f8;
+            color: #163075;
+        }
+
+
+        .botao-excluir {
+            background: #fdecec;
+            color: #c82623;
+        }
+
+
+        /* ==========================================
+           CARDS DASHBOARD
+        ========================================== */
+
+        .dashboard-cards {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+
+        .dashboard-card {
+            background: white;
+            border-radius: 14px;
+            padding: 22px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+        }
+
+
+        .dashboard-card .numero {
+            font-size: 30px;
+            font-weight: bold;
+            margin-top: 8px;
+        }
+
+
+        .dashboard-card .texto {
+            color: #777;
+            font-size: 14px;
+            margin-top: 5px;
+        }
+
+
+        /* ==========================================
+           MENSAGEM
+        ========================================== */
+
+        .mensagem {
+            background: #f5f7fb;
+            border-radius: 10px;
+            padding: 18px;
+            color: #666;
+        }
+
+
+        .erro {
+            color: #c82623;
+        }
+
+
+        .sucesso {
+            color: #218838;
+        }
+
+
+        /* ==========================================
+           RODAPÉ
+        ========================================== */
+
+        footer {
+            text-align: center;
+            padding: 30px 20px;
+            color: #777;
+            font-size: 14px;
+        }
+
+
+        /* ==========================================
+           MOBILE
+        ========================================== */
+
+        @media (max-width: 900px) {
+
+            .menu {
+                grid-template-columns: repeat(3, 1fr);
+            }
+
+            .dashboard-cards {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+        }
+
+
+        @media (max-width: 650px) {
+
+            header {
+                padding: 18px 5%;
+            }
+
+            .professor-name {
+                display: none;
+            }
+
+            .layout {
+                padding: 30px 18px;
+            }
+
+            .menu {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .campo.full {
+                grid-column: auto;
+            }
+
+            .dashboard-cards {
+                grid-template-columns: 1fr;
+            }
+
+            .aluno-item {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .atividade-cabecalho {
+                flex-direction: column;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+    <header>
+
+        <div class="logo">
+            GUTALKS
+        </div>
+
+
+        <div class="header-right">
+
+            <span
+                class="professor-name"
+                id="nomeProfessor">
+
+                Carregando...
+
+            </span>
+
+
+            <button
+                class="logout"
+                onclick="logout()">
+
+                Sair
+
+            </button>
+
+        </div>
+
+    </header>
+
+
+    <main class="layout">
+
+
+        <!-- ==========================================
+             BOAS-VINDAS
+        ========================================== -->
+
+        <section class="welcome">
+
+            <h1>
+                Painel do Professor 👨‍🏫
+            </h1>
+
+            <p>
+                Gerencie seus alunos e organize o conteúdo
+                do Gutalks.
+            </p>
+
+        </section>
+
+
+        <!-- ==========================================
+             CARDS
+        ========================================== -->
+
+        <section class="dashboard-cards">
+
+            <div class="dashboard-card">
+
+                <div>
+                    👥 Alunos
+                </div>
+
+                <div
+                    class="numero"
+                    id="totalAlunos">
+
+                    0
+
+                </div>
+
+                <div class="texto">
+                    alunos cadastrados
+                </div>
+
+            </div>
+
+
+            <div class="dashboard-card">
+
+                <div>
+                    📅 Atividades
+                </div>
+
+                <div
+                    class="numero"
+                    id="totalAtividades">
+
+                    0
+
+                </div>
+
+                <div class="texto">
+                    atividades cadastradas
+                </div>
+
+            </div>
+
+
+            <div class="dashboard-card">
+
+                <div>
+                    ✅ Concluídas
+                </div>
+
+                <div
+                    class="numero"
+                    id="totalConcluidas">
+
+                    0
+
+                </div>
+
+                <div class="texto">
+                    atividades concluídas
+                </div>
+
+            </div>
+
+
+            <div class="dashboard-card">
+
+                <div>
+                    📚 Ciclo / Semana
+                </div>
+
+                <div
+                    class="numero"
+                    id="resumoCiclo">
+
+                    -
+
+                </div>
+
+                <div class="texto">
+                    aluno selecionado
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- ==========================================
+             MENU
+        ========================================== -->
+
+        <nav class="menu">
+
+            <button
+                class="ativo"
+                onclick="mostrarSecao('alunos', this)">
+
+                👥 Alunos
+
+            </button>
+
+
+            <button
+                onclick="mostrarSecao('programacao', this)">
+
+                📅 Programação
+
+            </button>
+
+
+            <button
+                onclick="mostrarSecao('aulas', this)">
+
+                📚 Aulas
+
+            </button>
+
+
+            <button
+                onclick="mostrarSecao('materiais', this)">
+
+                📖 Materiais
+
+            </button>
+
+
+            <button
+                onclick="mostrarSecao('progresso', this)">
+
+                📊 Progresso
+
+            </button>
+
+        </nav>
+
+
+        <!-- ==========================================
+             ALUNOS
+        ========================================== -->
+
+        <section
+            id="secao-alunos"
+            class="secao ativa">
+
+            <div class="painel">
+
+                <h2>
+                    👥 Meus alunos
+                </h2>
+
+                <p class="subtitulo">
+                    Selecione um aluno para gerenciar a programação.
+                </p>
+
+
+                <div
+                    id="alunosLista"
+                    class="alunos-lista">
+
+                    <div class="mensagem">
+                        Carregando alunos...
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- ==========================================
+             PROGRAMAÇÃO
+        ========================================== -->
+
+        <section
+            id="secao-programacao"
+            class="secao">
+
+
+            <div class="painel">
+
+                <h2>
+                    📅 Programação semanal
+                </h2>
+
+                <p class="subtitulo">
+                    Crie atividades específicas para o aluno,
+                    ciclo e semana selecionados.
+                </p>
+
+
+                <div
+                    id="alunoSelecionado"
+                    class="aluno-selecionado">
+
+                    <strong>
+                        Nenhum aluno selecionado
+                    </strong>
+
+                    <span>
+                        Volte em "Alunos" e selecione um aluno.
+                    </span>
+
+                </div>
+
+
+                <!-- FORMULÁRIO -->
+
+                <form
+                    id="atividadeForm"
+                    onsubmit="salvarAtividade(event)">
+
+
+                    <input
+                        type="hidden"
+                        id="atividadeId"
+                    >
+
+
+                    <div class="form-grid">
+
+
+                        <div class="campo">
+
+                            <label for="ciclo">
+                                Ciclo
+                            </label>
+
+                            <input
+                                type="number"
+                                id="ciclo"
+                                min="1"
+                                value="1"
+                                required
+                            >
+
+                        </div>
+
+
+                        <div class="campo">
+
+                            <label for="semana">
+                                Semana
+                            </label>
+
+                            <input
+                                type="number"
+                                id="semana"
+                                min="1"
+                                value="1"
+                                required
+                            >
+
+                        </div>
+
+
+                        <div class="campo">
+
+                            <label for="diaSemana">
+                                Dia da semana
+                            </label>
+
+                            <select
+                                id="diaSemana"
+                                required
+                            >
+
+                                <option value="1">
+                                    Segunda-feira
+                                </option>
+
+                                <option value="2">
+                                    Terça-feira
+                                </option>
+
+                                <option value="3">
+                                    Quarta-feira
+                                </option>
+
+                                <option value="4">
+                                    Quinta-feira
+                                </option>
+
+                                <option value="5">
+                                    Sexta-feira
+                                </option>
+
+                                <option value="6">
+                                    Sábado
+                                </option>
+
+                                <option value="7">
+                                    Domingo
+                                </option>
+
+                            </select>
+
+                        </div>
+
+
+                        <div class="campo">
+
+                            <label for="tipo">
+                                Tipo
+                            </label>
+
+                            <select
+                                id="tipo"
+                                required
+                            >
+
+                                <option value="flashcards">
+                                    Flashcards
+                                </option>
+
+                                <option value="pratica_oral">
+                                    Prática oral
+                                </option>
+
+                                <option value="listening">
+                                    Listening
+                                </option>
+
+                                <option value="reading">
+                                    Reading
+                                </option>
+
+                                <option value="revisao">
+                                    Revisão
+                                </option>
+
+                                <option value="pronuncia">
+                                    Pronúncia
+                                </option>
+
+                                <option value="escrita">
+                                    Escrita
+                                </option>
+
+                                <option value="conversacao">
+                                    Conversação
+                                </option>
+
+                                <option value="midia">
+                                    Mídia
+                                </option>
+
+                            </select>
+
+                        </div>
+
+
+                        <div class="campo full">
+
+                            <label for="titulo">
+                                Título da atividade
+                            </label>
+
+                            <input
+                                type="text"
+                                id="titulo"
+                                placeholder="Ex.: Prática de pronúncia"
+                                required
+                            >
+
+                        </div>
+
+
+                        <div class="campo full">
+
+                            <label for="descricao">
+                                Descrição
+                            </label>
+
+                            <textarea
+                                id="descricao"
+                                placeholder="Explique ao aluno o que ele deve fazer."
+                            ></textarea>
+
+                        </div>
+
+
+                        <div class="campo">
+
+                            <label for="link">
+                                Link
+                            </label>
+
+                            <input
+                                type="url"
+                                id="link"
+                                placeholder="https://..."
+                            >
+
+                        </div>
+
+
+                        <div class="campo">
+
+                            <label for="tempo">
+                                Tempo estimado (minutos)
+                            </label>
+
+                            <input
+                                type="number"
+                                id="tempo"
+                                min="1"
+                                placeholder="Ex.: 20"
+                            >
+
+                        </div>
+
+                    </div>
+
+
+                    <div
+                        id="mensagemFormulario"
+                        style="
+                            margin-top: 15px;
+                            min-height: 20px;
+                        "
+                    ></div>
+
+
+                    <div class="acoes-formulario">
+
+                        <button
+                            type="submit"
+                            class="botao-principal"
+                            id="salvarButton">
+
+                            💾 Salvar atividade
+
+                        </button>
+
+
+                        <button
+                            type="button"
+                            class="
+                                botao-principal
+                                botao-verde
+                            "
+                            onclick="limparFormulario()">
+
+                            ➕ Nova atividade
+
+                        </button>
+
+                    </div>
+
+                </form>
+
+            </div>
+
+
+            <!-- LISTA -->
+
+            <div class="painel">
+
+                <h2>
+                    Atividades cadastradas
+                </h2>
+
+
+                <div
+                    id="atividadesLista"
+                    class="atividades-lista">
+
+                    <div class="mensagem">
+                        Selecione um aluno para visualizar as atividades.
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- ==========================================
+             AULAS
+        ========================================== -->
+
+        <section
+            id="secao-aulas"
+            class="secao">
+
+            <div class="painel">
+
+                <h2>
+                    📚 Aulas
+                </h2>
+
+                <p class="subtitulo">
+                    Área preparada para você organizar suas aulas.
+                </p>
+
+                <div class="mensagem">
+                    🚧 O gerenciamento de aulas será conectado
+                    aqui na próxima etapa.
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- ==========================================
+             MATERIAIS
+        ========================================== -->
+
+        <section
+            id="secao-materiais"
+            class="secao">
+
+            <div class="painel">
+
+                <h2>
+                    📖 Materiais
+                </h2>
+
+                <p class="subtitulo">
+                    Aqui você poderá disponibilizar PDFs,
+                    apresentações, links e outros materiais.
+                </p>
+
+                <div class="mensagem">
+                    🚧 O gerenciamento de materiais será conectado
+                    aqui na próxima etapa.
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- ==========================================
+             PROGRESSO
+        ========================================== -->
+
+        <section
+            id="secao-progresso"
+            class="secao">
+
+            <div class="painel">
+
+                <h2>
+                    📊 Progresso dos alunos
+                </h2>
+
+                <p class="subtitulo">
+                    Veja o desempenho e a evolução de cada aluno.
+                </p>
+
+                <div class="mensagem">
+                    🚧 O painel detalhado de progresso será conectado
+                    aqui na próxima etapa.
+                </div>
+
+            </div>
+
+        </section>
+
+
+    </main>
+
+
+    <footer>
+
+        © 2026 Gutalks — Painel do Professor
+
+    </footer>
+
+
+    <script>
+
+        // ==========================================
+        // VARIÁVEIS
+        // ==========================================
+
+        let usuarioProfessor = null;
+
+        let alunoSelecionado = null;
+
+        let professorAtual = null;
+
+
+        // ==========================================
+        // ESCAPAR HTML
+        // ==========================================
+
+        function escaparHTML(texto) {
+
+            if (
+                texto === null ||
+                texto === undefined
+            ) {
+                return "";
+            }
+
+
+            return String(texto)
+
+                .replace(
+                    /&/g,
+                    "&amp;"
+                )
+
+                .replace(
+                    /</g,
+                    "&lt;"
+                )
+
+                .replace(
+                    />/g,
+                    "&gt;"
+                )
+
+                .replace(
+                    /"/g,
+                    "&quot;"
+                )
+
+                .replace(
+                    /'/g,
+                    "&#039;"
+                );
+
+        }
+
+
+        // ==========================================
+        // MENU
+        // ==========================================
+
+        function mostrarSecao(
+            nome,
+            botao
+        ) {
+
+            document
+                .querySelectorAll(".secao")
+                .forEach(
+                    secao => {
+
+                        secao.classList.remove(
+                            "ativa"
+                        );
+
+                    }
+                );
+
+
+            document
+                .querySelectorAll(".menu button")
+                .forEach(
+                    item => {
+
+                        item.classList.remove(
+                            "ativo"
+                        );
+
+                    }
+                );
+
+
+            document
+                .getElementById(
+                    "secao-" + nome
+                )
+                .classList.add(
+                    "ativa"
+                );
+
+
+            botao.classList.add(
+                "ativo"
+            );
+
+
+            if (
+                nome === "programacao" &&
+                alunoSelecionado
+            ) {
+
+                carregarAtividades();
+
+            }
+
+        }
+
+
+        // ==========================================
+        // CARREGAR ALUNOS
+        // ==========================================
+
+        async function carregarAlunos() {
+
+            const container =
+                document.getElementById(
+                    "alunosLista"
+                );
+
+
+            const {
+                data,
+                error
+            } = await supabaseClient
+
+                .from("Alunos")
+
+                .select(
+                    "id, user_id, nome, email, semana_atual, ciclo_atual"
+                )
+
+                .order(
+                    "nome",
+                    {
+                        ascending: true
+                    }
+                );
+
+
+            if (error) {
+
+                console.error(
+                    "Erro ao carregar alunos:",
+                    error
+                );
+
+
+                container.innerHTML = `
+
+                    <div class="mensagem erro">
+
+                        Não foi possível carregar os alunos.
+
+                        <br><br>
+
+                        ${escaparHTML(
+                            error.message
+                        )}
+
+                    </div>
+
+                `;
+
+                return;
+
+            }
+
+
+            const alunos =
+                data || [];
+
+
+            document.getElementById(
+                "totalAlunos"
+            ).textContent =
+                alunos.length;
+
+
+            if (
+                alunos.length === 0
+            ) {
+
+                container.innerHTML = `
+
+                    <div class="mensagem">
+
+                        Nenhum aluno cadastrado.
+
+                    </div>
+
+                `;
+
+                return;
+
+            }
+
+
+            container.innerHTML =
+
+                alunos
+                    .map(
+                        aluno => `
+
+                            <div class="aluno-item">
+
+                                <div class="aluno-info">
+
+                                    <div class="aluno-nome">
+
+                                        ${escaparHTML(
+                                            aluno.nome
+                                        )}
+
+                                    </div>
+
+                                    <div class="aluno-email">
+
+                                        ${escaparHTML(
+                                            aluno.email
+                                        )}
+
+                                    </div>
+
+                                    <div class="aluno-status">
+
+                                        Ciclo ${Number(
+                                            aluno.ciclo_atual
+                                        ) || 1}
+
+                                        •
+
+                                        Semana ${Number(
+                                            aluno.semana_atual
+                                        ) || 1}
+
+                                    </div>
+
+                                </div>
+
+
+                                <button
+                                    class="botao-principal"
+                                    onclick="
+                                        selecionarAluno(
+                                            '${String(
+                                                aluno.id
+                                            ).replace(
+                                                /'/g,
+                                                "\\'"
+                                            )}'
+                                        )
+                                    "
+                                >
+
+                                    Gerenciar
+
+                                </button>
+
+                            </div>
+
+                        `
+                    )
+                    .join("");
+
+        }
+
+
+        // ==========================================
+        // SELECIONAR ALUNO
+        // ==========================================
+
+        async function selecionarAluno(
+            alunoId
+        ) {
+
+            const {
+                data: aluno,
+                error
+            } = await supabaseClient
+
+                .from("Alunos")
+
+                .select(
+                    "id, user_id, nome, email, semana_atual, ciclo_atual"
+                )
+
+                .eq(
+                    "id",
+                    alunoId
+                )
+
+                .single();
+
+
+            if (error) {
+
+                console.error(
+                    "Erro ao selecionar aluno:",
+                    error
+                );
+
+
+                alert(
+                    "Não foi possível selecionar o aluno."
+                );
+
+                return;
+
+            }
+
+
+            alunoSelecionado =
+                aluno;
+
+
+            document.getElementById(
+                "ciclo"
+            ).value =
+                Number(
+                    aluno.ciclo_atual
+                ) || 1;
+
+
+            document.getElementById(
+                "semana"
+            ).value =
+                Number(
+                    aluno.semana_atual
+                ) || 1;
+
+
+            document.getElementById(
+                "alunoSelecionado"
+            ).innerHTML = `
+
+                <strong>
+
+                    ${escaparHTML(
+                        aluno.nome
+                    )}
+
+                </strong>
+
+                <span>
+
+                    ${escaparHTML(
+                        aluno.email
+                    )}
+
+                    •
+
+                    Ciclo atual:
+                    ${Number(
+                        aluno.ciclo_atual
+                    ) || 1}
+
+                    •
+
+                    Semana atual:
+                    ${Number(
+                        aluno.semana_atual
+                    ) || 1}
+
+                </span>
+
+            `;
+
+
+            document.getElementById(
+                "resumoCiclo"
+            ).textContent =
+
+                `${Number(
+                    aluno.ciclo_atual
+                ) || 1}/${Number(
+                    aluno.semana_atual
+                ) || 1}`;
+
+
+            mostrarProgramacao();
+
+
+            await carregarAtividades();
+
+        }
+
+
+        // ==========================================
+        // MOSTRAR PROGRAMAÇÃO
+        // ==========================================
+
+        function mostrarProgramacao() {
+
+            document
+                .querySelectorAll(".secao")
+                .forEach(
+                    secao => {
+
+                        secao.classList.remove(
+                            "ativa"
+                        );
+
+                    }
+                );
+
+
+            document
+                .querySelectorAll(".menu button")
+                .forEach(
+                    botao => {
+
+                        botao.classList.remove(
+                            "ativo"
+                        );
+
+                    }
+                );
+
+
+            document
+                .getElementById(
+                    "secao-programacao"
+                )
+                .classList.add(
+                    "ativa"
+                );
+
+
+            const botoes =
+                document.querySelectorAll(
+                    ".menu button"
+                );
+
+
+            botoes[1].classList.add(
+                "ativo"
+            );
+
+        }
+
+
+        // ==========================================
+        // CARREGAR ATIVIDADES
+        // ==========================================
+
+        async function carregarAtividades() {
+
+            const container =
+                document.getElementById(
+                    "atividadesLista"
+                );
+
+
+            if (
+                !alunoSelecionado
+            ) {
+
+                container.innerHTML = `
+
+                    <div class="mensagem">
+
+                        Selecione um aluno.
+
+                    </div>
+
+                `;
+
+                return;
+
+            }
+
+
+            const ciclo =
+                Number(
+                    document.getElementById(
+                        "ciclo"
+                    ).value
+                ) || 1;
+
+
+            const semana =
+                Number(
+                    document.getElementById(
+                        "semana"
+                    ).value
+                ) || 1;
+
+
+            const {
+                data,
+                error
+            } = await supabaseClient
+
+                .from(
+                    "programacao_semanal"
+                )
+
+                .select("*")
+
+                .eq(
+                    "user_id",
+                    alunoSelecionado.user_id
+                )
+
+                .eq(
+                    "ciclo",
+                    ciclo
+                )
+
+                .eq(
+                    "semana",
+                    semana
+                )
+
+                .order(
+                    "dia_semana",
+                    {
+                        ascending: true
+                    }
+                );
+
+
+            if (error) {
+
+                console.error(
+                    "Erro ao carregar atividades:",
+                    error
+                );
+
+
+                container.innerHTML = `
+
+                    <div class="mensagem erro">
+
+                        Não foi possível carregar
+                        as atividades.
+
+                        <br><br>
+
+                        ${escaparHTML(
+                            error.message
+                        )}
+
+                    </div>
+
+                `;
+
+                return;
+
+            }
+
+
+            const atividades =
+                data || [];
+
+
+            document.getElementById(
+                "totalAtividades"
+            ).textContent =
+                atividades.length;
+
+
+            document.getElementById(
+                "totalConcluidas"
+            ).textContent =
+                atividades.filter(
+                    atividade =>
+                        atividade.concluida
+                ).length;
+
+
+            if (
+                atividades.length === 0
+            ) {
+
+                container.innerHTML = `
+
+                    <div class="mensagem">
+
+                        Nenhuma atividade cadastrada
+                        para o Ciclo ${ciclo},
+                        Semana ${semana}.
+
+                    </div>
+
+                `;
+
+                return;
+
+            }
+
+
+            container.innerHTML =
+
+                atividades
+
+                    .map(
+                        atividade => `
+
+                            <div class="atividade-item">
+
+                                <div class="atividade-cabecalho">
+
+                                    <div>
+
+                                        <div
+                                            class="atividade-titulo"
+                                        >
+
+                                            ${escaparHTML(
+                                                atividade.titulo
+                                            )}
+
+                                        </div>
+
+                                        <div
+                                            class="atividade-meta"
+                                        >
+
+                                            ${obterNomeDia(
+                                                atividade.dia_semana
+                                            )}
+
+                                            •
+
+                                            ${obterNomeTipo(
+                                                atividade.tipo
+                                            )}
+
+                                            ${
+                                                atividade.tempo_minutos
+                                                    ?
+
+                                                    ` • ${atividade.tempo_minutos} min`
+
+                                                    :
+
+                                                    ""
+                                            }
+
+                                            •
+
+                                            ${
+                                                atividade.concluida
+                                                    ?
+
+                                                    "✅ Concluída"
+
+                                                    :
+
+                                                    "⏳ Pendente"
+                                            }
+
+                                        </div>
+
+                                    </div>
+
+                                </div>
+
+
+                                ${
+                                    atividade.descricao
+                                        ?
+
+                                        `
+                                            <div
+                                                class="atividade-descricao"
+                                            >
+
+                                                ${escaparHTML(
+                                                    atividade.descricao
+                                                )}
+
+                                            </div>
+                                        `
+
+                                        :
+
+                                        ""
+                                }
+
+
+                                <div
+                                    class="atividade-acoes"
+                                >
+
+                                    <button
+                                        class="
+                                            botao-pequeno
+                                            botao-editar
+                                        "
+                                        onclick="
+                                            editarAtividade(
+                                                ${atividade.id}
+                                            )
+                                        "
+                                    >
+
+                                        ✏️ Editar
+
+                                    </button>
+
+
+                                    <button
+                                        class="
+                                            botao-pequeno
+                                            botao-excluir
+                                        "
+                                        onclick="
+                                            excluirAtividade(
+                                                ${atividade.id}
+                                            )
+                                        "
+                                    >
+
+                                        🗑️ Excluir
+
+                                    </button>
+
+                                </div>
+
+                            </div>
+
+                        `
+                    )
+                    .join("");
+
+        }
+
+
+        // ==========================================
+        // NOME DO DIA
+        // ==========================================
+
+        function obterNomeDia(
+            dia
+        ) {
+
+            const dias = {
+
+                1: "Segunda-feira",
+                2: "Terça-feira",
+                3: "Quarta-feira",
+                4: "Quinta-feira",
+                5: "Sexta-feira",
+                6: "Sábado",
+                7: "Domingo"
+
+            };
+
+
+            return dias[Number(dia)] ||
+                "Dia";
+
+        }
+
+
+        // ==========================================
+        // NOME DO TIPO
+        // ==========================================
+
+        function obterNomeTipo(
+            tipo
+        ) {
+
+            const tipos = {
+
+                flashcards: "Flashcards",
+                pratica_oral: "Prática oral",
+                listening: "Listening",
+                reading: "Reading",
+                revisao: "Revisão",
+                pronuncia: "Pronúncia",
+                escrita: "Escrita",
+                conversacao: "Conversação",
+                midia: "Mídia"
+
+            };
+
+
+            return tipos[tipo] ||
+                "Atividade";
+
+        }
+
+
+        // ==========================================
+        // SALVAR ATIVIDADE
+        // ==========================================
+
+        async function salvarAtividade(
+            event
+        ) {
+
+            event.preventDefault();
+
+
+            if (
+                !alunoSelecionado
+            ) {
+
+                mostrarMensagemFormulario(
+                    "Selecione um aluno antes de salvar.",
+                    true
+                );
+
+                return;
+
+            }
+
+
+            const ciclo =
+                Number(
+                    document.getElementById(
+                        "ciclo"
+                    ).value
+                );
+
+
+            const semana =
+                Number(
+                    document.getElementById(
+                        "semana"
+                    ).value
+                );
+
+
+            const diaSemana =
+                Number(
+                    document.getElementById(
+                        "diaSemana"
+                    ).value
+                );
+
+
+            const tipo =
+                document.getElementById(
+                    "tipo"
+                ).value;
+
+
+            const titulo =
+                document.getElementById(
+                    "titulo"
+                ).value.trim();
+
+
+            const descricao =
+                document.getElementById(
+                    "descricao"
+                ).value.trim();
+
+
+            const link =
+                document.getElementById(
+                    "link"
+                ).value.trim();
+
+
+            const tempo =
+                document.getElementById(
+                    "tempo"
+                ).value;
+
+
+            const atividadeId =
+                document.getElementById(
+                    "atividadeId"
+                ).value;
+
+
+            if (
+                !ciclo ||
+                !semana ||
+                !diaSemana ||
+                !titulo
+            ) {
+
+                mostrarMensagemFormulario(
+                    "Preencha os campos obrigatórios.",
+                    true
+                );
+
+                return;
+
+            }
+
+
+            const dados = {
+
+                user_id:
+                    alunoSelecionado.user_id,
+
+                ciclo:
+                    ciclo,
+
+                semana:
+                    semana,
+
+                dia_semana:
+                    diaSemana,
+
+                titulo:
+                    titulo,
+
+                tipo:
+                    tipo,
+
+                descricao:
+                    descricao || null,
+
+                link:
+                    link || null,
+
+                tempo_minutos:
+                    tempo
+                        ? Number(tempo)
+                        : null
+
+            };
+
+
+            const button =
+                document.getElementById(
+                    "salvarButton"
+                );
+
+
+            button.disabled = true;
+
+            button.textContent =
+                "Salvando...";
+
+
+            let error;
+
+
+            if (
+                atividadeId
+            ) {
+
+                const resposta =
+                    await supabaseClient
+
+                        .from(
+                            "programacao_semanal"
+                        )
+
+                        .update(
+                            dados
+                        )
+
+                        .eq(
+                            "id",
+                            atividadeId
+                        )
+
+                        .eq(
+                            "user_id",
+                            alunoSelecionado.user_id
+                        );
+
+
+                error =
+                    resposta.error;
+
+            }
+
+            else {
+
+                const resposta =
+                    await supabaseClient
+
+                        .from(
+                            "programacao_semanal"
+                        )
+
+                        .insert(
+                            dados
+                        );
+
+
+                error =
+                    resposta.error;
+
+            }
+
+
+            if (error) {
+
+                console.error(
+                    "Erro ao salvar atividade:",
+                    error
+                );
+
+
+                mostrarMensagemFormulario(
+                    error.message,
+                    true
+                );
+
+
+                button.disabled = false;
+
+                button.textContent =
+                    "💾 Salvar atividade";
+
+                return;
+
+            }
+
+
+            mostrarMensagemFormulario(
+                "Atividade salva com sucesso!",
+                false
+            );
+
+
+            limparFormulario();
+
+
+            await carregarAtividades();
+
+
+            button.disabled = false;
+
+            button.textContent =
+                "💾 Salvar atividade";
+
+        }
+
+
+        // ==========================================
+        // EDITAR ATIVIDADE
+        // ==========================================
+
+        async function editarAtividade(
+            id
+        ) {
+
+            if (
+                !alunoSelecionado
+            ) {
+
+                return;
+
+            }
+
+
+            const {
+                data: atividade,
+                error
+            } = await supabaseClient
+
+                .from(
+                    "programacao_semanal"
+                )
+
+                .select("*")
+
+                .eq(
+                    "id",
+                    id
+                )
+
+                .eq(
+                    "user_id",
+                    alunoSelecionado.user_id
+                )
+
+                .single();
+
+
+            if (error) {
+
+                alert(
+                    "Não foi possível carregar a atividade."
+                );
+
+                return;
+
+            }
+
+
+            document.getElementById(
+                "atividadeId"
+            ).value =
+                atividade.id;
+
+
+            document.getElementById(
+                "ciclo"
+            ).value =
+                atividade.ciclo;
+
+
+            document.getElementById(
+                "semana"
+            ).value =
+                atividade.semana;
+
+
+            document.getElementById(
+                "diaSemana"
+            ).value =
+                atividade.dia_semana;
+
+
+            document.getElementById(
+                "tipo"
+            ).value =
+                atividade.tipo;
+
+
+            document.getElementById(
+                "titulo"
+            ).value =
+                atividade.titulo || "";
+
+
+            document.getElementById(
+                "descricao"
+            ).value =
+                atividade.descricao || "";
+
+
+            document.getElementById(
+                "link"
+            ).value =
+                atividade.link || "";
+
+
+            document.getElementById(
+                "tempo"
+            ).value =
+                atividade.tempo_minutos || "";
+
+
+            document.getElementById(
+                "salvarButton"
+            ).textContent =
+                "💾 Atualizar atividade";
+
+
+            mostrarMensagemFormulario(
+                "Editando atividade.",
+                false
+            );
+
+        }
+
+
+        // ==========================================
+        // EXCLUIR ATIVIDADE
+        // ==========================================
+
+        async function excluirAtividade(
+            id
+        ) {
+
+            if (
+                !alunoSelecionado
+            ) {
+
+                return;
+
+            }
+
+
+            const confirmar =
+                confirm(
+                    "Deseja realmente excluir esta atividade?"
+                );
+
+
+            if (!confirmar) {
+
+                return;
+
+            }
+
+
+            const {
+                error
+            } = await supabaseClient
+
+                .from(
+                    "programacao_semanal"
+                )
+
+                .delete()
+
+                .eq(
+                    "id",
+                    id
+                )
+
+                .eq(
+                    "user_id",
+                    alunoSelecionado.user_id
+                );
+
+
+            if (error) {
+
+                console.error(
+                    "Erro ao excluir atividade:",
+                    error
+                );
+
+
+                alert(
+                    "Não foi possível excluir a atividade."
+                );
+
+                return;
+
+            }
+
+
+            await carregarAtividades();
+
+        }
+
+
+        // ==========================================
+        // LIMPAR FORMULÁRIO
+        // ==========================================
+
+        function limparFormulario() {
+
+            document.getElementById(
+                "atividadeForm"
+            ).reset();
+
+
+            document.getElementById(
+                "atividadeId"
+            ).value =
+                "";
+
+
+            if (
+                alunoSelecionado
+            ) {
+
+                document.getElementById(
+                    "ciclo"
+                ).value =
+                    Number(
+                        alunoSelecionado.ciclo_atual
+                    ) || 1;
+
+
+                document.getElementById(
+                    "semana"
+                ).value =
+                    Number(
+                        alunoSelecionado.semana_atual
+                    ) || 1;
+
+            }
+
+            else {
+
+                document.getElementById(
+                    "ciclo"
+                ).value =
+                    1;
+
+
+                document.getElementById(
+                    "semana"
+                ).value =
+                    1;
+
+            }
+
+
+            document.getElementById(
+                "diaSemana"
+            ).value =
+                1;
+
+
+            document.getElementById(
+                "tipo"
+            ).value =
+                "flashcards";
+
+
+            document.getElementById(
+                "mensagemFormulario"
+            ).textContent =
+                "";
+
+
+            document.getElementById(
+                "salvarButton"
+            ).textContent =
+                "💾 Salvar atividade";
+
+        }
+
+
+        // ==========================================
+        // MENSAGEM DO FORMULÁRIO
+        // ==========================================
+
+        function mostrarMensagemFormulario(
+            texto,
+            erro
+        ) {
+
+            const elemento =
+                document.getElementById(
+                    "mensagemFormulario"
+                );
+
+
+            elemento.textContent =
+                texto;
+
+
+            elemento.className =
+                erro
+                    ? "erro"
+                    : "sucesso";
+
+        }
+
+
+        // ==========================================
+        // VERIFICAR PROFESSOR
+        // ==========================================
+
+        async function verificarProfessor() {
+
+            try {
+
+                const {
+                    data: {
+                        session
+                    },
+                    error: sessionError
+                } =
+                    await supabaseClient
+                        .auth
+                        .getSession();
+
+
+                if (
+                    sessionError ||
+                    !session
+                ) {
+
+                    window.location.href =
+                        "login.html";
+
+                    return;
+
+                }
+
+
+                usuarioProfessor =
+                    session.user;
+
+
+                const {
+                    data: professor,
+                    error: professorError
+                } =
+                    await supabaseClient
+
+                        .from(
+                            "Professores"
+                        )
+
+                        .select(
+                            "id, nome, email, ativo"
+                        )
+
+                        .eq(
+                            "user_id",
+                            session.user.id
+                        )
+
+                        .maybeSingle();
+
+
+                if (
+                    professorError ||
+                    !professor
+                ) {
+
+                    await supabaseClient
+                        .auth
+                        .signOut();
+
+
+                    window.location.href =
+                        "login.html";
+
+                    return;
+
+                }
+
+
+                if (
+                    professor.ativo !== true
+                ) {
+
+                    await supabaseClient
+                        .auth
+                        .signOut();
+
+
+                    alert(
+                        "Seu acesso de professor está desativado."
+                    );
+
+
+                    window.location.href =
+                        "login.html";
+
+                    return;
+
+                }
+
+
+                professorAtual =
+                    professor;
+
+
+                document.getElementById(
+                    "nomeProfessor"
+                ).textContent =
+                    professor.nome ||
+                    professor.email;
+
+
+                await carregarAlunos();
+
+            }
+
+            catch (erro) {
+
+                console.error(
+                    "Erro ao verificar professor:",
+                    erro
+                );
+
+
+                alert(
+                    "Ocorreu um erro ao carregar o painel."
+                );
+
+
+                window.location.href =
+                    "login.html";
+
+            }
+
+        }
+
+
+        // ==========================================
+        // LOGOUT
+        // ==========================================
+
+        async function logout() {
+
+            await supabaseClient
+                .auth
+                .signOut();
+
+
+            window.location.href =
+                "login.html";
+
+        }
+
+
+        // ==========================================
+        // INICIAR
+        // ==========================================
+
+        verificarProfessor();
+
+    </script>
+
+</body>
+
+</html>
+```
