@@ -240,11 +240,12 @@
             }
 
 
-            // Buscar flashcards
+            // Buscar somente os flashcards do aluno logado
             const { data, error } =
                 await supabaseClient
                     .from("flashcards")
                     .select("*")
+                    .eq("user_id", session.user.id)
                     .order("id", { ascending: true });
 
 
@@ -270,7 +271,7 @@
 
                 document.getElementById("conteudo").innerHTML = `
                     <div class="mensagem">
-                        Ainda não existem flashcards cadastrados.
+                        Ainda não existem flashcards cadastrados para este aluno.
                     </div>
                 `;
 
