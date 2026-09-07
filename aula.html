@@ -45,7 +45,7 @@
     }
 
     main {
-        max-width: 900px;
+        max-width: 1000px;
         margin: 0 auto;
         padding: 45px 25px;
     }
@@ -82,6 +82,22 @@
         line-height: 1.7;
     }
 
+    .conteudo h2 {
+        color: #163075;
+        margin-bottom: 20px;
+    }
+
+    .slides {
+        margin-top: 25px;
+    }
+
+    .slides iframe {
+        width: 100%;
+        height: 600px;
+        border: none;
+        border-radius: 8px;
+    }
+
     .mensagem {
         background: white;
         padding: 30px;
@@ -96,12 +112,17 @@
     }
 
     @media (max-width: 700px) {
+
         .aula-container {
             padding: 25px;
         }
 
         h1 {
             font-size: 28px;
+        }
+
+        .slides iframe {
+            height: 450px;
         }
     }
 </style>
@@ -158,9 +179,11 @@
 
 
         // Pegar o ID da aula na URL
-        const parametros = new URLSearchParams(window.location.search);
+        const parametros =
+            new URLSearchParams(window.location.search);
 
-        const idAula = parametros.get("id");
+        const idAula =
+            parametros.get("id");
 
 
         const container =
@@ -192,12 +215,19 @@
         // Verificar erro
         if (error) {
 
-            console.error("Erro ao carregar aula:", error);
+            console.error(
+                "Erro ao carregar aula:",
+                error
+            );
 
             container.innerHTML = `
                 <div class="mensagem">
-                    <strong>Erro ao carregar a aula.</strong>
+                    <strong>
+                        Erro ao carregar a aula.
+                    </strong>
+
                     <br><br>
+
                     ${error.message}
                 </div>
             `;
@@ -223,15 +253,24 @@
                     ${aula.descricao}
                 </p>
 
+
                 <div class="conteudo">
 
-                    <h2>Conteúdo da aula</h2>
+                    <h2>
+                        📊 Slides da aula
+                    </h2>
 
-                    <br>
 
-                    <p>
-                        O conteúdo desta aula será disponibilizado aqui.
-                    </p>
+                    <div class="slides">
+
+                        <iframe
+                            loading="lazy"
+                            src="https://www.canva.com/design/DAHQBrY5A-8/_r9MI264TLOzyxTp3Bv9-w/view?embed"
+                            allowfullscreen="allowfullscreen"
+                            allow="fullscreen">
+                        </iframe>
+
+                    </div>
 
                 </div>
 
@@ -249,3 +288,4 @@
 
 </body>
 </html>
+
