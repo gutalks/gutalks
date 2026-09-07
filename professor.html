@@ -1,4 +1,3 @@
-```html
 <!DOCTYPE html>
 <html lang="pt-BR">
 
@@ -247,6 +246,12 @@
         }
 
 
+        .botao-principal:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+
         .botao-verde {
             background: #218838;
             color: white;
@@ -336,12 +341,104 @@
         .aluno-selecionado strong {
             display: block;
             margin-bottom: 5px;
+            font-size: 18px;
         }
 
 
         .aluno-selecionado span {
             color: #666;
             font-size: 14px;
+        }
+
+
+        /* ==========================================
+           CONTROLE DE CICLO / SEMANA
+        ========================================== */
+
+        .controle-semana {
+            background: #fafbfe;
+            border: 1px solid #e1e5ee;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 22px;
+        }
+
+
+        .controle-semana-titulo {
+            text-align: center;
+            font-weight: bold;
+            color: #163075;
+            margin-bottom: 18px;
+        }
+
+
+        .controle-semana-centro {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 18px;
+            flex-wrap: wrap;
+        }
+
+
+        .controle-semana-info {
+            min-width: 190px;
+            text-align: center;
+        }
+
+
+        .controle-ciclo {
+            color: #777;
+            font-size: 15px;
+            margin-bottom: 5px;
+        }
+
+
+        .controle-semana-numero {
+            color: #163075;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+
+        .botao-navegacao {
+            border: none;
+            padding: 11px 17px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+
+        .botao-navegacao:hover:not(:disabled) {
+            opacity: 0.9;
+        }
+
+
+        .botao-navegacao:disabled {
+            opacity: 0.45;
+            cursor: not-allowed;
+        }
+
+
+        .botao-anterior {
+            background: #e9edf7;
+            color: #163075;
+        }
+
+
+        .botao-proxima {
+            background: #163075;
+            color: white;
+        }
+
+
+        .aviso-navegacao {
+            color: #777;
+            text-align: center;
+            font-size: 13px;
+            line-height: 1.5;
+            margin-top: 15px;
         }
 
 
@@ -391,6 +488,14 @@
         }
 
 
+        .atividade-link {
+            margin-top: 10px;
+            font-size: 13px;
+            word-break: break-all;
+            color: #163075;
+        }
+
+
         .atividade-acoes {
             display: flex;
             gap: 8px;
@@ -421,7 +526,7 @@
 
 
         /* ==========================================
-           CARDS DASHBOARD
+           DASHBOARD
         ========================================== */
 
         .dashboard-cards {
@@ -498,6 +603,7 @@
                 grid-template-columns: repeat(3, 1fr);
             }
 
+
             .dashboard-cards {
                 grid-template-columns: repeat(2, 1fr);
             }
@@ -511,37 +617,60 @@
                 padding: 18px 5%;
             }
 
+
             .professor-name {
                 display: none;
             }
+
 
             .layout {
                 padding: 30px 18px;
             }
 
+
             .menu {
                 grid-template-columns: repeat(2, 1fr);
             }
+
 
             .form-grid {
                 grid-template-columns: 1fr;
             }
 
+
             .campo.full {
                 grid-column: auto;
             }
 
+
             .dashboard-cards {
                 grid-template-columns: 1fr;
             }
+
 
             .aluno-item {
                 flex-direction: column;
                 align-items: flex-start;
             }
 
+
             .atividade-cabecalho {
                 flex-direction: column;
+            }
+
+
+            .controle-semana-centro {
+                flex-direction: column;
+            }
+
+
+            .controle-semana-info {
+                order: -1;
+            }
+
+
+            .botao-navegacao {
+                width: 100%;
             }
 
         }
@@ -607,16 +736,18 @@
 
 
         <!-- ==========================================
-             CARDS
+             DASHBOARD
         ========================================== -->
 
         <section class="dashboard-cards">
+
 
             <div class="dashboard-card">
 
                 <div>
                     👥 Alunos
                 </div>
+
 
                 <div
                     class="numero"
@@ -626,8 +757,11 @@
 
                 </div>
 
+
                 <div class="texto">
+
                     alunos cadastrados
+
                 </div>
 
             </div>
@@ -639,6 +773,7 @@
                     📅 Atividades
                 </div>
 
+
                 <div
                     class="numero"
                     id="totalAtividades">
@@ -647,8 +782,11 @@
 
                 </div>
 
+
                 <div class="texto">
+
                     atividades cadastradas
+
                 </div>
 
             </div>
@@ -660,6 +798,7 @@
                     ✅ Concluídas
                 </div>
 
+
                 <div
                     class="numero"
                     id="totalConcluidas">
@@ -668,8 +807,11 @@
 
                 </div>
 
+
                 <div class="texto">
+
                     atividades concluídas
+
                 </div>
 
             </div>
@@ -681,6 +823,7 @@
                     📚 Ciclo / Semana
                 </div>
 
+
                 <div
                     class="numero"
                     id="resumoCiclo">
@@ -689,8 +832,11 @@
 
                 </div>
 
+
                 <div class="texto">
+
                     aluno selecionado
+
                 </div>
 
             </div>
@@ -704,9 +850,12 @@
 
         <nav class="menu">
 
+
             <button
+                id="menuAlunos"
                 class="ativo"
-                onclick="mostrarSecao('alunos', this)">
+                onclick="mostrarSecao('alunos', this)"
+            >
 
                 👥 Alunos
 
@@ -714,7 +863,9 @@
 
 
             <button
-                onclick="mostrarSecao('programacao', this)">
+                id="menuProgramacao"
+                onclick="mostrarSecao('programacao', this)"
+            >
 
                 📅 Programação
 
@@ -722,7 +873,8 @@
 
 
             <button
-                onclick="mostrarSecao('aulas', this)">
+                onclick="mostrarSecao('aulas', this)"
+            >
 
                 📚 Aulas
 
@@ -730,7 +882,8 @@
 
 
             <button
-                onclick="mostrarSecao('materiais', this)">
+                onclick="mostrarSecao('materiais', this)"
+            >
 
                 📖 Materiais
 
@@ -738,7 +891,8 @@
 
 
             <button
-                onclick="mostrarSecao('progresso', this)">
+                onclick="mostrarSecao('progresso', this)"
+            >
 
                 📊 Progresso
 
@@ -753,7 +907,8 @@
 
         <section
             id="secao-alunos"
-            class="secao ativa">
+            class="secao ativa"
+        >
 
             <div class="painel">
 
@@ -761,17 +916,24 @@
                     👥 Meus alunos
                 </h2>
 
+
                 <p class="subtitulo">
-                    Selecione um aluno para gerenciar a programação.
+
+                    Selecione um aluno para gerenciar
+                    sua programação.
+
                 </p>
 
 
                 <div
                     id="alunosLista"
-                    class="alunos-lista">
+                    class="alunos-lista"
+                >
 
                     <div class="mensagem">
+
                         Carregando alunos...
+
                     </div>
 
                 </div>
@@ -787,41 +949,149 @@
 
         <section
             id="secao-programacao"
-            class="secao">
+            class="secao"
+        >
 
+
+            <!-- ==========================================
+                 PAINEL PRINCIPAL
+            ========================================== -->
 
             <div class="painel">
 
+
                 <h2>
+
                     📅 Programação semanal
+
                 </h2>
 
+
                 <p class="subtitulo">
+
                     Crie atividades específicas para o aluno,
                     ciclo e semana selecionados.
+
                 </p>
 
 
+                <!-- ALUNO -->
+
                 <div
                     id="alunoSelecionado"
-                    class="aluno-selecionado">
+                    class="aluno-selecionado"
+                >
 
                     <strong>
+
                         Nenhum aluno selecionado
+
                     </strong>
 
+
                     <span>
+
                         Volte em "Alunos" e selecione um aluno.
+
                     </span>
 
                 </div>
 
 
-                <!-- FORMULÁRIO -->
+                <!-- ==========================================
+                     CONTROLE DA SEMANA
+                ========================================== -->
+
+                <div
+                    id="controleSemana"
+                    class="controle-semana"
+                    style="display:none;"
+                >
+
+                    <div class="controle-semana-titulo">
+
+                        📚 Semana atual do aluno
+
+                    </div>
+
+
+                    <div class="controle-semana-centro">
+
+
+                        <button
+                            id="botaoSemanaAnterior"
+                            class="
+                                botao-navegacao
+                                botao-anterior
+                            "
+                            onclick="alterarSemanaAluno(-1)"
+                        >
+
+                            ← Semana anterior
+
+                        </button>
+
+
+                        <div class="controle-semana-info">
+
+
+                            <div
+                                id="controleCiclo"
+                                class="controle-ciclo"
+                            >
+
+                                Ciclo 1
+
+                            </div>
+
+
+                            <div
+                                id="controleSemana"
+                                class="controle-semana-numero"
+                            >
+
+                                Semana 1
+
+                            </div>
+
+                        </div>
+
+
+                        <button
+                            id="botaoProximaSemana"
+                            class="
+                                botao-navegacao
+                                botao-proxima
+                            "
+                            onclick="alterarSemanaAluno(1)"
+                        >
+
+                            Próxima semana →
+
+                        </button>
+
+                    </div>
+
+
+                    <div class="aviso-navegacao">
+
+                        As atividades das semanas anteriores
+                        continuam armazenadas.
+                        Avançar apenas altera a semana atual do aluno.
+
+                    </div>
+
+                </div>
+
+
+                <!-- ==========================================
+                     FORMULÁRIO
+                ========================================== -->
 
                 <form
                     id="atividadeForm"
-                    onsubmit="salvarAtividade(event)">
+                    onsubmit="salvarAtividade(event)"
+                >
 
 
                     <input
@@ -833,11 +1103,16 @@
                     <div class="form-grid">
 
 
+                        <!-- CICLO -->
+
                         <div class="campo">
 
                             <label for="ciclo">
+
                                 Ciclo
+
                             </label>
+
 
                             <input
                                 type="number"
@@ -850,16 +1125,22 @@
                         </div>
 
 
+                        <!-- SEMANA -->
+
                         <div class="campo">
 
                             <label for="semana">
+
                                 Semana
+
                             </label>
+
 
                             <input
                                 type="number"
                                 id="semana"
                                 min="1"
+                                max="4"
                                 value="1"
                                 required
                             >
@@ -867,11 +1148,16 @@
                         </div>
 
 
+                        <!-- DIA -->
+
                         <div class="campo">
 
                             <label for="diaSemana">
+
                                 Dia da semana
+
                             </label>
+
 
                             <select
                                 id="diaSemana"
@@ -911,11 +1197,16 @@
                         </div>
 
 
+                        <!-- TIPO -->
+
                         <div class="campo">
 
                             <label for="tipo">
+
                                 Tipo
+
                             </label>
+
 
                             <select
                                 id="tipo"
@@ -963,11 +1254,16 @@
                         </div>
 
 
+                        <!-- TÍTULO -->
+
                         <div class="campo full">
 
                             <label for="titulo">
+
                                 Título da atividade
+
                             </label>
+
 
                             <input
                                 type="text"
@@ -979,11 +1275,16 @@
                         </div>
 
 
+                        <!-- DESCRIÇÃO -->
+
                         <div class="campo full">
 
                             <label for="descricao">
+
                                 Descrição
+
                             </label>
+
 
                             <textarea
                                 id="descricao"
@@ -993,11 +1294,16 @@
                         </div>
 
 
+                        <!-- LINK -->
+
                         <div class="campo">
 
                             <label for="link">
+
                                 Link
+
                             </label>
+
 
                             <input
                                 type="url"
@@ -1008,11 +1314,16 @@
                         </div>
 
 
+                        <!-- TEMPO -->
+
                         <div class="campo">
 
                             <label for="tempo">
+
                                 Tempo estimado (minutos)
+
                             </label>
+
 
                             <input
                                 type="number"
@@ -1037,10 +1348,12 @@
 
                     <div class="acoes-formulario">
 
+
                         <button
                             type="submit"
                             class="botao-principal"
-                            id="salvarButton">
+                            id="salvarButton"
+                        >
 
                             💾 Salvar atividade
 
@@ -1053,7 +1366,8 @@
                                 botao-principal
                                 botao-verde
                             "
-                            onclick="limparFormulario()">
+                            onclick="limparFormulario()"
+                        >
 
                             ➕ Nova atividade
 
@@ -1066,21 +1380,30 @@
             </div>
 
 
-            <!-- LISTA -->
+            <!-- ==========================================
+                 LISTA DE ATIVIDADES
+            ========================================== -->
 
             <div class="painel">
 
+
                 <h2>
+
                     Atividades cadastradas
+
                 </h2>
 
 
                 <div
                     id="atividadesLista"
-                    class="atividades-lista">
+                    class="atividades-lista"
+                >
 
                     <div class="mensagem">
-                        Selecione um aluno para visualizar as atividades.
+
+                        Selecione um aluno para visualizar
+                        as atividades.
+
                     </div>
 
                 </div>
@@ -1096,21 +1419,31 @@
 
         <section
             id="secao-aulas"
-            class="secao">
+            class="secao"
+        >
 
             <div class="painel">
 
                 <h2>
+
                     📚 Aulas
+
                 </h2>
 
+
                 <p class="subtitulo">
-                    Área preparada para você organizar suas aulas.
+
+                    Área preparada para você organizar
+                    suas aulas.
+
                 </p>
 
+
                 <div class="mensagem">
+
                     🚧 O gerenciamento de aulas será conectado
                     aqui na próxima etapa.
+
                 </div>
 
             </div>
@@ -1124,22 +1457,31 @@
 
         <section
             id="secao-materiais"
-            class="secao">
+            class="secao"
+        >
 
             <div class="painel">
 
                 <h2>
+
                     📖 Materiais
+
                 </h2>
 
+
                 <p class="subtitulo">
+
                     Aqui você poderá disponibilizar PDFs,
                     apresentações, links e outros materiais.
+
                 </p>
 
+
                 <div class="mensagem">
+
                     🚧 O gerenciamento de materiais será conectado
                     aqui na próxima etapa.
+
                 </div>
 
             </div>
@@ -1153,21 +1495,31 @@
 
         <section
             id="secao-progresso"
-            class="secao">
+            class="secao"
+        >
 
             <div class="painel">
 
                 <h2>
+
                     📊 Progresso dos alunos
+
                 </h2>
 
+
                 <p class="subtitulo">
-                    Veja o desempenho e a evolução de cada aluno.
+
+                    Veja o desempenho e a evolução
+                    de cada aluno.
+
                 </p>
 
+
                 <div class="mensagem">
-                    🚧 O painel detalhado de progresso será conectado
-                    aqui na próxima etapa.
+
+                    🚧 O painel detalhado de progresso
+                    será conectado aqui na próxima etapa.
+
                 </div>
 
             </div>
@@ -1186,6 +1538,7 @@
 
 
     <script>
+
 
         // ==========================================
         // VARIÁVEIS
@@ -1208,7 +1561,9 @@
                 texto === null ||
                 texto === undefined
             ) {
+
                 return "";
+
             }
 
 
@@ -1277,18 +1632,28 @@
                 );
 
 
-            document
-                .getElementById(
+            const secao =
+                document.getElementById(
                     "secao-" + nome
-                )
-                .classList.add(
-                    "ativa"
                 );
 
 
-            botao.classList.add(
-                "ativo"
-            );
+            if (secao) {
+
+                secao.classList.add(
+                    "ativa"
+                );
+
+            }
+
+
+            if (botao) {
+
+                botao.classList.add(
+                    "ativo"
+                );
+
+            }
 
 
             if (
@@ -1296,9 +1661,73 @@
                 alunoSelecionado
             ) {
 
+                atualizarInterfaceAluno();
+
                 carregarAtividades();
 
             }
+
+        }
+
+
+        // ==========================================
+        // MOSTRAR PROGRAMAÇÃO
+        // ==========================================
+
+        function mostrarProgramacao() {
+
+            document
+                .querySelectorAll(".secao")
+                .forEach(
+                    secao => {
+
+                        secao.classList.remove(
+                            "ativa"
+                        );
+
+                    }
+                );
+
+
+            document
+                .querySelectorAll(".menu button")
+                .forEach(
+                    botao => {
+
+                        botao.classList.remove(
+                            "ativo"
+                        );
+
+                    }
+                );
+
+
+            document
+                .getElementById(
+                    "secao-programacao"
+                )
+                .classList.add(
+                    "ativa"
+                );
+
+
+            document
+                .getElementById(
+                    "menuProgramacao"
+                )
+                .classList.add(
+                    "ativo"
+                );
+
+
+            document
+                .getElementById(
+                    "controleSemana"
+                )
+                .style.display =
+                alunoSelecionado
+                    ? "block"
+                    : "none";
 
         }
 
@@ -1395,68 +1824,75 @@
             container.innerHTML =
 
                 alunos
+
                     .map(
-                        aluno => `
+                        aluno => {
 
-                            <div class="aluno-item">
+                            const ciclo =
+                                Number(
+                                    aluno.ciclo_atual
+                                ) || 1;
 
-                                <div class="aluno-info">
 
-                                    <div class="aluno-nome">
+                            const semana =
+                                Number(
+                                    aluno.semana_atual
+                                ) || 1;
 
-                                        ${escaparHTML(
-                                            aluno.nome
-                                        )}
+
+                            return `
+
+                                <div class="aluno-item">
+
+                                    <div class="aluno-info">
+
+                                        <div class="aluno-nome">
+
+                                            ${escaparHTML(
+                                                aluno.nome
+                                            )}
+
+                                        </div>
+
+
+                                        <div class="aluno-email">
+
+                                            ${escaparHTML(
+                                                aluno.email || ""
+                                            )}
+
+                                        </div>
+
+
+                                        <div class="aluno-status">
+
+                                            Ciclo ${ciclo}
+                                            •
+                                            Semana ${semana}
+
+                                        </div>
 
                                     </div>
 
-                                    <div class="aluno-email">
 
-                                        ${escaparHTML(
-                                            aluno.email
-                                        )}
+                                    <button
+                                        class="botao-principal"
+                                        onclick='selecionarAluno(${JSON.stringify(
+                                            aluno.id
+                                        )})'
+                                    >
 
-                                    </div>
+                                        Gerenciar
 
-                                    <div class="aluno-status">
-
-                                        Ciclo ${Number(
-                                            aluno.ciclo_atual
-                                        ) || 1}
-
-                                        •
-
-                                        Semana ${Number(
-                                            aluno.semana_atual
-                                        ) || 1}
-
-                                    </div>
+                                    </button>
 
                                 </div>
 
+                            `;
 
-                                <button
-                                    class="botao-principal"
-                                    onclick="
-                                        selecionarAluno(
-                                            '${String(
-                                                aluno.id
-                                            ).replace(
-                                                /'/g,
-                                                "\\'"
-                                            )}'
-                                        )
-                                    "
-                                >
-
-                                    Gerenciar
-
-                                </button>
-
-                            </div>
-
-                        `
+                        }
                     )
+
                     .join("");
 
         }
@@ -1469,6 +1905,12 @@
         async function selecionarAluno(
             alunoId
         ) {
+
+            console.log(
+                "Selecionando aluno:",
+                alunoId
+            );
+
 
             const {
                 data: aluno,
@@ -1498,7 +1940,19 @@
 
 
                 alert(
-                    "Não foi possível selecionar o aluno."
+                    "Não foi possível selecionar o aluno.\n\n" +
+                    error.message
+                );
+
+                return;
+
+            }
+
+
+            if (!aluno) {
+
+                alert(
+                    "Aluno não encontrado."
                 );
 
                 return;
@@ -1510,68 +1964,7 @@
                 aluno;
 
 
-            document.getElementById(
-                "ciclo"
-            ).value =
-                Number(
-                    aluno.ciclo_atual
-                ) || 1;
-
-
-            document.getElementById(
-                "semana"
-            ).value =
-                Number(
-                    aluno.semana_atual
-                ) || 1;
-
-
-            document.getElementById(
-                "alunoSelecionado"
-            ).innerHTML = `
-
-                <strong>
-
-                    ${escaparHTML(
-                        aluno.nome
-                    )}
-
-                </strong>
-
-                <span>
-
-                    ${escaparHTML(
-                        aluno.email
-                    )}
-
-                    •
-
-                    Ciclo atual:
-                    ${Number(
-                        aluno.ciclo_atual
-                    ) || 1}
-
-                    •
-
-                    Semana atual:
-                    ${Number(
-                        aluno.semana_atual
-                    ) || 1}
-
-                </span>
-
-            `;
-
-
-            document.getElementById(
-                "resumoCiclo"
-            ).textContent =
-
-                `${Number(
-                    aluno.ciclo_atual
-                ) || 1}/${Number(
-                    aluno.semana_atual
-                ) || 1}`;
+            atualizarInterfaceAluno();
 
 
             mostrarProgramacao();
@@ -1583,55 +1976,373 @@
 
 
         // ==========================================
-        // MOSTRAR PROGRAMAÇÃO
+        // ATUALIZAR INTERFACE DO ALUNO
         // ==========================================
 
-        function mostrarProgramacao() {
+        function atualizarInterfaceAluno() {
 
-            document
-                .querySelectorAll(".secao")
-                .forEach(
-                    secao => {
+            if (
+                !alunoSelecionado
+            ) {
 
-                        secao.classList.remove(
-                            "ativa"
-                        );
+                return;
 
-                    }
+            }
+
+
+            const ciclo =
+                Number(
+                    alunoSelecionado.ciclo_atual
+                ) || 1;
+
+
+            const semana =
+                Number(
+                    alunoSelecionado.semana_atual
+                ) || 1;
+
+
+            // ==========================================
+            // INFORMAÇÕES DO ALUNO
+            // ==========================================
+
+            document.getElementById(
+                "alunoSelecionado"
+            ).innerHTML = `
+
+                <strong>
+
+                    ${escaparHTML(
+                        alunoSelecionado.nome
+                    )}
+
+                </strong>
+
+
+                <span>
+
+                    ${escaparHTML(
+                        alunoSelecionado.email || ""
+                    )}
+
+                    •
+
+                    Ciclo atual: ${ciclo}
+
+                    •
+
+                    Semana atual: ${semana}
+
+                </span>
+
+            `;
+
+
+            // ==========================================
+            // CONTROLE
+            // ==========================================
+
+            document.getElementById(
+                "controleSemana"
+            ).style.display =
+                "block";
+
+
+            document.getElementById(
+                "controleCiclo"
+            ).textContent =
+                `Ciclo ${ciclo}`;
+
+
+            document.getElementById(
+                "controleSemana"
+            ).textContent =
+                `Semana ${semana}`;
+
+
+            // ==========================================
+            // BOTÃO ANTERIOR
+            // ==========================================
+
+            document.getElementById(
+                "botaoSemanaAnterior"
+            ).disabled =
+                ciclo === 1 &&
+                semana === 1;
+
+
+            // ==========================================
+            // FORMULÁRIO
+            // ==========================================
+
+            document.getElementById(
+                "ciclo"
+            ).value =
+                ciclo;
+
+
+            document.getElementById(
+                "semana"
+            ).value =
+                semana;
+
+
+            // ==========================================
+            // DASHBOARD
+            // ==========================================
+
+            document.getElementById(
+                "resumoCiclo"
+            ).textContent =
+                `${ciclo}/${semana}`;
+
+        }
+
+
+        // ==========================================
+        // ALTERAR SEMANA DO ALUNO
+        // ==========================================
+
+        async function alterarSemanaAluno(
+            direcao
+        ) {
+
+            if (
+                !alunoSelecionado
+            ) {
+
+                alert(
+                    "Selecione um aluno primeiro."
+                );
+
+                return;
+
+            }
+
+
+            let ciclo =
+                Number(
+                    alunoSelecionado.ciclo_atual
+                ) || 1;
+
+
+            let semana =
+                Number(
+                    alunoSelecionado.semana_atual
+                ) || 1;
+
+
+            // ==========================================
+            // PRÓXIMA SEMANA
+            // ==========================================
+
+            if (
+                direcao === 1
+            ) {
+
+                if (
+                    semana < 4
+                ) {
+
+                    semana++;
+
+                }
+
+                else {
+
+                    semana = 1;
+
+                    ciclo++;
+
+                }
+
+            }
+
+
+            // ==========================================
+            // SEMANA ANTERIOR
+            // ==========================================
+
+            else if (
+                direcao === -1
+            ) {
+
+                if (
+                    ciclo === 1 &&
+                    semana === 1
+                ) {
+
+                    return;
+
+                }
+
+
+                if (
+                    semana > 1
+                ) {
+
+                    semana--;
+
+                }
+
+                else {
+
+                    ciclo--;
+
+                    semana = 4;
+
+                }
+
+            }
+
+
+            const mensagemConfirmacao =
+
+                direcao === 1
+
+                    ?
+
+                    `Deseja avançar para o Ciclo ${ciclo}, Semana ${semana}?`
+
+                    :
+
+                    `Deseja voltar para o Ciclo ${ciclo}, Semana ${semana}?`;
+
+
+            const confirmar =
+                confirm(
+                    mensagemConfirmacao +
+                    "\n\n" +
+                    "As atividades das semanas anteriores NÃO serão apagadas."
                 );
 
 
-            document
-                .querySelectorAll(".menu button")
-                .forEach(
-                    botao => {
+            if (
+                !confirmar
+            ) {
 
-                        botao.classList.remove(
-                            "ativo"
-                        );
+                return;
 
-                    }
+            }
+
+
+            const botao =
+                direcao === 1
+
+                    ?
+
+                    document.getElementById(
+                        "botaoProximaSemana"
+                    )
+
+                    :
+
+                    document.getElementById(
+                        "botaoSemanaAnterior"
+                    );
+
+
+            const textoOriginal =
+                direcao === 1
+
+                    ?
+
+                    "Próxima semana →"
+
+                    :
+
+                    "← Semana anterior";
+
+
+            botao.disabled =
+                true;
+
+
+            botao.textContent =
+                "Atualizando...";
+
+
+            const {
+                data,
+                error
+            } =
+                await supabaseClient
+
+                    .from(
+                        "Alunos"
+                    )
+
+                    .update({
+
+                        ciclo_atual:
+                            ciclo,
+
+                        semana_atual:
+                            semana
+
+                    })
+
+                    .eq(
+                        "id",
+                        alunoSelecionado.id
+                    )
+
+                    .select(
+                        "id, user_id, nome, email, semana_atual, ciclo_atual"
+                    )
+
+                    .single();
+
+
+            if (error) {
+
+                console.error(
+                    "Erro ao alterar semana:",
+                    error
                 );
 
 
-            document
-                .getElementById(
-                    "secao-programacao"
-                )
-                .classList.add(
-                    "ativa"
+                alert(
+                    "Não foi possível alterar a semana.\n\n" +
+                    error.message
                 );
 
 
-            const botoes =
-                document.querySelectorAll(
-                    ".menu button"
-                );
+                botao.disabled =
+                    false;
 
 
-            botoes[1].classList.add(
-                "ativo"
-            );
+                botao.textContent =
+                    textoOriginal;
+
+
+                return;
+
+            }
+
+
+            alunoSelecionado =
+                data;
+
+
+            atualizarInterfaceAluno();
+
+
+            limparFormulario();
+
+
+            await carregarAtividades();
+
+
+            await carregarAlunos();
+
+
+            botao.disabled =
+                false;
+
+
+            botao.textContent =
+                textoOriginal;
 
         }
 
@@ -1686,35 +2397,36 @@
             const {
                 data,
                 error
-            } = await supabaseClient
+            } =
+                await supabaseClient
 
-                .from(
-                    "programacao_semanal"
-                )
+                    .from(
+                        "programacao_semanal"
+                    )
 
-                .select("*")
+                    .select("*")
 
-                .eq(
-                    "user_id",
-                    alunoSelecionado.user_id
-                )
+                    .eq(
+                        "user_id",
+                        alunoSelecionado.user_id
+                    )
 
-                .eq(
-                    "ciclo",
-                    ciclo
-                )
+                    .eq(
+                        "ciclo",
+                        ciclo
+                    )
 
-                .eq(
-                    "semana",
-                    semana
-                )
+                    .eq(
+                        "semana",
+                        semana
+                    )
 
-                .order(
-                    "dia_semana",
-                    {
-                        ascending: true
-                    }
-                );
+                    .order(
+                        "dia_semana",
+                        {
+                            ascending: true
+                        }
+                    );
 
 
             if (error) {
@@ -1751,6 +2463,10 @@
                 data || [];
 
 
+            // ==========================================
+            // DASHBOARD
+            // ==========================================
+
             document.getElementById(
                 "totalAtividades"
             ).textContent =
@@ -1760,11 +2476,18 @@
             document.getElementById(
                 "totalConcluidas"
             ).textContent =
+
                 atividades.filter(
                     atividade =>
-                        atividade.concluida
+                        Boolean(
+                            atividade.concluida
+                        )
                 ).length;
 
+
+            // ==========================================
+            // NENHUMA ATIVIDADE
+            // ==========================================
 
             if (
                 atividades.length === 0
@@ -1787,6 +2510,10 @@
             }
 
 
+            // ==========================================
+            // LISTAR ATIVIDADES
+            // ==========================================
+
             container.innerHTML =
 
                 atividades
@@ -1796,9 +2523,12 @@
 
                             <div class="atividade-item">
 
+
                                 <div class="atividade-cabecalho">
 
+
                                     <div>
+
 
                                         <div
                                             class="atividade-titulo"
@@ -1809,6 +2539,7 @@
                                             )}
 
                                         </div>
+
 
                                         <div
                                             class="atividade-meta"
@@ -1826,6 +2557,7 @@
 
                                             ${
                                                 atividade.tempo_minutos
+
                                                     ?
 
                                                     ` • ${atividade.tempo_minutos} min`
@@ -1839,6 +2571,7 @@
 
                                             ${
                                                 atividade.concluida
+
                                                     ?
 
                                                     "✅ Concluída"
@@ -1857,9 +2590,11 @@
 
                                 ${
                                     atividade.descricao
+
                                         ?
 
                                         `
+
                                             <div
                                                 class="atividade-descricao"
                                             >
@@ -1869,6 +2604,34 @@
                                                 )}
 
                                             </div>
+
+                                        `
+
+                                        :
+
+                                        ""
+                                }
+
+
+                                ${
+                                    atividade.link
+
+                                        ?
+
+                                        `
+
+                                            <div
+                                                class="atividade-link"
+                                            >
+
+                                                🔗
+
+                                                ${escaparHTML(
+                                                    atividade.link
+                                                )}
+
+                                            </div>
+
                                         `
 
                                         :
@@ -1880,6 +2643,7 @@
                                 <div
                                     class="atividade-acoes"
                                 >
+
 
                                     <button
                                         class="
@@ -1914,12 +2678,15 @@
 
                                     </button>
 
+
                                 </div>
+
 
                             </div>
 
                         `
                     )
+
                     .join("");
 
         }
@@ -1936,17 +2703,25 @@
             const dias = {
 
                 1: "Segunda-feira",
+
                 2: "Terça-feira",
+
                 3: "Quarta-feira",
+
                 4: "Quinta-feira",
+
                 5: "Sexta-feira",
+
                 6: "Sábado",
+
                 7: "Domingo"
 
             };
 
 
-            return dias[Number(dia)] ||
+            return dias[
+                Number(dia)
+            ] ||
                 "Dia";
 
         }
@@ -1962,15 +2737,32 @@
 
             const tipos = {
 
-                flashcards: "Flashcards",
-                pratica_oral: "Prática oral",
-                listening: "Listening",
-                reading: "Reading",
-                revisao: "Revisão",
-                pronuncia: "Pronúncia",
-                escrita: "Escrita",
-                conversacao: "Conversação",
-                midia: "Mídia"
+                flashcards:
+                    "Flashcards",
+
+                pratica_oral:
+                    "Prática oral",
+
+                listening:
+                    "Listening",
+
+                reading:
+                    "Reading",
+
+                revisao:
+                    "Revisão",
+
+                pronuncia:
+                    "Pronúncia",
+
+                escrita:
+                    "Escrita",
+
+                conversacao:
+                    "Conversação",
+
+                midia:
+                    "Mídia"
 
             };
 
@@ -2039,19 +2831,22 @@
             const titulo =
                 document.getElementById(
                     "titulo"
-                ).value.trim();
+                ).value
+                .trim();
 
 
             const descricao =
                 document.getElementById(
                     "descricao"
-                ).value.trim();
+                ).value
+                .trim();
 
 
             const link =
                 document.getElementById(
                     "link"
-                ).value.trim();
+                ).value
+                .trim();
 
 
             const tempo =
@@ -2083,6 +2878,21 @@
             }
 
 
+            if (
+                semana < 1 ||
+                semana > 4
+            ) {
+
+                mostrarMensagemFormulario(
+                    "A semana deve estar entre 1 e 4.",
+                    true
+                );
+
+                return;
+
+            }
+
+
             const dados = {
 
                 user_id:
@@ -2104,10 +2914,12 @@
                     tipo,
 
                 descricao:
-                    descricao || null,
+                    descricao ||
+                    null,
 
                 link:
-                    link || null,
+                    link ||
+                    null,
 
                 tempo_minutos:
                     tempo
@@ -2123,14 +2935,21 @@
                 );
 
 
-            button.disabled = true;
+            button.disabled =
+                true;
+
 
             button.textContent =
                 "Salvando...";
 
 
-            let error;
+            let error =
+                null;
 
+
+            // ==========================================
+            // EDITAR
+            // ==========================================
 
             if (
                 atividadeId
@@ -2162,6 +2981,11 @@
                     resposta.error;
 
             }
+
+
+            // ==========================================
+            // CRIAR
+            // ==========================================
 
             else {
 
@@ -2197,10 +3021,13 @@
                 );
 
 
-                button.disabled = false;
+                button.disabled =
+                    false;
+
 
                 button.textContent =
                     "💾 Salvar atividade";
+
 
                 return;
 
@@ -2208,7 +3035,9 @@
 
 
             mostrarMensagemFormulario(
-                "Atividade salva com sucesso!",
+                atividadeId
+                    ? "Atividade atualizada com sucesso!"
+                    : "Atividade salva com sucesso!",
                 false
             );
 
@@ -2219,7 +3048,9 @@
             await carregarAtividades();
 
 
-            button.disabled = false;
+            button.disabled =
+                false;
+
 
             button.textContent =
                 "💾 Salvar atividade";
@@ -2247,31 +3078,33 @@
             const {
                 data: atividade,
                 error
-            } = await supabaseClient
+            } =
+                await supabaseClient
 
-                .from(
-                    "programacao_semanal"
-                )
+                    .from(
+                        "programacao_semanal"
+                    )
 
-                .select("*")
+                    .select("*")
 
-                .eq(
-                    "id",
-                    id
-                )
+                    .eq(
+                        "id",
+                        id
+                    )
 
-                .eq(
-                    "user_id",
-                    alunoSelecionado.user_id
-                )
+                    .eq(
+                        "user_id",
+                        alunoSelecionado.user_id
+                    )
 
-                .single();
+                    .single();
 
 
             if (error) {
 
                 alert(
-                    "Não foi possível carregar a atividade."
+                    "Não foi possível carregar a atividade.\n\n" +
+                    error.message
                 );
 
                 return;
@@ -2312,25 +3145,29 @@
             document.getElementById(
                 "titulo"
             ).value =
-                atividade.titulo || "";
+                atividade.titulo ||
+                "";
 
 
             document.getElementById(
                 "descricao"
             ).value =
-                atividade.descricao || "";
+                atividade.descricao ||
+                "";
 
 
             document.getElementById(
                 "link"
             ).value =
-                atividade.link || "";
+                atividade.link ||
+                "";
 
 
             document.getElementById(
                 "tempo"
             ).value =
-                atividade.tempo_minutos || "";
+                atividade.tempo_minutos ||
+                "";
 
 
             document.getElementById(
@@ -2370,7 +3207,9 @@
                 );
 
 
-            if (!confirmar) {
+            if (
+                !confirmar
+            ) {
 
                 return;
 
@@ -2379,23 +3218,24 @@
 
             const {
                 error
-            } = await supabaseClient
+            } =
+                await supabaseClient
 
-                .from(
-                    "programacao_semanal"
-                )
+                    .from(
+                        "programacao_semanal"
+                    )
 
-                .delete()
+                    .delete()
 
-                .eq(
-                    "id",
-                    id
-                )
+                    .eq(
+                        "id",
+                        id
+                    )
 
-                .eq(
-                    "user_id",
-                    alunoSelecionado.user_id
-                );
+                    .eq(
+                        "user_id",
+                        alunoSelecionado.user_id
+                    );
 
 
             if (error) {
@@ -2407,7 +3247,8 @@
 
 
                 alert(
-                    "Não foi possível excluir a atividade."
+                    "Não foi possível excluir a atividade.\n\n" +
+                    error.message
                 );
 
                 return;
@@ -2427,14 +3268,45 @@
         function limparFormulario() {
 
             document.getElementById(
-                "atividadeForm"
-            ).reset();
-
-
-            document.getElementById(
                 "atividadeId"
             ).value =
                 "";
+
+
+            document.getElementById(
+                "titulo"
+            ).value =
+                "";
+
+
+            document.getElementById(
+                "descricao"
+            ).value =
+                "";
+
+
+            document.getElementById(
+                "link"
+            ).value =
+                "";
+
+
+            document.getElementById(
+                "tempo"
+            ).value =
+                "";
+
+
+            document.getElementById(
+                "diaSemana"
+            ).value =
+                "1";
+
+
+            document.getElementById(
+                "tipo"
+            ).value =
+                "flashcards";
 
 
             if (
@@ -2472,18 +3344,6 @@
                     1;
 
             }
-
-
-            document.getElementById(
-                "diaSemana"
-            ).value =
-                1;
-
-
-            document.getElementById(
-                "tipo"
-            ).value =
-                "flashcards";
 
 
             document.getElementById(
@@ -2586,9 +3446,42 @@
 
 
                 if (
-                    professorError ||
+                    professorError
+                ) {
+
+                    console.error(
+                        "Erro ao verificar professor:",
+                        professorError
+                    );
+
+
+                    alert(
+                        "Não foi possível verificar seu acesso de professor.\n\n" +
+                        professorError.message
+                    );
+
+
+                    await supabaseClient
+                        .auth
+                        .signOut();
+
+
+                    window.location.href =
+                        "login.html";
+
+                    return;
+
+                }
+
+
+                if (
                     !professor
                 ) {
+
+                    alert(
+                        "Esta conta não está cadastrada como professor."
+                    );
+
 
                     await supabaseClient
                         .auth
@@ -2607,14 +3500,14 @@
                     professor.ativo !== true
                 ) {
 
-                    await supabaseClient
-                        .auth
-                        .signOut();
-
-
                     alert(
                         "Seu acesso de professor está desativado."
                     );
+
+
+                    await supabaseClient
+                        .auth
+                        .signOut();
 
 
                     window.location.href =
@@ -2633,7 +3526,8 @@
                     "nomeProfessor"
                 ).textContent =
                     professor.nome ||
-                    professor.email;
+                    professor.email ||
+                    "Professor";
 
 
                 await carregarAlunos();
@@ -2649,12 +3543,12 @@
 
 
                 alert(
-                    "Ocorreu um erro ao carregar o painel."
+                    "Ocorreu um erro ao carregar o painel.\n\n" +
+                    (
+                        erro.message ||
+                        String(erro)
+                    )
                 );
-
-
-                window.location.href =
-                    "login.html";
 
             }
 
@@ -2689,4 +3583,3 @@
 </body>
 
 </html>
-```
