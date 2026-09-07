@@ -394,7 +394,7 @@
 
             const { data: aluno, error: alunoError } =
                 await supabaseClient
-                    .from("alunos")
+                    .from("Alunos")
                     .select("nome, email")
                     .eq("user_id", session.user.id)
                     .single();
