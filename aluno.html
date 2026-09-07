@@ -24,7 +24,6 @@
             color: #163075;
         }
 
-
         /* ==========================================
            HEADER
         ========================================== */
@@ -506,8 +505,8 @@
         .modal-conteudo {
             background: white;
             width: 100%;
-            max-width: 950px;
-            max-height: 90vh;
+            max-width: 1000px;
+            max-height: 92vh;
             overflow-y: auto;
             border-radius: 18px;
             padding: 25px;
@@ -555,25 +554,26 @@
 
         .modal-embed {
             width: 100%;
-            min-height: 480px;
+            min-height: 520px;
             border: 1px solid #e5e8ef;
             border-radius: 12px;
             overflow: hidden;
             background: #f5f7fb;
-            margin-bottom: 18px;
+            margin-bottom: 15px;
         }
 
         .modal-embed iframe {
             display: block;
             width: 100%;
-            height: 500px;
+            height: 520px;
             border: none;
+            background: white;
         }
 
         .modal-link-aviso {
             background: #f5f7fb;
             border-radius: 10px;
-            padding: 15px;
+            padding: 14px;
             color: #666;
             font-size: 14px;
             line-height: 1.5;
@@ -783,8 +783,6 @@
             </p>
 
 
-            <!-- RESUMO -->
-
             <div
                 id="semanaResumo"
                 class="semana-resumo">
@@ -798,7 +796,8 @@
                 </div>
 
 
-                <div class="semana-progresso-bar">
+                <div
+                    class="semana-progresso-bar">
 
                     <div
                         id="semanaProgressoFill"
@@ -1062,7 +1061,6 @@
 
     <script>
 
-
         // ==========================================
         // USUÁRIO LOGADO
         // ==========================================
@@ -1071,7 +1069,7 @@
 
 
         // ==========================================
-        // CACHE
+        // CACHE DAS ATIVIDADES
         // ==========================================
 
         let programacaoCache = {};
@@ -1202,7 +1200,7 @@
 
 
         // ==========================================
-        // FORMATO ISO
+        // FORMATAR ISO
         // ==========================================
 
         function formatarISO(
@@ -1258,7 +1256,7 @@
 
 
         // ==========================================
-        // TIPO DA ATIVIDADE
+        // NOME DO TIPO
         // ==========================================
 
         function nomeTipo(
@@ -1290,7 +1288,9 @@
         // TRANSFORMAR LINK EM EMBED
         // ==========================================
 
-        function obterUrlEmbed(link) {
+        function obterUrlEmbed(
+            link
+        ) {
 
             if (!link) {
 
@@ -1388,9 +1388,8 @@
                 // ==========================================
 
                 if (
-                    url.hostname.includes(
-                        "instagram.com"
-                    )
+                    url.hostname === "instagram.com" ||
+                    url.hostname === "www.instagram.com"
                 ) {
 
                     const match =
@@ -1417,12 +1416,15 @@
 
 
                 // ==========================================
-                // OUTROS SITES
+                // QUALQUER OUTRO SITE
                 // ==========================================
 
                 return {
+
                     tipo: "pagina",
+
                     url: link
+
                 };
 
             }
@@ -1430,14 +1432,17 @@
             catch (erro) {
 
                 console.error(
-                    "Não foi possível interpretar o link:",
+                    "Erro ao interpretar o link:",
                     erro
                 );
 
 
                 return {
+
                     tipo: "pagina",
+
                     url: link
+
                 };
 
             }
@@ -1813,15 +1818,11 @@
                                                     >
 
                                                         <div
-                                                            class="
-                                                                atividade-semana-info
-                                                            "
+                                                            class="atividade-semana-info"
                                                         >
 
                                                             <div
-                                                                class="
-                                                                    atividade-semana-titulo
-                                                                "
+                                                                class="atividade-semana-titulo"
                                                             >
 
                                                                 ${
@@ -1838,9 +1839,7 @@
 
 
                                                             <div
-                                                                class="
-                                                                    atividade-semana-tipo
-                                                                "
+                                                                class="atividade-semana-tipo"
                                                             >
 
                                                                 ${escaparHTML(
@@ -1861,9 +1860,7 @@
 
 
                                                         <div
-                                                            class="
-                                                                atividade-semana-acoes
-                                                            "
+                                                            class="atividade-semana-acoes"
                                                         >
 
                                                             ${
@@ -1880,9 +1877,7 @@
 
 
                                                             <button
-                                                                class="
-                                                                    abrir-semana-btn
-                                                                "
+                                                                class="abrir-semana-btn"
                                                                 onclick="
                                                                     abrirAtividade(
                                                                         ${atividade.id}
@@ -2073,7 +2068,7 @@
 
 
             // ==========================================
-            // PREENCHER MODAL
+            // MODAL
             // ==========================================
 
             document.getElementById(
@@ -2130,7 +2125,7 @@
 
 
             // ==========================================
-            // LINK
+            // COM LINK
             // ==========================================
 
             if (
@@ -2142,10 +2137,6 @@
                         atividade.link
                     );
 
-
-                // ==========================================
-                // IFRAME
-                // ==========================================
 
                 if (
                     embedData &&
@@ -2186,8 +2177,11 @@
 
                     aviso.innerHTML = `
 
-                        Caso este site não permita incorporação,
-                        você ainda poderá abrir o conteúdo diretamente.
+                        <strong>Conteúdo incorporado</strong><br>
+
+                        O Gutalks está tentando carregar este conteúdo
+                        dentro da plataforma. Alguns sites externos podem
+                        bloquear incorporação por motivos de segurança.
 
                     `;
 
@@ -2271,10 +2265,6 @@
             }
 
 
-            // ==========================================
-            // ABRIR
-            // ==========================================
-
             document.getElementById(
                 "modalAtividade"
             ).classList.add(
@@ -2302,7 +2292,6 @@
                 );
 
 
-            // Parar vídeo/conteúdo
             embed.innerHTML = "";
 
 
