@@ -84,18 +84,37 @@
 
     .conteudo h2 {
         color: #163075;
-        margin-bottom: 20px;
+        margin-bottom: 25px;
     }
 
-    .slides {
-        margin-top: 25px;
+    .material {
+        background: #f5f7fb;
+        padding: 22px;
+        border-radius: 12px;
+        margin-bottom: 18px;
     }
 
-    .slides iframe {
-        width: 100%;
-        height: 600px;
-        border: none;
+    .material-tipo {
+        color: #c82623;
+        font-weight: bold;
+        font-size: 14px;
+        margin-bottom: 8px;
+        text-transform: uppercase;
+    }
+
+    .material h3 {
+        color: #163075;
+        margin-bottom: 15px;
+    }
+
+    .material-botao {
+        display: inline-block;
+        background: #163075;
+        color: white;
+        text-decoration: none;
+        padding: 10px 18px;
         border-radius: 8px;
+        font-weight: bold;
     }
 
     .mensagem {
@@ -119,10 +138,6 @@
 
         h1 {
             font-size: 28px;
-        }
-
-        .slides iframe {
-            height: 450px;
         }
     }
 </style>
@@ -203,8 +218,8 @@
         }
 
 
-        // Buscar a aula no Supabase
-        const { data: aula, error } =
+        // Buscar a aula
+        const { data: aula, error: erroAula } =
             await supabaseClient
                 .from("Aulas")
                 .select("*")
@@ -212,12 +227,12 @@
                 .single();
 
 
-        // Verificar erro
-        if (error) {
+        // Verificar erro da aula
+        if (erroAula) {
 
             console.error(
                 "Erro ao carregar aula:",
-                error
+                erroAula
             );
 
             container.innerHTML = `
@@ -228,7 +243,7 @@
 
                     <br><br>
 
-                    ${error.message}
+                    ${erroAula.message}
                 </div>
             `;
 
@@ -236,7 +251,86 @@
         }
 
 
-        // Mostrar aula
+        // Buscar materiais relacionados à aula
+        const { data: materiais, error: erroMateriais } =
+            await supabaseClient
+                .from("Materiais")
+                .select("*")
+                .eq("aula_id", idAula)
+                .order("created_at", { ascending: true });
+
+
+        // Verificar erro dos materiais
+        if (erroMateriais) {
+
+            console.error(
+                "Erro ao carregar materiais:",
+                erroMateriais
+            );
+
+            container.innerHTML = `
+                <div class="mensagem">
+                    <strong>
+                        A aula foi encontrada, mas não foi possível carregar os materiais.
+                    </strong>
+
+                    <br><br>
+
+                    ${erroMateriais.message}
+                </div>
+            `;
+
+            return;
+        }
+
+
+        // Criar área de materiais
+        let materiaisHTML = "";
+
+
+        if (!materiais || materiais.length === 0) {
+
+            materiaisHTML = `
+                <div class="mensagem">
+                    Nenhum material disponível para esta aula no momento.
+                </div>
+            `;
+
+        } else {
+
+            materiais.forEach(material => {
+
+                materiaisHTML += `
+
+                    <div class="material">
+
+                        <div class="material-tipo">
+                            ${material.tipo}
+                        </div>
+
+                        <h3>
+                            ${material.titulo}
+                        </h3>
+
+                        <a
+                            href="${material.url}"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            class="material-botao"
+                        >
+                            Acessar material
+                        </a>
+
+                    </div>
+
+                `;
+
+            });
+
+        }
+
+
+        // Mostrar aula e materiais
         container.innerHTML = `
 
             <article class="aula-container">
@@ -257,20 +351,10 @@
                 <div class="conteudo">
 
                     <h2>
-                        📊 Slides da aula
+                        📚 Materiais da aula
                     </h2>
 
-
-                    <div class="slides">
-
-                        <iframe
-                            loading="lazy"
-                            src="https://www.canva.com/design/DAHQBrY5A-8/_r9MI264TLOzyxTp3Bv9-w/view?embed"
-                            allowfullscreen="allowfullscreen"
-                            allow="fullscreen">
-                        </iframe>
-
-                    </div>
+                    ${materiaisHTML}
 
                 </div>
 
@@ -288,4 +372,3 @@
 
 </body>
 </html>
-
