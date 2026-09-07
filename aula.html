@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+```
+<title>Aula | Gutalks</title>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="js/supabase.js"></script>
+
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: Arial, sans-serif;
+    }
+
+    body {
+        background: #f5f7fb;
+        color: #163075;
+    }
+
+    header {
+        background: #163075;
+        color: white;
+        padding: 18px 7%;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .logo {
+        font-size: 28px;
+        font-weight: bold;
+    }
+
+    .back-button {
+        color: white;
+        text-decoration: none;
+        font-weight: bold;
+    }
+
+    main {
+        max-width: 900px;
+        margin: 0 auto;
+        padding: 45px 25px;
+    }
+
+    .aula-container {
+        background: white;
+        padding: 40px;
+        border-radius: 18px;
+        box-shadow: 0 4px 18px rgba(0, 0, 0, 0.07);
+    }
+
+    .numero {
+        color: #c82623;
+        font-weight: bold;
+        margin-bottom: 12px;
+    }
+
+    h1 {
+        font-size: 36px;
+        margin-bottom: 20px;
+    }
+
+    .descricao {
+        color: #666;
+        font-size: 17px;
+        line-height: 1.6;
+        margin-bottom: 30px;
+    }
+
+    .conteudo {
+        border-top: 1px solid #eee;
+        padding-top: 30px;
+        color: #333;
+        line-height: 1.7;
+    }
+
+    .mensagem {
+        background: white;
+        padding: 30px;
+        border-radius: 12px;
+        color: #666;
+    }
+
+    footer {
+        text-align: center;
+        padding: 30px;
+        color: #777;
+    }
+
+    @media (max-width: 700px) {
+        .aula-container {
+            padding: 25px;
+        }
+
+        h1 {
+            font-size: 28px;
+        }
+    }
+</style>
+```
+
+</head>
+
+<body>
+
+```
+<header>
+
+    <div class="logo">
+        GUTALKS
+    </div>
+
+    <a href="Aulas.html" class="back-button">
+        ← Voltar para aulas
+    </a>
+
+</header>
+
+
+<main>
+
+    <div id="conteudoAula">
+
+        <div class="mensagem">
+            Carregando aula...
+        </div>
+
+    </div>
+
+</main>
+
+
+<footer>
+    © 2026 Gutalks — Área do aluno
+</footer>
+
+
+<script>
+
+    async function carregarAula() {
+
+        // Verificar se o aluno está logado
+        const { data: { session } } =
+            await supabaseClient.auth.getSession();
+
+        if (!session) {
+            window.location.href = "login.html";
+            return;
+        }
+
+
+        // Pegar o ID da aula na URL
+        const parametros = new URLSearchParams(window.location.search);
+
+        const idAula = parametros.get("id");
+
+
+        const container =
+            document.getElementById("conteudoAula");
+
+
+        // Verificar se existe ID
+        if (!idAula) {
+
+            container.innerHTML = `
+                <div class="mensagem">
+                    Não foi possível identificar a aula.
+                </div>
+            `;
+
+            return;
+        }
+
+
+        // Buscar a aula no Supabase
+        const { data: aula, error } =
+            await supabaseClient
+                .from("Aulas")
+                .select("*")
+                .eq("id", idAula)
+                .single();
+
+
+        // Verificar erro
+        if (error) {
+
+            console.error("Erro ao carregar aula:", error);
+
+            container.innerHTML = `
+                <div class="mensagem">
+                    <strong>Erro ao carregar a aula.</strong>
+                    <br><br>
+                    ${error.message}
+                </div>
+            `;
+
+            return;
+        }
+
+
+        // Mostrar aula
+        container.innerHTML = `
+
+            <article class="aula-container">
+
+                <div class="numero">
+                    AULA ${aula.numero}
+                </div>
+
+                <h1>
+                    ${aula.titulo}
+                </h1>
+
+                <p class="descricao">
+                    ${aula.descricao}
+                </p>
+
+                <div class="conteudo">
+
+                    <h2>Conteúdo da aula</h2>
+
+                    <br>
+
+                    <p>
+                        O conteúdo desta aula será disponibilizado aqui.
+                    </p>
+
+                </div>
+
+            </article>
+
+        `;
+
+    }
+
+
+    carregarAula();
+
+</script>
+```
+
+</body>
+</html>
