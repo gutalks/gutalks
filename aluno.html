@@ -22,27 +22,6 @@
          YOUGLISH
     ========================================== -->
 
-    <script>
-
-        let youglishApiPronta = false;
-
-        let youglishWidget = null;
-
-
-        function onYouglishAPIReady() {
-
-            console.log(
-                "YouGlish API carregada."
-            );
-
-
-            youglishApiPronta = true;
-
-        }
-
-    </script>
-
-
     <script
         async
         src="https://youglish.com/public/emb/widget.js"
@@ -53,24 +32,15 @@
     <style>
 
         * {
-
             margin: 0;
-
             padding: 0;
-
             box-sizing: border-box;
-
             font-family: Arial, sans-serif;
-
         }
 
-
         body {
-
             background: #f5f7fb;
-
             color: #163075;
-
         }
 
 
@@ -79,76 +49,43 @@
         ========================================== */
 
         header {
-
             background: #163075;
-
             color: white;
-
             padding: 18px 7%;
-
             display: flex;
-
             justify-content: space-between;
-
             align-items: center;
-
         }
-
 
         .logo {
-
             font-size: 28px;
-
             font-weight: bold;
-
             letter-spacing: 1px;
-
         }
-
 
         .header-right {
-
             display: flex;
-
             align-items: center;
-
             gap: 20px;
-
         }
-
 
         .student-name {
-
             font-size: 14px;
-
             opacity: 0.9;
-
         }
-
 
         .logout {
-
             background: #c82623;
-
             color: white;
-
             border: none;
-
             padding: 10px 20px;
-
             border-radius: 8px;
-
             cursor: pointer;
-
             font-weight: bold;
-
         }
 
-
         .logout:hover {
-
             opacity: 0.9;
-
         }
 
 
@@ -157,13 +94,9 @@
         ========================================== */
 
         main {
-
             max-width: 1150px;
-
             margin: 0 auto;
-
             padding: 45px 25px;
-
         }
 
 
@@ -172,27 +105,17 @@
         ========================================== */
 
         .welcome {
-
             margin-bottom: 35px;
-
         }
-
 
         .welcome h1 {
-
             font-size: 34px;
-
             margin-bottom: 10px;
-
         }
 
-
         .welcome p {
-
             color: #666;
-
             font-size: 16px;
-
         }
 
 
@@ -202,27 +125,17 @@
 
         .hoje-section,
         .semana-section {
-
             margin-bottom: 40px;
-
         }
-
 
         .section-title {
-
             font-size: 26px;
-
             margin-bottom: 8px;
-
         }
 
-
         .section-subtitle {
-
             color: #666;
-
             margin-bottom: 20px;
-
         }
 
 
@@ -231,174 +144,96 @@
         ========================================== */
 
         .atividades-hoje {
-
             display: grid;
-
             gap: 18px;
-
         }
-
 
         .atividade-hoje {
-
             background: white;
-
             border-radius: 16px;
-
             padding: 25px;
-
             box-shadow: 0 4px 18px rgba(0, 0, 0, 0.07);
-
             border-left: 6px solid #163075;
-
         }
-
 
         .atividade-hoje.concluida {
-
             border-left-color: #218838;
-
         }
-
 
         .atividade-cabecalho {
-
             display: flex;
-
             justify-content: space-between;
-
             align-items: flex-start;
-
             gap: 15px;
-
             margin-bottom: 12px;
-
         }
-
 
         .atividade-titulo {
-
             font-size: 21px;
-
             font-weight: bold;
-
             color: #163075;
-
         }
-
 
         .atividade-hoje.concluida .atividade-titulo {
-
             color: #218838;
-
         }
-
 
         .atividade-tipo {
-
             background: #eef1f8;
-
             color: #163075;
-
             padding: 6px 10px;
-
             border-radius: 20px;
-
             font-size: 12px;
-
             font-weight: bold;
-
             white-space: nowrap;
-
         }
-
 
         .atividade-descricao {
-
             color: #666;
-
             line-height: 1.6;
-
             margin-bottom: 18px;
-
             white-space: pre-wrap;
-
         }
-
 
         .atividade-meta {
-
             display: flex;
-
             flex-wrap: wrap;
-
             gap: 15px;
-
             color: #777;
-
             font-size: 14px;
-
             margin-bottom: 18px;
-
         }
-
 
         .atividade-acoes {
-
             display: flex;
-
             flex-wrap: wrap;
-
             gap: 10px;
-
         }
-
 
         .atividade-btn {
-
             display: inline-block;
-
             background: #163075;
-
             color: white;
-
             text-decoration: none;
-
             border: none;
-
             padding: 11px 18px;
-
             border-radius: 8px;
-
             cursor: pointer;
-
             font-weight: bold;
-
         }
-
 
         .atividade-btn:hover {
-
             opacity: 0.9;
-
         }
-
 
         .concluir-btn {
-
             background: #e9edf7;
-
             color: #163075;
-
         }
 
-
         .concluir-btn.concluida {
-
             background: #218838;
-
             color: white;
-
         }
 
 
@@ -407,253 +242,139 @@
         ========================================== */
 
         .semana-resumo {
-
             background: white;
-
             border-radius: 16px;
-
             padding: 22px 25px;
-
             margin-bottom: 15px;
-
             box-shadow: 0 4px 18px rgba(0, 0, 0, 0.05);
-
         }
-
 
         .semana-nome {
-
             font-size: 18px;
-
             font-weight: bold;
-
             margin-bottom: 12px;
-
         }
-
 
         .semana-progresso-bar {
-
             width: 100%;
-
             height: 10px;
-
             background: #e5e5e5;
-
             border-radius: 10px;
-
             overflow: hidden;
-
             margin-bottom: 8px;
-
         }
-
 
         .semana-progresso-fill {
-
             width: 0%;
-
             height: 100%;
-
             background: #218838;
-
             transition: width 0.3s ease;
-
         }
-
 
         .semana-progresso-texto {
-
             font-size: 14px;
-
             color: #666;
-
         }
-
 
         .semana-lista {
-
             display: grid;
-
             gap: 12px;
-
         }
-
 
         .dia-programacao {
-
             background: white;
-
             border-radius: 14px;
-
             padding: 20px;
-
             box-shadow: 0 3px 12px rgba(0, 0, 0, 0.05);
-
             border-left: 5px solid transparent;
-
         }
-
 
         .dia-programacao.hoje {
-
             border-left-color: #163075;
-
         }
-
 
         .dia-programacao.concluido {
-
             border-left-color: #218838;
-
         }
-
 
         .dia-cabecalho {
-
             display: flex;
-
             justify-content: space-between;
-
             align-items: center;
-
             gap: 15px;
-
             margin-bottom: 14px;
-
         }
-
 
         .dia-nome {
-
             font-size: 18px;
-
             font-weight: bold;
-
             color: #163075;
-
         }
-
 
         .dia-tag-hoje {
-
             color: #163075;
-
             font-size: 12px;
-
             font-weight: bold;
-
             background: #eef1f8;
-
             padding: 5px 9px;
-
             border-radius: 20px;
-
         }
-
 
         .atividades-dia {
-
             display: grid;
-
             gap: 10px;
-
         }
-
 
         .atividade-semana {
-
             border: 1px solid #e5e8ef;
-
             border-radius: 10px;
-
             padding: 15px;
-
             display: flex;
-
             justify-content: space-between;
-
             align-items: center;
-
             gap: 15px;
-
         }
-
 
         .atividade-semana-info {
-
             min-width: 0;
-
         }
-
 
         .atividade-semana-titulo {
-
             font-weight: bold;
-
             color: #163075;
-
             margin-bottom: 5px;
-
         }
-
 
         .atividade-semana-tipo {
-
             color: #777;
-
             font-size: 13px;
-
         }
-
 
         .atividade-semana-acoes {
-
             display: flex;
-
             align-items: center;
-
             gap: 8px;
-
             flex-shrink: 0;
-
         }
-
 
         .status-concluida {
-
             font-size: 13px;
-
             color: #218838;
-
             font-weight: bold;
-
         }
-
 
         .abrir-semana-btn {
-
             background: #163075;
-
             color: white;
-
             border: none;
-
             padding: 9px 14px;
-
             border-radius: 7px;
-
             cursor: pointer;
-
             font-weight: bold;
-
         }
 
-
         .abrir-semana-btn:hover {
-
             opacity: 0.9;
-
         }
 
 
@@ -662,116 +383,66 @@
         ========================================== */
 
         .cards {
-
             display: grid;
-
             grid-template-columns: repeat(2, 1fr);
-
             gap: 25px;
-
         }
 
-
         .card {
-
             background: white;
-
             padding: 30px;
-
             border-radius: 16px;
-
             box-shadow: 0 4px 18px rgba(0, 0, 0, 0.07);
-
             transition:
                 transform 0.2s,
                 box-shadow 0.2s;
-
         }
-
 
         .card:hover {
-
             transform: translateY(-4px);
-
             box-shadow:
                 0 8px 24px rgba(0, 0, 0, 0.10);
-
         }
-
 
         .icon {
-
             font-size: 38px;
-
             margin-bottom: 18px;
-
         }
-
 
         .card h2 {
-
             font-size: 22px;
-
             margin-bottom: 10px;
-
         }
-
 
         .card p {
-
             color: #666;
-
             line-height: 1.5;
-
             margin-bottom: 22px;
-
         }
-
 
         .card button {
-
             background: #163075;
-
             color: white;
-
             border: none;
-
             padding: 11px 20px;
-
             border-radius: 8px;
-
             cursor: pointer;
-
             font-weight: bold;
-
         }
-
 
         .card-button {
-
             display: inline-block;
-
             background: #163075;
-
             color: white;
-
             text-decoration: none;
-
             padding: 11px 20px;
-
             border-radius: 8px;
-
             cursor: pointer;
-
             font-weight: bold;
-
         }
 
-
         .card-button:hover {
-
             opacity: 0.9;
-
         }
 
 
@@ -780,16 +451,11 @@
         ========================================== */
 
         .flashcards-card {
-
             border-top: 5px solid #c82623;
-
         }
 
-
         .flashcards-card .card-button {
-
             background: #c82623;
-
         }
 
 
@@ -798,48 +464,28 @@
         ========================================== */
 
         .progress-card {
-
             border-top: 5px solid #c82623;
-
         }
-
 
         .progress-bar {
-
             width: 100%;
-
             height: 10px;
-
             background: #e5e5e5;
-
             border-radius: 10px;
-
             overflow: hidden;
-
             margin: 15px 0;
-
         }
-
 
         .progress-fill {
-
             width: 0%;
-
             height: 100%;
-
             background: #c82623;
-
             transition: width 0.3s ease;
-
         }
 
-
         .progress-text {
-
             font-size: 14px;
-
             color: #666;
-
         }
 
 
@@ -848,24 +494,15 @@
         ========================================== */
 
         .mensagem {
-
             background: white;
-
             border-radius: 16px;
-
             padding: 25px;
-
             color: #666;
-
             box-shadow: 0 4px 18px rgba(0, 0, 0, 0.05);
-
         }
 
-
         .erro {
-
             color: #c82623;
-
         }
 
 
@@ -874,161 +511,87 @@
         ========================================== */
 
         .modal {
-
             display: none;
-
             position: fixed;
-
             inset: 0;
-
             background: rgba(0, 0, 0, 0.60);
-
             z-index: 1000;
-
             padding: 20px;
-
             align-items: center;
-
             justify-content: center;
-
         }
-
 
         .modal.ativo {
-
             display: flex;
-
         }
-
 
         .modal-conteudo {
-
             background: white;
-
             width: 100%;
-
             max-width: 1000px;
-
             max-height: 92vh;
-
             overflow-y: auto;
-
             border-radius: 18px;
-
             padding: 25px;
-
             position: relative;
-
             box-shadow:
                 0 20px 60px rgba(0, 0, 0, 0.25);
-
         }
-
 
         .modal-fechar {
-
             position: absolute;
-
             top: 12px;
-
             right: 16px;
-
             border: none;
-
             background: transparent;
-
             font-size: 30px;
-
             line-height: 1;
-
             color: #777;
-
             cursor: pointer;
-
             z-index: 3;
-
         }
-
 
         .modal-titulo {
-
             font-size: 26px;
-
             color: #163075;
-
             margin-bottom: 8px;
-
             padding-right: 45px;
-
         }
-
 
         .modal-tipo {
-
             display: inline-block;
-
             background: #eef1f8;
-
             color: #163075;
-
             padding: 6px 10px;
-
             border-radius: 20px;
-
             font-size: 12px;
-
             font-weight: bold;
-
             margin-bottom: 20px;
-
         }
-
 
         .modal-descricao {
-
             color: #555;
-
             line-height: 1.7;
-
             white-space: pre-wrap;
-
             margin-bottom: 20px;
-
         }
-
 
         .modal-embed {
-
             width: 100%;
-
             min-height: 520px;
-
-            border:
-                1px solid #e5e8ef;
-
+            border: 1px solid #e5e8ef;
             border-radius: 12px;
-
             overflow: hidden;
-
             background: #f5f7fb;
-
             margin-bottom: 15px;
-
         }
 
-
         .modal-embed iframe {
-
             display: block;
-
             width: 100%;
-
             height: 520px;
-
             border: none;
-
             background: white;
-
         }
 
 
@@ -1036,7 +599,7 @@
            YOUGLISH
         ========================================== */
 
-        .youglish-widget {
+        .youglish-container {
 
             width: 100%;
 
@@ -1053,8 +616,36 @@
 
             margin-bottom: 15px;
 
+            display: none;
+
         }
 
+
+        .youglish-container a.youglish-widget {
+
+            display: block;
+
+            width: 100%;
+
+            min-height: 520px;
+
+        }
+
+
+        .youglish-loading {
+
+            padding: 30px;
+
+            text-align: center;
+
+            color: #666;
+
+        }
+
+
+        /* ==========================================
+           MODAL AVISO
+        ========================================== */
 
         .modal-link-aviso {
 
@@ -1117,15 +708,6 @@
         .modal-botao.verde {
 
             background: #218838;
-
-        }
-
-
-        .modal-botao.cinza {
-
-            background: #e9edf7;
-
-            color: #163075;
 
         }
 
@@ -1241,7 +823,14 @@
             }
 
 
-            .youglish-widget {
+            .youglish-container {
+
+                min-height: 450px;
+
+            }
+
+
+            .youglish-container a.youglish-widget {
 
                 min-height: 450px;
 
@@ -1668,7 +1257,9 @@
             </div>
 
 
-            <!-- IFRAME NORMAL -->
+            <!-- ==========================================
+                 IFRAME NORMAL
+            ========================================== -->
 
             <div
                 id="modalEmbed"
@@ -1678,12 +1269,31 @@
             </div>
 
 
-            <!-- YOUGLISH -->
+            <!-- ==========================================
+                 YOUGLISH GENÉRICO
+            ========================================== -->
 
             <div
-                id="youglishWidget"
-                class="youglish-widget"
-                style="display:none;">
+                id="youglishContainer"
+                class="youglish-container">
+
+                <a
+                    id="youglishWidget"
+                    class="youglish-widget"
+                    data-components="243"
+                    data-bkg-color="FFFFFF"
+                    data-link-color="337AB7"
+                    data-ttl-color="555555"
+                    data-cap-color="6495BF"
+                    data-marker-color="FFFF00"
+                    data-cap-size="40"
+                    data-toggle-ui="0"
+                    data-scroll="inner"
+                    href="https://youglish.com">
+
+                    Visite o YouGlish.com
+
+                </a>
 
             </div>
 
@@ -1723,9 +1333,7 @@
 
         let usuarioLogado = null;
 
-
         let semanaAtualAluno = 1;
-
 
         let programacaoCache = {};
 
@@ -1734,7 +1342,9 @@
         // ESCAPAR HTML
         // ==========================================
 
-        function escaparHTML(texto) {
+        function escaparHTML(
+            texto
+        ) {
 
             if (
                 texto === null ||
@@ -1785,13 +1395,17 @@
             return new Intl.DateTimeFormat(
                 "en-CA",
                 {
-                    timeZone: "America/Sao_Paulo",
+                    timeZone:
+                        "America/Sao_Paulo",
 
-                    year: "numeric",
+                    year:
+                        "numeric",
 
-                    month: "2-digit",
+                    month:
+                        "2-digit",
 
-                    day: "2-digit"
+                    day:
+                        "2-digit"
 
                 }
             ).format(
@@ -1803,14 +1417,6 @@
 
         // ==========================================
         // DIA DA SEMANA
-        //
-        // 1 = Segunda
-        // 2 = Terça
-        // 3 = Quarta
-        // 4 = Quinta
-        // 5 = Sexta
-        // 6 = Sábado
-        // 7 = Domingo
         // ==========================================
 
         function obterDiaSemanaAtual() {
@@ -1849,37 +1455,6 @@
 
 
         // ==========================================
-        // FORMATAR DATA
-        // ==========================================
-
-        function formatarData(
-            dataTexto
-        ) {
-
-            const data =
-                criarDataLocal(
-                    dataTexto
-                );
-
-
-            return new Intl.DateTimeFormat(
-                "pt-BR",
-                {
-                    weekday: "long",
-
-                    day: "2-digit",
-
-                    month: "long"
-
-                }
-            ).format(
-                data
-            );
-
-        }
-
-
-        // ==========================================
         // FORMATAR DATA DE HOJE
         // ==========================================
 
@@ -1891,85 +1466,19 @@
                     timeZone:
                         "America/Sao_Paulo",
 
-                    weekday: "long",
+                    weekday:
+                        "long",
 
-                    day: "2-digit",
+                    day:
+                        "2-digit",
 
-                    month: "long"
+                    month:
+                        "long"
 
                 }
             ).format(
                 new Date()
             );
-
-        }
-
-
-        // ==========================================
-        // SEGUNDA-FEIRA
-        // ==========================================
-
-        function obterSegundaFeira(
-            dataTexto
-        ) {
-
-            const data =
-                criarDataLocal(
-                    dataTexto
-                );
-
-
-            const dia =
-                data.getDay();
-
-
-            const diferenca =
-                dia === 0
-                    ? -6
-                    : 1 - dia;
-
-
-            data.setDate(
-                data.getDate() + diferenca
-            );
-
-
-            return data;
-
-        }
-
-
-        // ==========================================
-        // FORMATAR ISO
-        // ==========================================
-
-        function formatarISO(
-            data
-        ) {
-
-            const ano =
-                data.getFullYear();
-
-
-            const mes =
-                String(
-                    data.getMonth() + 1
-                ).padStart(
-                    2,
-                    "0"
-                );
-
-
-            const dia =
-                String(
-                    data.getDate()
-                ).padStart(
-                    2,
-                    "0"
-                );
-
-
-            return `${ano}-${mes}-${dia}`;
 
         }
 
@@ -1985,17 +1494,11 @@
             const nomes = {
 
                 1: "Segunda-feira",
-
                 2: "Terça-feira",
-
                 3: "Quarta-feira",
-
                 4: "Quinta-feira",
-
                 5: "Sexta-feira",
-
                 6: "Sábado",
-
                 7: "Domingo"
 
             };
@@ -2023,7 +1526,6 @@
 
 
             return texto.charAt(0).toUpperCase()
-
                 + texto.slice(1);
 
         }
@@ -2039,7 +1541,8 @@
 
             const tipos = {
 
-                flashcards: "Flashcards",
+                flashcards:
+                    "Flashcards",
 
                 pratica_oral:
                     "Prática oral",
@@ -2126,7 +1629,8 @@
 
                         return {
 
-                            tipo: "youtube",
+                            tipo:
+                                "youtube",
 
                             url:
                                 "https://www.youtube.com/embed/" +
@@ -2150,7 +1654,8 @@
 
                     if (
 
-                        partes[1] === "shorts"
+                        partes[1] ===
+                            "shorts"
 
                         &&
 
@@ -2160,7 +1665,8 @@
 
                         return {
 
-                            tipo: "youtube",
+                            tipo:
+                                "youtube",
 
                             url:
                                 "https://www.youtube.com/embed/" +
@@ -2179,21 +1685,20 @@
 
 
                 // ==========================================
-                // YOUTUBE SHORT LINK
+                // YOUTUBE SHORT
                 // ==========================================
 
                 if (
-                    url.hostname === "youtu.be"
+                    url.hostname ===
+                    "youtu.be"
                 ) {
 
                     const videoId =
                         url.pathname
-
                             .replace(
                                 "/",
                                 ""
                             )
-
                             .trim();
 
 
@@ -2201,7 +1706,8 @@
 
                         return {
 
-                            tipo: "youtube",
+                            tipo:
+                                "youtube",
 
                             url:
                                 "https://www.youtube.com/embed/" +
@@ -2245,7 +1751,8 @@
 
                         return {
 
-                            tipo: "instagram",
+                            tipo:
+                                "instagram",
 
                             url:
                                 "https://www.instagram.com/" +
@@ -2265,15 +1772,13 @@
                 }
 
 
-                // ==========================================
-                // OUTROS SITES
-                // ==========================================
-
                 return {
 
-                    tipo: "pagina",
+                    tipo:
+                        "pagina",
 
-                    url: link
+                    url:
+                        link
 
                 };
 
@@ -2289,9 +1794,11 @@
 
                 return {
 
-                    tipo: "pagina",
+                    tipo:
+                        "pagina",
 
-                    url: link
+                    url:
+                        link
 
                 };
 
@@ -2315,13 +1822,8 @@
 
 
             if (
-
-                !atividades
-
-                ||
-
+                !atividades ||
                 atividades.length === 0
-
             ) {
 
                 container.innerHTML = `
@@ -2414,7 +1916,8 @@
 
                                         ${
                                             atividade.link ||
-                                            atividade.tipo === "pronuncia"
+                                            atividade.tipo ===
+                                                "pronuncia"
 
                                                 ?
 
@@ -2495,11 +1998,8 @@
                                         ${
                                             tempo
                                                 ?
-
                                                 `<span>${tempo}</span>`
-
                                                 :
-
                                                 ""
                                         }
 
@@ -2535,7 +2035,6 @@
                                                     : ""
                                                 }
                                             "
-
                                             onclick="
                                                 alternarConclusao(
                                                     ${atividade.id},
@@ -2619,6 +2118,7 @@
 
 
                             const todasConcluidas =
+
                                 atividadesDoDia.length > 0
 
                                 &&
@@ -2639,7 +2139,9 @@
                                 conteudo = `
 
                                     <div
-                                        class="atividade-semana"
+                                        class="
+                                            atividade-semana
+                                        "
                                     >
 
                                         <div
@@ -2762,7 +2264,9 @@
                                                                     `
 
                                                                         <span
-                                                                            class="status-concluida"
+                                                                            class="
+                                                                                status-concluida
+                                                                            "
                                                                         >
 
                                                                             Concluída
@@ -2789,12 +2293,9 @@
                                                             >
 
                                                                 ${
-                                                                    atividade.link
-
-                                                                        ||
-
-                                                                        atividade.tipo ===
-                                                                            "pronuncia"
+                                                                    atividade.link ||
+                                                                    atividade.tipo ===
+                                                                        "pronuncia"
 
                                                                         ?
 
@@ -2838,9 +2339,7 @@
                                 >
 
                                     <div
-                                        class="
-                                            dia-cabecalho
-                                        "
+                                        class="dia-cabecalho"
                                     >
 
                                         <div
@@ -2972,144 +2471,37 @@
 
 
         // ==========================================
-        // INICIAR YOUGLISH GENÉRICO
+        // MOSTRAR YOUGLISH
         // ==========================================
 
-        function iniciarYouGlish() {
+        function mostrarYouGlish() {
 
             const container =
                 document.getElementById(
-                    "youglishWidget"
+                    "youglishContainer"
                 );
 
-
-            container.innerHTML = "";
 
             container.style.display =
                 "block";
 
-
-            // ==========================================
-            // API AINDA NÃO CARREGOU
-            // ==========================================
-
-            if (
-                !youglishApiPronta ||
-                typeof YG === "undefined"
-            ) {
-
-                container.innerHTML = `
-
-                    <div
-                        class="mensagem"
-                        style="text-align:center;"
-                    >
-
-                        🎙️ Carregando ferramenta de pronúncia...
-
-                    </div>
-
-                `;
+        }
 
 
-                setTimeout(
-                    function() {
+        // ==========================================
+        // ESCONDER YOUGLISH
+        // ==========================================
 
-                        iniciarYouGlish();
+        function esconderYouGlish() {
 
-                    },
-                    500
+            const container =
+                document.getElementById(
+                    "youglishContainer"
                 );
 
 
-                return;
-
-            }
-
-
-            // ==========================================
-            // CRIAR WIDGET
-            // ==========================================
-
-            try {
-
-                youglishWidget =
-                    new YG.Widget(
-                        "youglishWidget",
-                        {
-
-                            width: 900,
-
-                            height: 500,
-
-                            /*
-                                COMPONENTES:
-
-                                1   = Search box
-                                2   = Accent panel
-                                4   = Title
-                                8   = Caption
-                                16  = Speed controls
-                                64  = Control buttons
-                                128 = Dictionary
-                                512 = Phonetic panel
-
-                                Total = 735
-                            */
-
-                            components:
-                                735,
-
-                            autoStart:
-                                0,
-
-                            restrictionMode:
-                                1
-
-                        }
-                    );
-
-
-                console.log(
-                    "YouGlish genérico iniciado."
-                );
-
-
-                /*
-                    Não utilizamos fetch().
-
-                    O aluno irá pesquisar
-                    a palavra diretamente
-                    na caixa de busca.
-                */
-
-            }
-
-            catch (erro) {
-
-                console.error(
-                    "Erro ao criar YouGlish:",
-                    erro
-                );
-
-
-                container.innerHTML = `
-
-                    <div
-                        class="
-                            mensagem
-                            erro
-                        "
-                    >
-
-                        Não foi possível carregar
-                        a ferramenta de pronúncia.
-
-                    </div>
-
-                `;
-
-            }
+            container.style.display =
+                "none";
 
         }
 
@@ -3156,7 +2548,7 @@
 
 
             // ==========================================
-            // ELEMENTOS DO MODAL
+            // ELEMENTOS
             // ==========================================
 
             const modal =
@@ -3168,12 +2560,6 @@
             const embed =
                 document.getElementById(
                     "modalEmbed"
-                );
-
-
-            const youglish =
-                document.getElementById(
-                    "youglishWidget"
                 );
 
 
@@ -3199,10 +2585,7 @@
                 "none";
 
 
-            youglish.innerHTML = "";
-
-            youglish.style.display =
-                "none";
+            esconderYouGlish();
 
 
             aviso.innerHTML = "";
@@ -3215,7 +2598,7 @@
 
 
             // ==========================================
-            // CABEÇALHO
+            // TÍTULO
             // ==========================================
 
             document.getElementById(
@@ -3243,9 +2626,6 @@
 
             // ==========================================
             // PRONÚNCIA
-            //
-            // TOTALMENTE GENÉRICO
-            // NÃO DEPENDE DO LINK
             // ==========================================
 
             if (
@@ -3258,7 +2638,7 @@
                 );
 
 
-                iniciarYouGlish();
+                mostrarYouGlish();
 
 
                 aviso.innerHTML = `
@@ -3270,12 +2650,7 @@
                     <br><br>
 
                     Pesquise uma palavra ou expressão
-                    na caixa de busca do YouGlish.
-
-                    <br>
-
-                    Você pode ouvir diferentes exemplos
-                    de pronúncia em inglês.
+                    diretamente na caixa de busca do YouGlish.
 
                 `;
 
@@ -3347,6 +2722,7 @@
                     embed.innerHTML = `
 
                         <iframe
+
                             src="${escaparHTML(
                                 embedData.url
                             )}"
@@ -3372,6 +2748,7 @@
                             referrerpolicy="
                                 strict-origin-when-cross-origin
                             "
+
                         ></iframe>
 
                     `;
@@ -3496,10 +2873,6 @@
             }
 
 
-            // ==========================================
-            // ABRIR MODAL
-            // ==========================================
-
             modal.classList.add(
                 "ativo"
             );
@@ -3525,19 +2898,10 @@
                 );
 
 
-            const youglish =
-                document.getElementById(
-                    "youglishWidget"
-                );
-
-
             embed.innerHTML = "";
 
 
-            youglish.innerHTML = "";
-
-            youglish.style.display =
-                "none";
+            esconderYouGlish();
 
 
             modal.classList.remove(
@@ -3720,9 +3084,15 @@
                     "atividadesHoje"
                 ).innerHTML = `
 
-                    <div class="mensagem erro">
+                    <div
+                        class="
+                            mensagem
+                            erro
+                        "
+                    >
 
-                        Não foi possível carregar sua programação.
+                        Não foi possível carregar
+                        sua programação.
 
                     </div>
 
@@ -3733,9 +3103,15 @@
                     "semanaLista"
                 ).innerHTML = `
 
-                    <div class="mensagem erro">
+                    <div
+                        class="
+                            mensagem
+                            erro
+                        "
+                    >
 
-                        Não foi possível carregar sua programação.
+                        Não foi possível carregar
+                        sua programação.
 
                     </div>
 
@@ -3766,13 +3142,10 @@
             );
 
 
-            // ==========================================
-            // ATIVIDADES DE HOJE
-            // ==========================================
-
             const atividadesHoje =
                 atividades.filter(
                     atividade =>
+
                         Number(
                             atividade.dia_semana
                         ) === diaAtual
@@ -3784,19 +3157,11 @@
             );
 
 
-            // ==========================================
-            // SEMANA COMPLETA
-            // ==========================================
-
             renderizarSemana(
                 atividades,
                 diaAtual
             );
 
-
-            // ==========================================
-            // PROGRESSO
-            // ==========================================
 
             atualizarProgressoSemana(
                 atividades
@@ -3840,17 +3205,9 @@
                 }
 
 
-                // ==========================================
-                // USUÁRIO LOGADO
-                // ==========================================
-
                 usuarioLogado =
                     session.user;
 
-
-                // ==========================================
-                // BUSCAR ALUNO
-                // ==========================================
 
                 const {
                     data: aluno,
@@ -3942,10 +3299,6 @@
                 }
 
 
-                // ==========================================
-                // DADOS DO ALUNO
-                // ==========================================
-
                 document.getElementById(
                     "nomeAluno"
                 ).textContent =
@@ -3962,10 +3315,6 @@
                     "";
 
 
-                // ==========================================
-                // SEMANA ATUAL
-                // ==========================================
-
                 semanaAtualAluno =
                     Number(
                         aluno.semana_atual
@@ -3973,14 +3322,10 @@
 
 
                 console.log(
-                    "Semana atual do aluno:",
+                    "Semana atual:",
                     semanaAtualAluno
                 );
 
-
-                // ==========================================
-                // CARREGAR PROGRAMAÇÃO
-                // ==========================================
 
                 await carregarProgramacao();
 
@@ -4030,9 +3375,7 @@
         async function logout() {
 
             await supabaseClient
-
                 .auth
-
                 .signOut();
 
 
