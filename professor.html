@@ -345,6 +345,85 @@
 
 
         /* ==========================================
+           CONTROLE DE CICLO / SEMANA
+        ========================================== */
+
+        .controle-semana {
+            background: #fafbfe;
+            border: 1px solid #e1e5ee;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .controle-semana-titulo {
+            text-align: center;
+            font-weight: bold;
+            color: #163075;
+            margin-bottom: 18px;
+        }
+
+        .controle-semana-centro {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 18px;
+            flex-wrap: wrap;
+        }
+
+        .controle-semana-info {
+            min-width: 180px;
+            text-align: center;
+        }
+
+        .controle-ciclo {
+            color: #777;
+            font-size: 14px;
+            margin-bottom: 5px;
+        }
+
+        .controle-semana-numero {
+            color: #163075;
+            font-size: 26px;
+            font-weight: bold;
+        }
+
+        .botao-navegacao {
+            border: none;
+            padding: 10px 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .botao-anterior {
+            background: #e9edf7;
+            color: #163075;
+        }
+
+        .botao-proxima {
+            background: #163075;
+            color: white;
+        }
+
+        .botao-navegacao:hover {
+            opacity: 0.9;
+        }
+
+        .botao-navegacao:disabled {
+            opacity: 0.45;
+            cursor: not-allowed;
+        }
+
+        .aviso-navegacao {
+            color: #777;
+            text-align: center;
+            font-size: 13px;
+            margin-top: 12px;
+        }
+
+
+        /* ==========================================
            ATIVIDADES
         ========================================== */
 
@@ -540,6 +619,10 @@
             }
 
             .atividade-cabecalho {
+                flex-direction: column;
+            }
+
+            .controle-semana-centro {
                 flex-direction: column;
             }
 
@@ -812,6 +895,79 @@
                     <span>
                         Volte em "Alunos" e selecione um aluno.
                     </span>
+
+                </div>
+
+
+                <!-- ==========================================
+                     CONTROLE DE SEMANA
+                ========================================== -->
+
+                <div
+                    id="controleSemana"
+                    class="controle-semana"
+                    style="display:none;"
+                >
+
+                    <div class="controle-semana-titulo">
+                        📚 Semana atual do aluno
+                    </div>
+
+
+                    <div class="controle-semana-centro">
+
+                        <button
+                            type="button"
+                            id="botaoSemanaAnterior"
+                            class="botao-navegacao botao-anterior"
+                            onclick="alterarSemanaAluno(-1)"
+                        >
+
+                            ← Semana anterior
+
+                        </button>
+
+
+                        <div class="controle-semana-info">
+
+                            <div
+                                id="controleCiclo"
+                                class="controle-ciclo"
+                            >
+                                Ciclo 1
+                            </div>
+
+
+                            <div
+                                id="controleSemana"
+                                class="controle-semana-numero"
+                            >
+                                Semana 1
+                            </div>
+
+                        </div>
+
+
+                        <button
+                            type="button"
+                            id="botaoProximaSemana"
+                            class="botao-navegacao botao-proxima"
+                            onclick="alterarSemanaAluno(1)"
+                        >
+
+                            Próxima semana →
+
+                        </button>
+
+                    </div>
+
+
+                    <div class="aviso-navegacao">
+
+                        As atividades das semanas anteriores
+                        continuam armazenadas.
+
+                    </div>
 
                 </div>
 
@@ -1510,6 +1666,31 @@
 
 
             document.getElementById(
+                "controleSemana"
+            ).style.display =
+                "block";
+
+
+            document.getElementById(
+                "controleCiclo"
+            ).textContent =
+                `Ciclo ${Number(aluno.ciclo_atual) || 1}`;
+
+
+            document.getElementById(
+                "controleSemana"
+            ).textContent =
+                `Semana ${Number(aluno.semana_atual) || 1}`;
+
+
+            document.getElementById(
+                "botaoSemanaAnterior"
+            ).disabled =
+                (Number(aluno.ciclo_atual) || 1) === 1 &&
+                (Number(aluno.semana_atual) || 1) === 1;
+
+
+            document.getElementById(
                 "ciclo"
             ).value =
                 Number(
@@ -1631,6 +1812,234 @@
             botoes[1].classList.add(
                 "ativo"
             );
+
+        }
+
+
+        // ==========================================
+        // ALTERAR SEMANA DO ALUNO
+        // ==========================================
+
+        async function alterarSemanaAluno(
+            direcao
+        ) {
+
+            if (!alunoSelecionado) {
+
+                return;
+
+            }
+
+
+            let ciclo =
+                Number(
+                    alunoSelecionado.ciclo_atual
+                ) || 1;
+
+
+            let semana =
+                Number(
+                    alunoSelecionado.semana_atual
+                ) || 1;
+
+
+            // ==========================================
+            // PRÓXIMA SEMANA
+            // ==========================================
+
+            if (direcao === 1) {
+
+                if (semana < 4) {
+
+                    semana++;
+
+                }
+
+                else {
+
+                    semana = 1;
+
+                    ciclo++;
+
+                }
+
+            }
+
+
+            // ==========================================
+            // SEMANA ANTERIOR
+            // ==========================================
+
+            if (direcao === -1) {
+
+                if (ciclo === 1 && semana === 1) {
+
+                    return;
+
+                }
+
+
+                if (semana > 1) {
+
+                    semana--;
+
+                }
+
+                else {
+
+                    ciclo--;
+                    semana = 4;
+
+                }
+
+            }
+
+
+            const mensagem =
+                direcao === 1
+                    ? `Deseja avançar para o Ciclo ${ciclo}, Semana ${semana}?\n\nAs atividades anteriores NÃO serão apagadas.`
+                    : `Deseja voltar para o Ciclo ${ciclo}, Semana ${semana}?\n\nAs atividades anteriores NÃO serão apagadas.`;
+
+
+            if (!confirm(mensagem)) {
+
+                return;
+
+            }
+
+
+            const botao =
+                direcao === 1
+                    ? document.getElementById(
+                        "botaoProximaSemana"
+                    )
+                    : document.getElementById(
+                        "botaoSemanaAnterior"
+                    );
+
+
+            botao.disabled = true;
+            botao.textContent = "Atualizando...";
+
+
+            const {
+                data,
+                error
+            } = await supabaseClient
+                .from("Alunos")
+                .update({
+                    ciclo_atual: ciclo,
+                    semana_atual: semana
+                })
+                .eq(
+                    "id",
+                    alunoSelecionado.id
+                )
+                .select(
+                    "id, user_id, nome, email, semana_atual, ciclo_atual"
+                )
+                .single();
+
+
+            if (error) {
+
+                console.error(
+                    "Erro ao alterar semana:",
+                    error
+                );
+
+
+                alert(
+                    "Não foi possível alterar a semana.\n\n" +
+                    error.message
+                );
+
+
+                botao.disabled = false;
+                botao.textContent =
+                    direcao === 1
+                        ? "Próxima semana →"
+                        : "← Semana anterior";
+
+                return;
+
+            }
+
+
+            alunoSelecionado = data;
+
+
+            // Atualiza o quadro do aluno
+            document.getElementById(
+                "alunoSelecionado"
+            ).innerHTML = `
+
+                <strong>
+                    ${escaparHTML(data.nome)}
+                </strong>
+
+                <span>
+                    ${escaparHTML(data.email)}
+                    •
+                    Ciclo atual: ${Number(data.ciclo_atual) || 1}
+                    •
+                    Semana atual: ${Number(data.semana_atual) || 1}
+                </span>
+
+            `;
+
+
+            // Atualiza o quadro de navegação
+            document.getElementById(
+                "controleCiclo"
+            ).textContent =
+                `Ciclo ${Number(data.ciclo_atual) || 1}`;
+
+
+            document.getElementById(
+                "controleSemana"
+            ).textContent =
+                `Semana ${Number(data.semana_atual) || 1}`;
+
+
+            document.getElementById(
+                "botaoSemanaAnterior"
+            ).disabled =
+                (Number(data.ciclo_atual) || 1) === 1 &&
+                (Number(data.semana_atual) || 1) === 1;
+
+
+            // Atualiza o formulário para a nova semana
+            document.getElementById(
+                "ciclo"
+            ).value =
+                Number(data.ciclo_atual) || 1;
+
+
+            document.getElementById(
+                "semana"
+            ).value =
+                Number(data.semana_atual) || 1;
+
+
+            document.getElementById(
+                "resumoCiclo"
+            ).textContent =
+                `${Number(data.ciclo_atual) || 1}/${Number(data.semana_atual) || 1}`;
+
+
+            await carregarAtividades();
+
+
+            botao.disabled = false;
+            botao.textContent =
+                direcao === 1
+                    ? "Próxima semana →"
+                    : "← Semana anterior";
+
+
+            // Atualiza a lista de alunos para refletir a nova semana
+            await carregarAlunos();
 
         }
 
