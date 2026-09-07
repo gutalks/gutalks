@@ -24,6 +24,11 @@
             color: #163075;
         }
 
+
+        /* ==========================================
+           HEADER
+        ========================================== */
+
         header {
             background: #163075;
             color: white;
@@ -63,6 +68,11 @@
         .logout:hover {
             opacity: 0.9;
         }
+
+
+        /* ==========================================
+           MAIN
+        ========================================== */
 
         main {
             max-width: 1150px;
@@ -163,6 +173,7 @@
             color: #666;
             line-height: 1.6;
             margin-bottom: 18px;
+            white-space: pre-wrap;
         }
 
         .atividade-meta {
@@ -208,7 +219,7 @@
 
 
         /* ==========================================
-           RESUMO DA SEMANA
+           PROGRAMAÇÃO DA SEMANA
         ========================================== */
 
         .semana-resumo {
@@ -245,11 +256,6 @@
             font-size: 14px;
             color: #666;
         }
-
-
-        /* ==========================================
-           PROGRAMACAO DA SEMANA
-        ========================================== */
 
         .semana-lista {
             display: grid;
@@ -486,7 +492,7 @@
             display: none;
             position: fixed;
             inset: 0;
-            background: rgba(0, 0, 0, 0.55);
+            background: rgba(0, 0, 0, 0.60);
             z-index: 1000;
             padding: 20px;
             align-items: center;
@@ -500,31 +506,33 @@
         .modal-conteudo {
             background: white;
             width: 100%;
-            max-width: 700px;
-            max-height: 85vh;
+            max-width: 950px;
+            max-height: 90vh;
             overflow-y: auto;
             border-radius: 18px;
-            padding: 30px;
+            padding: 25px;
             position: relative;
-            box-shadow: 0 15px 45px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.25);
         }
 
         .modal-fechar {
             position: absolute;
-            top: 15px;
-            right: 18px;
+            top: 12px;
+            right: 16px;
             border: none;
             background: transparent;
-            font-size: 28px;
+            font-size: 30px;
+            line-height: 1;
             color: #777;
             cursor: pointer;
+            z-index: 3;
         }
 
         .modal-titulo {
             font-size: 26px;
             color: #163075;
             margin-bottom: 8px;
-            padding-right: 35px;
+            padding-right: 45px;
         }
 
         .modal-tipo {
@@ -542,7 +550,34 @@
             color: #555;
             line-height: 1.7;
             white-space: pre-wrap;
-            margin-bottom: 25px;
+            margin-bottom: 20px;
+        }
+
+        .modal-embed {
+            width: 100%;
+            min-height: 480px;
+            border: 1px solid #e5e8ef;
+            border-radius: 12px;
+            overflow: hidden;
+            background: #f5f7fb;
+            margin-bottom: 18px;
+        }
+
+        .modal-embed iframe {
+            display: block;
+            width: 100%;
+            height: 500px;
+            border: none;
+        }
+
+        .modal-link-aviso {
+            background: #f5f7fb;
+            border-radius: 10px;
+            padding: 15px;
+            color: #666;
+            font-size: 14px;
+            line-height: 1.5;
+            margin-bottom: 18px;
         }
 
         .modal-acoes {
@@ -560,6 +595,19 @@
             border-radius: 8px;
             cursor: pointer;
             font-weight: bold;
+        }
+
+        .modal-botao:hover {
+            opacity: 0.9;
+        }
+
+        .modal-botao.verde {
+            background: #218838;
+        }
+
+        .modal-botao.cinza {
+            background: #e9edf7;
+            color: #163075;
         }
 
 
@@ -620,7 +668,15 @@
             }
 
             .modal-conteudo {
-                padding: 25px 20px;
+                padding: 22px 18px;
+            }
+
+            .modal-embed {
+                min-height: 350px;
+            }
+
+            .modal-embed iframe {
+                height: 350px;
             }
 
         }
@@ -698,7 +754,6 @@
                 Carregando programação...
 
             </p>
-
 
             <div
                 id="atividadesHoje"
@@ -972,6 +1027,22 @@
 
 
             <div
+                id="modalEmbed"
+                class="modal-embed"
+                style="display:none;">
+
+            </div>
+
+
+            <div
+                id="modalAviso"
+                class="modal-link-aviso"
+                style="display:none;">
+
+            </div>
+
+
+            <div
                 id="modalAcoes"
                 class="modal-acoes">
 
@@ -999,7 +1070,10 @@
         let usuarioLogado = null;
 
 
-        // Cache das atividades
+        // ==========================================
+        // CACHE
+        // ==========================================
+
         let programacaoCache = {};
 
 
@@ -1128,7 +1202,7 @@
 
 
         // ==========================================
-        // ISO
+        // FORMATO ISO
         // ==========================================
 
         function formatarISO(
@@ -1213,7 +1287,166 @@
 
 
         // ==========================================
-        // RENDERIZAR HOJE
+        // TRANSFORMAR LINK EM EMBED
+        // ==========================================
+
+        function obterUrlEmbed(link) {
+
+            if (!link) {
+
+                return null;
+
+            }
+
+
+            try {
+
+                const url =
+                    new URL(link);
+
+
+                // ==========================================
+                // YOUTUBE
+                // ==========================================
+
+                if (
+                    url.hostname === "www.youtube.com" ||
+                    url.hostname === "youtube.com" ||
+                    url.hostname === "m.youtube.com"
+                ) {
+
+                    const videoId =
+                        url.searchParams.get("v");
+
+
+                    if (videoId) {
+
+                        return {
+                            tipo: "youtube",
+                            url:
+                                "https://www.youtube.com/embed/" +
+                                encodeURIComponent(videoId) +
+                                "?rel=0"
+                        };
+
+                    }
+
+
+                    const partes =
+                        url.pathname.split("/");
+
+
+                    if (
+                        partes[1] === "shorts" &&
+                        partes[2]
+                    ) {
+
+                        return {
+                            tipo: "youtube",
+                            url:
+                                "https://www.youtube.com/embed/" +
+                                encodeURIComponent(partes[2]) +
+                                "?rel=0"
+                        };
+
+                    }
+
+                }
+
+
+                // ==========================================
+                // YOUTUBE SHORT LINK
+                // ==========================================
+
+                if (
+                    url.hostname === "youtu.be"
+                ) {
+
+                    const videoId =
+                        url.pathname
+                            .replace("/", "")
+                            .trim();
+
+
+                    if (videoId) {
+
+                        return {
+                            tipo: "youtube",
+                            url:
+                                "https://www.youtube.com/embed/" +
+                                encodeURIComponent(videoId) +
+                                "?rel=0"
+                        };
+
+                    }
+
+                }
+
+
+                // ==========================================
+                // INSTAGRAM
+                // ==========================================
+
+                if (
+                    url.hostname.includes(
+                        "instagram.com"
+                    )
+                ) {
+
+                    const match =
+                        url.pathname.match(
+                            /\/(reel|p)\/([^\/?#]+)/
+                        );
+
+
+                    if (match) {
+
+                        return {
+                            tipo: "instagram",
+                            url:
+                                "https://www.instagram.com/" +
+                                match[1] +
+                                "/" +
+                                match[2] +
+                                "/embed/"
+                        };
+
+                    }
+
+                }
+
+
+                // ==========================================
+                // OUTROS SITES
+                // ==========================================
+
+                return {
+                    tipo: "pagina",
+                    url: link
+                };
+
+            }
+
+            catch (erro) {
+
+                console.error(
+                    "Não foi possível interpretar o link:",
+                    erro
+                );
+
+
+                return {
+                    tipo: "pagina",
+                    url: link
+                };
+
+            }
+
+        }
+
+
+        // ==========================================
+        // RENDERIZAR ATIVIDADES DE HOJE
         // ==========================================
 
         function renderizarAtividadesHoje(
@@ -1249,6 +1482,12 @@
                     .map(
                         atividade => {
 
+                            programacaoCache[
+                                atividade.id
+                            ] =
+                                atividade;
+
+
                             const concluida =
                                 Boolean(
                                     atividade.concluida
@@ -1261,42 +1500,22 @@
                                     : "";
 
 
-                            let botaoAbrir = "";
+                            let botaoAbrir;
 
 
                             if (
-                                atividade.link
+                                atividade.link ===
+                                "flashcards.html"
                             ) {
-
-                                const externo =
-                                    atividade.link.startsWith(
-                                        "http://"
-                                    ) ||
-                                    atividade.link.startsWith(
-                                        "https://"
-                                    );
-
 
                                 botaoAbrir = `
 
                                     <a
                                         class="atividade-btn"
-                                        href="${escaparHTML(
-                                            atividade.link
-                                        )}"
-                                        ${
-                                            externo
-                                                ? 'target="_blank" rel="noopener noreferrer"'
-                                                : ""
-                                        }
+                                        href="flashcards.html"
                                     >
 
-                                        ${
-                                            atividade.link ===
-                                            "flashcards.html"
-                                                ? "🧠 Começar"
-                                                : "▶️ Abrir atividade"
-                                        }
+                                        🧠 Começar
 
                                     </a>
 
@@ -1317,7 +1536,11 @@
                                         "
                                     >
 
-                                        📋 Ver atividade
+                                        ${
+                                            atividade.link
+                                                ? "▶️ Abrir atividade"
+                                                : "📋 Ver atividade"
+                                        }
 
                                     </button>
 
@@ -1388,14 +1611,12 @@
 
 
                                         <span>
-
                                             📅
                                             ${capitalizar(
                                                 formatarData(
                                                     atividade.data_atividade
                                                 )
                                             )}
-
                                         </span>
 
                                     </div>
@@ -1573,16 +1794,16 @@
                                         .map(
                                             atividade => {
 
-                                                const concluida =
-                                                    Boolean(
-                                                        atividade.concluida
-                                                    );
-
-
                                                 programacaoCache[
                                                     atividade.id
                                                 ] =
                                                     atividade;
+
+
+                                                const concluida =
+                                                    Boolean(
+                                                        atividade.concluida
+                                                    );
 
 
                                                 return `
@@ -1723,7 +1944,7 @@
                                                     >
                                                         HOJE
                                                     </div>
-                                                  `
+                                                `
                                                 : ""
                                         }
 
@@ -1824,42 +2045,10 @@
 
             if (!atividade) {
 
-                return;
-
-            }
-
-
-            // Se existe link, abrir diretamente
-            if (
-                atividade.link
-            ) {
-
-                const externo =
-                    atividade.link.startsWith(
-                        "http://"
-                    ) ||
-                    atividade.link.startsWith(
-                        "https://"
-                    );
-
-
-                if (externo) {
-
-                    window.open(
-                        atividade.link,
-                        "_blank",
-                        "noopener,noreferrer"
-                    );
-
-                }
-
-                else {
-
-                    window.location.href =
-                        atividade.link;
-
-                }
-
+                console.error(
+                    "Atividade não encontrada:",
+                    id
+                );
 
                 return;
 
@@ -1867,7 +2056,24 @@
 
 
             // ==========================================
-            // MODAL
+            // FLASHCARDS
+            // ==========================================
+
+            if (
+                atividade.link ===
+                "flashcards.html"
+            ) {
+
+                window.location.href =
+                    "flashcards.html";
+
+                return;
+
+            }
+
+
+            // ==========================================
+            // PREENCHER MODAL
             // ==========================================
 
             document.getElementById(
@@ -1890,32 +2096,184 @@
                 atividade.descricao || "";
 
 
-            document.getElementById(
-                "modalAcoes"
-            ).innerHTML = `
+            const embed =
+                document.getElementById(
+                    "modalEmbed"
+                );
 
-                <button
-                    class="modal-botao"
-                    onclick="
-                        alternarConclusao(
-                            ${atividade.id},
-                            ${Boolean(atividade.concluida)}
-                        );
 
-                        fecharModal();
-                    "
-                >
+            const aviso =
+                document.getElementById(
+                    "modalAviso"
+                );
 
-                    ${
-                        atividade.concluida
-                            ? "↩️ Marcar como não concluída"
-                            : "✅ Marcar como concluída"
-                    }
 
-                </button>
+            const acoes =
+                document.getElementById(
+                    "modalAcoes"
+                );
 
-            `;
 
+            embed.innerHTML = "";
+
+            embed.style.display =
+                "none";
+
+
+            aviso.innerHTML = "";
+
+            aviso.style.display =
+                "none";
+
+
+            acoes.innerHTML = "";
+
+
+            // ==========================================
+            // LINK
+            // ==========================================
+
+            if (
+                atividade.link
+            ) {
+
+                const embedData =
+                    obterUrlEmbed(
+                        atividade.link
+                    );
+
+
+                // ==========================================
+                // IFRAME
+                // ==========================================
+
+                if (
+                    embedData &&
+                    embedData.url
+                ) {
+
+                    embed.innerHTML = `
+
+                        <iframe
+                            src="${escaparHTML(
+                                embedData.url
+                            )}"
+                            title="${escaparHTML(
+                                atividade.titulo
+                            )}"
+                            loading="lazy"
+                            allow="
+                                accelerometer;
+                                autoplay;
+                                clipboard-write;
+                                encrypted-media;
+                                gyroscope;
+                                picture-in-picture;
+                                web-share
+                            "
+                            allowfullscreen
+                            referrerpolicy="
+                                strict-origin-when-cross-origin
+                            "
+                        ></iframe>
+
+                    `;
+
+
+                    embed.style.display =
+                        "block";
+
+
+                    aviso.innerHTML = `
+
+                        Caso este site não permita incorporação,
+                        você ainda poderá abrir o conteúdo diretamente.
+
+                    `;
+
+
+                    aviso.style.display =
+                        "block";
+
+
+                    acoes.innerHTML = `
+
+                        <a
+                            class="modal-botao"
+                            href="${escaparHTML(
+                                atividade.link
+                            )}"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                        >
+
+                            🔗 Abrir em nova aba
+
+                        </a>
+
+
+                        <button
+                            class="modal-botao verde"
+                            onclick="
+                                alternarConclusao(
+                                    ${atividade.id},
+                                    ${Boolean(atividade.concluida)}
+                                );
+
+                                fecharModal();
+                            "
+                        >
+
+                            ${
+                                atividade.concluida
+                                    ? "↩️ Marcar como não concluída"
+                                    : "✅ Marcar como concluída"
+                            }
+
+                        </button>
+
+                    `;
+
+                }
+
+            }
+
+            else {
+
+                // ==========================================
+                // SEM LINK
+                // ==========================================
+
+                acoes.innerHTML = `
+
+                    <button
+                        class="modal-botao verde"
+                        onclick="
+                            alternarConclusao(
+                                ${atividade.id},
+                                ${Boolean(atividade.concluida)}
+                            );
+
+                            fecharModal();
+                        "
+                    >
+
+                        ${
+                            atividade.concluida
+                                ? "↩️ Marcar como não concluída"
+                                : "✅ Marcar como concluída"
+                        }
+
+                    </button>
+
+                `;
+
+            }
+
+
+            // ==========================================
+            // ABRIR
+            // ==========================================
 
             document.getElementById(
                 "modalAtividade"
@@ -1932,16 +2290,36 @@
 
         function fecharModal() {
 
-            document.getElementById(
-                "modalAtividade"
-            ).classList.remove(
+            const modal =
+                document.getElementById(
+                    "modalAtividade"
+                );
+
+
+            const embed =
+                document.getElementById(
+                    "modalEmbed"
+                );
+
+
+            // Parar vídeo/conteúdo
+            embed.innerHTML = "";
+
+
+            modal.classList.remove(
                 "ativo"
             );
 
         }
 
 
-        function fecharModalFora(event) {
+        // ==========================================
+        // FECHAR CLICANDO FORA
+        // ==========================================
+
+        function fecharModalFora(
+            event
+        ) {
 
             if (
                 event.target.id ===
@@ -2149,7 +2527,6 @@
                 data || [];
 
 
-            // Limpar cache
             programacaoCache = {};
 
 
@@ -2303,7 +2680,7 @@
 
 
         // ==========================================
-        // ESC — FECHAR MODAL
+        // ESC PARA FECHAR
         // ==========================================
 
         document.addEventListener(
