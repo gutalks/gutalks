@@ -1,280 +1,273 @@
 <!DOCTYPE html>
+
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Aulas | Gutalks</title>
+```
+<title>Aulas | Gutalks</title>
 
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="js/supabase.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="js/supabase.js"></script>
 
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: Arial, sans-serif;
-        }
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: Arial, sans-serif;
+    }
 
-        body {
-            background: #f5f7fb;
-            color: #163075;
-        }
+    body {
+        background: #f5f7fb;
+        color: #163075;
+    }
 
-        header {
-            background: #163075;
-            color: white;
-            padding: 18px 7%;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
+    header {
+        background: #163075;
+        color: white;
+        padding: 18px 7%;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
 
-        .logo {
-            font-size: 28px;
-            font-weight: bold;
-        }
+    .logo {
+        font-size: 28px;
+        font-weight: bold;
+    }
 
-        .back-button {
-            color: white;
-            text-decoration: none;
-            font-weight: bold;
-        }
+    .back-button {
+        color: white;
+        text-decoration: none;
+        font-weight: bold;
+    }
 
-        main {
-            max-width: 1100px;
-            margin: 0 auto;
-            padding: 45px 25px;
-        }
+    main {
+        max-width: 1100px;
+        margin: 0 auto;
+        padding: 45px 25px;
+    }
 
-        .page-title {
-            margin-bottom: 35px;
+    .page-title {
+        margin-bottom: 35px;
+    }
+
+    .page-title h1 {
+        font-size: 34px;
+        margin-bottom: 10px;
+    }
+
+    .page-title p {
+        color: #666;
+    }
+
+    #listaAulas {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 25px;
+    }
+
+    .aula {
+        background: white;
+        padding: 28px;
+        border-radius: 16px;
+        box-shadow: 0 4px 18px rgba(0, 0, 0, 0.07);
+    }
+
+    .numero {
+        color: #c82623;
+        font-weight: bold;
+        margin-bottom: 10px;
+    }
+
+    .aula h2 {
+        margin-bottom: 12px;
+        font-size: 23px;
+    }
+
+    .aula p {
+        color: #666;
+        line-height: 1.5;
+        margin-bottom: 20px;
+    }
+
+    .botao {
+        display: inline-block;
+        background: #163075;
+        color: white;
+        text-decoration: none;
+        padding: 11px 20px;
+        border-radius: 8px;
+        font-weight: bold;
+    }
+
+    .mensagem {
+        background: white;
+        padding: 25px;
+        border-radius: 12px;
+        color: #666;
+    }
+
+    footer {
+        text-align: center;
+        padding: 30px;
+        color: #777;
+    }
+
+    @media (max-width: 700px) {
+        #listaAulas {
+            grid-template-columns: 1fr;
         }
 
         .page-title h1 {
-            font-size: 34px;
-            margin-bottom: 10px;
+            font-size: 28px;
         }
+    }
+</style>
+```
 
-        .page-title p {
-            color: #666;
-        }
-
-        #listaAulas {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 25px;
-        }
-
-        .aula {
-            background: white;
-            padding: 28px;
-            border-radius: 16px;
-            box-shadow: 0 4px 18px rgba(0, 0, 0, 0.07);
-        }
-
-        .numero {
-            color: #c82623;
-            font-weight: bold;
-            margin-bottom: 10px;
-        }
-
-        .aula h2 {
-            margin-bottom: 12px;
-            font-size: 23px;
-        }
-
-        .aula p {
-            color: #666;
-            line-height: 1.5;
-            margin-bottom: 20px;
-        }
-
-        .botao {
-            display: inline-block;
-            background: #163075;
-            color: white;
-            text-decoration: none;
-            padding: 11px 20px;
-            border-radius: 8px;
-            font-weight: bold;
-        }
-
-        .mensagem {
-            background: white;
-            padding: 25px;
-            border-radius: 12px;
-            color: #666;
-        }
-
-        footer {
-            text-align: center;
-            padding: 30px;
-            color: #777;
-        }
-
-        @media (max-width: 700px) {
-
-            #listaAulas {
-                grid-template-columns: 1fr;
-            }
-
-            .page-title h1 {
-                font-size: 28px;
-            }
-
-        }
-    </style>
 </head>
 
 <body>
 
-    <header>
+```
+<header>
 
-        <div class="logo">
-            GUTALKS
+    <div class="logo">
+        GUTALKS
+    </div>
+
+    <a href="aluno.html" class="back-button">
+        ← Voltar
+    </a>
+
+</header>
+
+
+<main>
+
+    <section class="page-title">
+
+        <h1>Minhas Aulas 📚</h1>
+
+        <p>
+            Escolha uma aula para começar seus estudos.
+        </p>
+
+    </section>
+
+
+    <section id="listaAulas">
+
+        <div class="mensagem">
+            Carregando aulas...
         </div>
 
-        <a href="aluno.html" class="back-button">
-            ← Voltar
-        </a>
+    </section>
 
-    </header>
+</main>
 
 
-    <main>
-
-        <section class="page-title">
-
-            <h1>Minhas Aulas 📚</h1>
-
-            <p>
-                Escolha uma aula para começar seus estudos.
-            </p>
-
-        </section>
+<footer>
+    © 2026 Gutalks — Área do aluno
+</footer>
 
 
-        <section id="listaAulas">
+<script>
 
-            <div class="mensagem">
-                Carregando aulas...
-            </div>
+    async function carregarAulas() {
 
-        </section>
+        const { data: { session } } =
+            await supabaseClient.auth.getSession();
 
-    </main>
-
-
-    <footer>
-        © 2026 Gutalks — Área do aluno
-    </footer>
-
-
-    <script>
-
-        async function carregarAulas() {
-
-            // Verifica se o aluno está logado
-            const { data: { session }, error: sessionError } =
-                await supabaseClient.auth.getSession();
-
-
-            if (sessionError || !session) {
-
-                window.location.href = "login.html";
-
-                return;
-            }
-
-
-            // Busca as aulas no Supabase
-            const { data: aulas, error } =
-                await supabaseClient
-                    .from("aulas")
-                    .select("*")
-                    .order("numero", { ascending: true });
-
-
-            const lista = document.getElementById("listaAulas");
-
-
-            // Verifica se ocorreu algum erro
-            if (error) {
-
-                console.error("Erro ao carregar aulas:", error);
-
-                lista.innerHTML = `
-                    <div class="mensagem">
-                        <strong>Erro ao carregar as aulas.</strong>
-                        <br><br>
-                        ${error.message}
-                    </div>
-                `;
-
-                return;
-            }
-
-
-            // Verifica se nenhuma aula foi encontrada
-            if (!aulas || aulas.length === 0) {
-
-                console.log("Nenhuma aula retornada pelo Supabase.");
-
-                lista.innerHTML = `
-                    <div class="mensagem">
-                        <strong>Nenhuma aula disponível no momento.</strong>
-                        <br><br>
-                        O sistema não encontrou nenhuma aula disponível.
-                    </div>
-                `;
-
-                return;
-            }
-
-
-            // Limpa a mensagem "Carregando aulas..."
-            lista.innerHTML = "";
-
-
-            // Cria os cards das aulas
-            aulas.forEach(aula => {
-
-                const card = document.createElement("div");
-
-                card.className = "aula";
-
-
-                card.innerHTML = `
-                    <div class="numero">
-                        AULA ${aula.numero}
-                    </div>
-
-                    <h2>
-                        ${aula.titulo}
-                    </h2>
-
-                    <p>
-                        ${aula.descricao}
-                    </p>
-
-                    <a href="aula.html?id=${aula.id}" class="botao">
-                        Acessar aula
-                    </a>
-                `;
-
-
-                lista.appendChild(card);
-
-            });
-
+        if (!session) {
+            window.location.href = "login.html";
+            return;
         }
 
 
-        carregarAulas();
+        const { data: aulas, error } =
+            await supabaseClient
+                .from("Aulas")
+                .select("*")
+                .order("numero", { ascending: true });
 
-    </script>
+
+        const lista = document.getElementById("listaAulas");
+
+
+        if (error) {
+
+            console.error("Erro ao carregar aulas:", error);
+
+            lista.innerHTML = `
+                <div class="mensagem">
+                    <strong>Erro ao carregar as aulas.</strong>
+                    <br><br>
+                    ${error.message}
+                </div>
+            `;
+
+            return;
+        }
+
+
+        if (!aulas || aulas.length === 0) {
+
+            console.log("Nenhuma aula retornada pelo Supabase.");
+
+            lista.innerHTML = `
+                <div class="mensagem">
+                    <strong>Nenhuma aula disponível no momento.</strong>
+                    <br><br>
+                    O sistema não encontrou nenhuma aula disponível.
+                </div>
+            `;
+
+            return;
+        }
+
+
+        lista.innerHTML = "";
+
+
+        aulas.forEach(aula => {
+
+            const card = document.createElement("div");
+
+            card.className = "aula";
+
+            card.innerHTML = `
+                <div class="numero">
+                    AULA ${aula.numero}
+                </div>
+
+                <h2>
+                    ${aula.titulo}
+                </h2>
+
+                <p>
+                    ${aula.descricao}
+                </p>
+
+                <a href="aula.html?id=${aula.id}" class="botao">
+                    Acessar aula
+                </a>
+            `;
+
+            lista.appendChild(card);
+
+        });
+
+    }
+
+
+    carregarAulas();
+
+</script>
+```
 
 </body>
 </html>
