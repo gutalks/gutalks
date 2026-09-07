@@ -115,6 +115,7 @@
         }
 
         @media (max-width: 700px) {
+
             #listaAulas {
                 grid-template-columns: 1fr;
             }
@@ -122,6 +123,7 @@
             .page-title h1 {
                 font-size: 28px;
             }
+
         }
     </style>
 </head>
@@ -174,15 +176,20 @@
 
         async function carregarAulas() {
 
-            const { data: { session } } =
+            // Verifica se o aluno está logado
+            const { data: { session }, error: sessionError } =
                 await supabaseClient.auth.getSession();
 
-            if (!session) {
+
+            if (sessionError || !session) {
+
                 window.location.href = "login.html";
+
                 return;
             }
 
 
+            // Busca as aulas no Supabase
             const { data: aulas, error } =
                 await supabaseClient
                     .from("aulas")
@@ -193,13 +200,16 @@
             const lista = document.getElementById("listaAulas");
 
 
+            // Verifica se ocorreu algum erro
             if (error) {
 
                 console.error("Erro ao carregar aulas:", error);
 
                 lista.innerHTML = `
                     <div class="mensagem">
-                        Não foi possível carregar as aulas.
+                        <strong>Erro ao carregar as aulas.</strong>
+                        <br><br>
+                        ${error.message}
                     </div>
                 `;
 
@@ -207,11 +217,16 @@
             }
 
 
+            // Verifica se nenhuma aula foi encontrada
             if (!aulas || aulas.length === 0) {
+
+                console.log("Nenhuma aula retornada pelo Supabase.");
 
                 lista.innerHTML = `
                     <div class="mensagem">
-                        Nenhuma aula disponível no momento.
+                        <strong>Nenhuma aula disponível no momento.</strong>
+                        <br><br>
+                        O sistema não encontrou nenhuma aula disponível.
                     </div>
                 `;
 
@@ -219,14 +234,17 @@
             }
 
 
+            // Limpa a mensagem "Carregando aulas..."
             lista.innerHTML = "";
 
 
+            // Cria os cards das aulas
             aulas.forEach(aula => {
 
                 const card = document.createElement("div");
 
                 card.className = "aula";
+
 
                 card.innerHTML = `
                     <div class="numero">
@@ -245,6 +263,7 @@
                         Acessar aula
                     </a>
                 `;
+
 
                 lista.appendChild(card);
 
