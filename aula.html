@@ -1,371 +1,398 @@
 <!DOCTYPE html>
-
 <html lang="pt-BR">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Aula | Gutalks</title>
+    <title>Aula | Gutalks</title>
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="js/supabase.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="js/supabase.js"></script>
 
-<style>
-    * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-        font-family: Arial, sans-serif;
-    }
+    <style>
+        * {
+            box-sizing: border-box;
+        }
 
-    body {
-        background: #f5f7fb;
-        color: #163075;
-    }
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f5f7fb;
+            color: #222;
+        }
 
-    header {
-        background: #163075;
-        color: white;
-        padding: 18px 7%;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-    }
+        header {
+            background: #163075;
+            color: white;
+            padding: 20px;
+        }
 
-    .logo {
-        font-size: 28px;
-        font-weight: bold;
-    }
+        .header-content {
+            max-width: 1100px;
+            margin: auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
 
-    .back-button {
-        color: white;
-        text-decoration: none;
-        font-weight: bold;
-    }
+        .logo {
+            font-size: 28px;
+            font-weight: bold;
+        }
 
-    main {
-        max-width: 1000px;
-        margin: 0 auto;
-        padding: 45px 25px;
-    }
+        .voltar {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+        }
 
-    .aula-container {
-        background: white;
-        padding: 40px;
-        border-radius: 18px;
-        box-shadow: 0 4px 18px rgba(0, 0, 0, 0.07);
-    }
+        main {
+            max-width: 1100px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
 
-    .numero {
-        color: #c82623;
-        font-weight: bold;
-        margin-bottom: 12px;
-    }
+        .aula-cabecalho {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+        }
 
-    h1 {
-        font-size: 36px;
-        margin-bottom: 20px;
-    }
-
-    .descricao {
-        color: #666;
-        font-size: 17px;
-        line-height: 1.6;
-        margin-bottom: 30px;
-    }
-
-    .conteudo {
-        border-top: 1px solid #eee;
-        padding-top: 30px;
-        color: #333;
-        line-height: 1.7;
-    }
-
-    .conteudo h2 {
-        color: #163075;
-        margin-bottom: 25px;
-    }
-
-    .material {
-        background: #f5f7fb;
-        padding: 22px;
-        border-radius: 12px;
-        margin-bottom: 18px;
-    }
-
-    .material-tipo {
-        color: #c82623;
-        font-weight: bold;
-        font-size: 14px;
-        margin-bottom: 8px;
-        text-transform: uppercase;
-    }
-
-    .material h3 {
-        color: #163075;
-        margin-bottom: 15px;
-    }
-
-    .material-botao {
-        display: inline-block;
-        background: #163075;
-        color: white;
-        text-decoration: none;
-        padding: 10px 18px;
-        border-radius: 8px;
-        font-weight: bold;
-    }
-
-    .mensagem {
-        background: white;
-        padding: 30px;
-        border-radius: 12px;
-        color: #666;
-    }
-
-    footer {
-        text-align: center;
-        padding: 30px;
-        color: #777;
-    }
-
-    @media (max-width: 700px) {
-
-        .aula-container {
-            padding: 25px;
+        .numero-aula {
+            color: #C82623;
+            font-weight: bold;
+            margin-bottom: 8px;
         }
 
         h1 {
-            font-size: 28px;
+            color: #163075;
+            margin-top: 0;
         }
-    }
-</style>
-```
 
+        .descricao {
+            color: #555;
+            line-height: 1.6;
+        }
+
+        .materiais-titulo {
+            color: #163075;
+            margin-bottom: 20px;
+        }
+
+        .material {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            margin-bottom: 25px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+        }
+
+        .material-tipo {
+            color: #C82623;
+            font-size: 14px;
+            font-weight: bold;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+        }
+
+        .material h3 {
+            color: #163075;
+            margin-top: 0;
+        }
+
+        .canva-container {
+            position: relative;
+            width: 100%;
+            height: 0;
+            padding-top: 56.25%;
+            overflow: hidden;
+            border-radius: 8px;
+            margin-top: 20px;
+        }
+
+        .canva-container iframe {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            border: none;
+        }
+
+        .material-botao {
+            display: inline-block;
+            background: #163075;
+            color: white;
+            text-decoration: none;
+            padding: 11px 20px;
+            border-radius: 8px;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+
+        .mensagem {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            color: #555;
+        }
+
+        footer {
+            text-align: center;
+            padding: 30px;
+            color: #777;
+        }
+
+        @media (max-width: 700px) {
+
+            .header-content {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            main {
+                margin-top: 25px;
+            }
+        }
+    </style>
 </head>
 
 <body>
 
-```
-<header>
+    <header>
 
-    <div class="logo">
-        GUTALKS
-    </div>
+        <div class="header-content">
 
-    <a href="Aulas.html" class="back-button">
-        ← Voltar para aulas
-    </a>
+            <div class="logo">
+                GUTALKS
+            </div>
 
-</header>
+            <a href="Aulas.html" class="voltar">
+                ← Voltar para aulas
+            </a>
+
+        </div>
+
+    </header>
 
 
-<main>
+    <main>
 
-    <div id="conteudoAula">
-
-        <div class="mensagem">
+        <div id="conteudo">
             Carregando aula...
         </div>
 
-    </div>
-
-</main>
+    </main>
 
 
-<footer>
-    © 2026 Gutalks — Área do aluno
-</footer>
+    <footer>
+        © 2026 Gutalks — Aprenda inglês de forma prática.
+    </footer>
 
 
-<script>
+    <script>
 
-    async function carregarAula() {
+        async function carregarAula() {
 
-        // Verificar se o aluno está logado
-        const { data: { session } } =
-            await supabaseClient.auth.getSession();
+            // Verifica se o aluno está logado
+            const { data: { session } } =
+                await supabaseClient.auth.getSession();
 
-        if (!session) {
-            window.location.href = "login.html";
-            return;
-        }
-
-
-        // Pegar o ID da aula na URL
-        const parametros =
-            new URLSearchParams(window.location.search);
-
-        const idAula =
-            parametros.get("id");
+            if (!session) {
+                window.location.href = "login.html";
+                return;
+            }
 
 
-        const container =
-            document.getElementById("conteudoAula");
+            // Pega o ID da aula pela URL
+            const parametros =
+                new URLSearchParams(window.location.search);
+
+            const idAula =
+                parametros.get("id");
 
 
-        // Verificar se existe ID
-        if (!idAula) {
+            if (!idAula) {
 
-            container.innerHTML = `
-                <div class="mensagem">
-                    Não foi possível identificar a aula.
-                </div>
-            `;
+                document.getElementById("conteudo").innerHTML =
+                    `<div class="mensagem">
+                        Aula não encontrada.
+                    </div>`;
 
-            return;
-        }
+                return;
+            }
 
 
-        // Buscar a aula
-        const { data: aula, error: erroAula } =
-            await supabaseClient
-                .from("Aulas")
-                .select("*")
-                .eq("id", idAula)
-                .single();
+            // Busca a aula
+            const { data: aula, error: erroAula } =
+                await supabaseClient
+                    .from("Aulas")
+                    .select("*")
+                    .eq("id", idAula)
+                    .single();
 
 
-        // Verificar erro da aula
-        if (erroAula) {
+            if (erroAula) {
 
-            console.error(
-                "Erro ao carregar aula:",
-                erroAula
-            );
+                console.error(erroAula);
 
-            container.innerHTML = `
-                <div class="mensagem">
-                    <strong>
-                        Erro ao carregar a aula.
-                    </strong>
+                document.getElementById("conteudo").innerHTML =
+                    `<div class="mensagem">
+                        Não foi possível carregar esta aula.
+                    </div>`;
 
-                    <br><br>
-
-                    ${erroAula.message}
-                </div>
-            `;
-
-            return;
-        }
+                return;
+            }
 
 
-        // Buscar materiais relacionados à aula
-        const { data: materiais, error: erroMateriais } =
-            await supabaseClient
-                .from("Materiais")
-                .select("*")
-                .eq("aula_id", idAula)
-                .order("created_at", { ascending: true });
+            // Busca os materiais da aula
+            const { data: materiais, error: erroMateriais } =
+                await supabaseClient
+                    .from("Materiais")
+                    .select("*")
+                    .eq("aula_id", idAula)
+                    .order("created_at", { ascending: true });
 
 
-        // Verificar erro dos materiais
-        if (erroMateriais) {
+            if (erroMateriais) {
 
-            console.error(
-                "Erro ao carregar materiais:",
-                erroMateriais
-            );
+                console.error(erroMateriais);
 
-            container.innerHTML = `
-                <div class="mensagem">
-                    <strong>
-                        A aula foi encontrada, mas não foi possível carregar os materiais.
-                    </strong>
+                document.getElementById("conteudo").innerHTML =
+                    `<div class="mensagem">
+                        <strong>A aula foi encontrada, mas não foi possível carregar os materiais.</strong>
+                        <br><br>
+                        ${erroMateriais.message}
+                    </div>`;
 
-                    <br><br>
-
-                    ${erroMateriais.message}
-                </div>
-            `;
-
-            return;
-        }
+                return;
+            }
 
 
-        // Criar área de materiais
-        let materiaisHTML = "";
+            // Monta os materiais
+            let materiaisHTML = "";
 
 
-        if (!materiais || materiais.length === 0) {
+            if (!materiais || materiais.length === 0) {
 
-            materiaisHTML = `
-                <div class="mensagem">
-                    Nenhum material disponível para esta aula no momento.
-                </div>
-            `;
-
-        } else {
-
-            materiais.forEach(material => {
-
-                materiaisHTML += `
-
-                    <div class="material">
-
-                        <div class="material-tipo">
-                            ${material.tipo}
-                        </div>
-
-                        <h3>
-                            ${material.titulo}
-                        </h3>
-
-                        <a
-                            href="${material.url}"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            class="material-botao"
-                        >
-                            Acessar material
-                        </a>
-
+                materiaisHTML = `
+                    <div class="mensagem">
+                        Nenhum material foi adicionado a esta aula ainda.
                     </div>
-
                 `;
 
-            });
+            } else {
+
+                materiais.forEach(material => {
+
+                    // MATERIAL DO TIPO SLIDES
+                    if (material.tipo.toLowerCase() === "slides") {
+
+                        let urlCanva = material.url;
+
+                        // Se for um link canva.link,
+                        // usamos o link armazenado normalmente.
+                        // O Canva será aberto dentro do iframe.
+                        materiaisHTML += `
+                            <div class="material">
+
+                                <div class="material-tipo">
+                                    ${material.tipo}
+                                </div>
+
+                                <h3>
+                                    ${material.titulo}
+                                </h3>
+
+                                <div class="canva-container">
+
+                                    <iframe
+                                        src="${urlCanva}"
+                                        loading="lazy"
+                                        allowfullscreen="allowfullscreen"
+                                        allow="fullscreen">
+                                    </iframe>
+
+                                </div>
+
+                            </div>
+                        `;
+
+                    }
+
+                    // OUTROS TIPOS DE MATERIAL
+                    else {
+
+                        materiaisHTML += `
+                            <div class="material">
+
+                                <div class="material-tipo">
+                                    ${material.tipo}
+                                </div>
+
+                                <h3>
+                                    ${material.titulo}
+                                </h3>
+
+                                <a
+                                    href="${material.url}"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    class="material-botao">
+
+                                    Acessar material
+
+                                </a>
+
+                            </div>
+                        `;
+
+                    }
+
+                });
+
+            }
+
+
+            // Exibe tudo
+            document.getElementById("conteudo").innerHTML = `
+
+                <div class="aula-cabecalho">
+
+                    <div class="numero-aula">
+                        AULA ${aula.numero}
+                    </div>
+
+                    <h1>
+                        ${aula.titulo}
+                    </h1>
+
+                    <div class="descricao">
+                        ${aula.descricao}
+                    </div>
+
+                </div>
+
+
+                <h2 class="materiais-titulo">
+                    📚 Materiais da aula
+                </h2>
+
+
+                ${materiaisHTML}
+
+            `;
 
         }
 
 
-        // Mostrar aula e materiais
-        container.innerHTML = `
+        carregarAula();
 
-            <article class="aula-container">
+    </script>
 
-                <div class="numero">
-                    AULA ${aula.numero}
-                </div>
-
-                <h1>
-                    ${aula.titulo}
-                </h1>
-
-                <p class="descricao">
-                    ${aula.descricao}
-                </p>
-
-
-                <div class="conteudo">
-
-                    <h2>
-                        📚 Materiais da aula
-                    </h2>
-
-                    ${materiaisHTML}
-
-                </div>
-
-            </article>
-
-        `;
-
-    }
-
-
-    carregarAula();
-
-</script>
 </body>
+
 </html>
