@@ -1,855 +1,871 @@
 <!DOCTYPE html>
-
 <html lang="pt-BR">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-```
-<title>Área do Aluno | Gutalks</title>
+    <title>Área do Aluno | Gutalks</title>
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="js/supabase.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="js/supabase.js"></script>
 
-<!-- ==========================================
-     YOUGLISH
-=========================================== -->
 
-<script>
-    let youglishApiPronta = false;
-    let youglishWidget = null;
+    <!-- ==========================================
+         YOUGLISH
+    ========================================== -->
 
-    function onYouglishAPIReady() {
+    <script>
 
-        console.log(
-            "YouGlish API carregada."
-        );
+        let youglishApiPronta = false;
 
-        youglishApiPronta = true;
+        let youglishWidget = null;
 
-    }
-</script>
 
-<script
-    async
-    src="https://youglish.com/public/emb/widget.js"
-    charset="utf-8">
-</script>
+        function onYouglishAPIReady() {
 
+            console.log(
+                "YouGlish API carregada."
+            );
 
-<style>
 
-    * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-        font-family: Arial, sans-serif;
-    }
+            youglishApiPronta = true;
 
-    body {
-        background: #f5f7fb;
-        color: #163075;
-    }
+        }
 
-    /* ==========================================
-       HEADER
-    ========================================== */
+    </script>
 
-    header {
-        background: #163075;
-        color: white;
-        padding: 18px 7%;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-    }
 
-    .logo {
-        font-size: 28px;
-        font-weight: bold;
-        letter-spacing: 1px;
-    }
+    <script
+        async
+        src="https://youglish.com/public/emb/widget.js"
+        charset="utf-8">
+    </script>
 
-    .header-right {
-        display: flex;
-        align-items: center;
-        gap: 20px;
-    }
 
-    .student-name {
-        font-size: 14px;
-        opacity: 0.9;
-    }
+    <style>
 
-    .logout {
-        background: #c82623;
-        color: white;
-        border: none;
-        padding: 10px 20px;
-        border-radius: 8px;
-        cursor: pointer;
-        font-weight: bold;
-    }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
 
-    .logout:hover {
-        opacity: 0.9;
-    }
+        body {
+            background: #f5f7fb;
+            color: #163075;
+        }
 
 
-    /* ==========================================
-       MAIN
-    ========================================== */
-
-    main {
-        max-width: 1150px;
-        margin: 0 auto;
-        padding: 45px 25px;
-    }
-
-
-    /* ==========================================
-       BOAS-VINDAS
-    ========================================== */
-
-    .welcome {
-        margin-bottom: 35px;
-    }
-
-    .welcome h1 {
-        font-size: 34px;
-        margin-bottom: 10px;
-    }
-
-    .welcome p {
-        color: #666;
-        font-size: 16px;
-    }
-
-
-    /* ==========================================
-       SEÇÕES
-    ========================================== */
-
-    .hoje-section,
-    .semana-section {
-        margin-bottom: 40px;
-    }
-
-    .section-title {
-        font-size: 26px;
-        margin-bottom: 8px;
-    }
-
-    .section-subtitle {
-        color: #666;
-        margin-bottom: 20px;
-    }
-
-
-    /* ==========================================
-       ATIVIDADES DE HOJE
-    ========================================== */
-
-    .atividades-hoje {
-        display: grid;
-        gap: 18px;
-    }
-
-    .atividade-hoje {
-        background: white;
-        border-radius: 16px;
-        padding: 25px;
-        box-shadow: 0 4px 18px rgba(0, 0, 0, 0.07);
-        border-left: 6px solid #163075;
-    }
-
-    .atividade-hoje.concluida {
-        border-left-color: #218838;
-    }
-
-    .atividade-cabecalho {
-        display: flex;
-        justify-content: space-between;
-        align-items: flex-start;
-        gap: 15px;
-        margin-bottom: 12px;
-    }
-
-    .atividade-titulo {
-        font-size: 21px;
-        font-weight: bold;
-        color: #163075;
-    }
-
-    .atividade-hoje.concluida .atividade-titulo {
-        color: #218838;
-    }
-
-    .atividade-tipo {
-        background: #eef1f8;
-        color: #163075;
-        padding: 6px 10px;
-        border-radius: 20px;
-        font-size: 12px;
-        font-weight: bold;
-        white-space: nowrap;
-    }
-
-    .atividade-descricao {
-        color: #666;
-        line-height: 1.6;
-        margin-bottom: 18px;
-        white-space: pre-wrap;
-    }
-
-    .atividade-meta {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 15px;
-        color: #777;
-        font-size: 14px;
-        margin-bottom: 18px;
-    }
-
-    .atividade-acoes {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 10px;
-    }
-
-    .atividade-btn {
-        display: inline-block;
-        background: #163075;
-        color: white;
-        text-decoration: none;
-        border: none;
-        padding: 11px 18px;
-        border-radius: 8px;
-        cursor: pointer;
-        font-weight: bold;
-    }
-
-    .atividade-btn:hover {
-        opacity: 0.9;
-    }
-
-    .concluir-btn {
-        background: #e9edf7;
-        color: #163075;
-    }
-
-    .concluir-btn.concluida {
-        background: #218838;
-        color: white;
-    }
-
-
-    /* ==========================================
-       PROGRAMAÇÃO DA SEMANA
-    ========================================== */
-
-    .semana-resumo {
-        background: white;
-        border-radius: 16px;
-        padding: 22px 25px;
-        margin-bottom: 15px;
-        box-shadow: 0 4px 18px rgba(0, 0, 0, 0.05);
-    }
-
-    .semana-nome {
-        font-size: 18px;
-        font-weight: bold;
-        margin-bottom: 12px;
-    }
-
-    .semana-progresso-bar {
-        width: 100%;
-        height: 10px;
-        background: #e5e5e5;
-        border-radius: 10px;
-        overflow: hidden;
-        margin-bottom: 8px;
-    }
-
-    .semana-progresso-fill {
-        width: 0%;
-        height: 100%;
-        background: #218838;
-        transition: width 0.3s ease;
-    }
-
-    .semana-progresso-texto {
-        font-size: 14px;
-        color: #666;
-    }
-
-    .semana-lista {
-        display: grid;
-        gap: 12px;
-    }
-
-    .dia-programacao {
-        background: white;
-        border-radius: 14px;
-        padding: 20px;
-        box-shadow: 0 3px 12px rgba(0, 0, 0, 0.05);
-        border-left: 5px solid transparent;
-    }
-
-    .dia-programacao.hoje {
-        border-left-color: #163075;
-    }
-
-    .dia-programacao.concluido {
-        border-left-color: #218838;
-    }
-
-    .dia-cabecalho {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        gap: 15px;
-        margin-bottom: 14px;
-    }
-
-    .dia-nome {
-        font-size: 18px;
-        font-weight: bold;
-        color: #163075;
-    }
-
-    .dia-tag-hoje {
-        color: #163075;
-        font-size: 12px;
-        font-weight: bold;
-        background: #eef1f8;
-        padding: 5px 9px;
-        border-radius: 20px;
-    }
-
-    .atividades-dia {
-        display: grid;
-        gap: 10px;
-    }
-
-    .atividade-semana {
-        border: 1px solid #e5e8ef;
-        border-radius: 10px;
-        padding: 15px;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        gap: 15px;
-    }
-
-    .atividade-semana-info {
-        min-width: 0;
-    }
-
-    .atividade-semana-titulo {
-        font-weight: bold;
-        color: #163075;
-        margin-bottom: 5px;
-    }
-
-    .atividade-semana-tipo {
-        color: #777;
-        font-size: 13px;
-    }
-
-    .atividade-semana-acoes {
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        flex-shrink: 0;
-    }
-
-    .status-concluida {
-        font-size: 13px;
-        color: #218838;
-        font-weight: bold;
-    }
-
-    .abrir-semana-btn {
-        background: #163075;
-        color: white;
-        border: none;
-        padding: 9px 14px;
-        border-radius: 7px;
-        cursor: pointer;
-        font-weight: bold;
-    }
-
-    .abrir-semana-btn:hover {
-        opacity: 0.9;
-    }
-
-
-    /* ==========================================
-       CARDS PRINCIPAIS
-    ========================================== */
-
-    .cards {
-        display: grid;
-        grid-template-columns: repeat(2, 1fr);
-        gap: 25px;
-    }
-
-    .card {
-        background: white;
-        padding: 30px;
-        border-radius: 16px;
-        box-shadow: 0 4px 18px rgba(0, 0, 0, 0.07);
-        transition: transform 0.2s, box-shadow 0.2s;
-    }
-
-    .card:hover {
-        transform: translateY(-4px);
-        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.10);
-    }
-
-    .icon {
-        font-size: 38px;
-        margin-bottom: 18px;
-    }
-
-    .card h2 {
-        font-size: 22px;
-        margin-bottom: 10px;
-    }
-
-    .card p {
-        color: #666;
-        line-height: 1.5;
-        margin-bottom: 22px;
-    }
-
-    .card button {
-        background: #163075;
-        color: white;
-        border: none;
-        padding: 11px 20px;
-        border-radius: 8px;
-        cursor: pointer;
-        font-weight: bold;
-    }
-
-    .card-button {
-        display: inline-block;
-        background: #163075;
-        color: white;
-        text-decoration: none;
-        padding: 11px 20px;
-        border-radius: 8px;
-        cursor: pointer;
-        font-weight: bold;
-    }
-
-    .card-button:hover {
-        opacity: 0.9;
-    }
-
-
-    /* ==========================================
-       FLASHCARDS
-    ========================================== */
-
-    .flashcards-card {
-        border-top: 5px solid #c82623;
-    }
-
-    .flashcards-card .card-button {
-        background: #c82623;
-    }
-
-
-    /* ==========================================
-       PROGRESSO
-    ========================================== */
-
-    .progress-card {
-        border-top: 5px solid #c82623;
-    }
-
-    .progress-bar {
-        width: 100%;
-        height: 10px;
-        background: #e5e5e5;
-        border-radius: 10px;
-        overflow: hidden;
-        margin: 15px 0;
-    }
-
-    .progress-fill {
-        width: 0%;
-        height: 100%;
-        background: #c82623;
-        transition: width 0.3s ease;
-    }
-
-    .progress-text {
-        font-size: 14px;
-        color: #666;
-    }
-
-
-    /* ==========================================
-       MENSAGENS
-    ========================================== */
-
-    .mensagem {
-        background: white;
-        border-radius: 16px;
-        padding: 25px;
-        color: #666;
-        box-shadow: 0 4px 18px rgba(0, 0, 0, 0.05);
-    }
-
-    .erro {
-        color: #c82623;
-    }
-
-
-    /* ==========================================
-       MODAL
-    ========================================== */
-
-    .modal {
-        display: none;
-        position: fixed;
-        inset: 0;
-        background: rgba(0, 0, 0, 0.60);
-        z-index: 1000;
-        padding: 20px;
-        align-items: center;
-        justify-content: center;
-    }
-
-    .modal.ativo {
-        display: flex;
-    }
-
-    .modal-conteudo {
-        background: white;
-        width: 100%;
-        max-width: 1000px;
-        max-height: 92vh;
-        overflow-y: auto;
-        border-radius: 18px;
-        padding: 25px;
-        position: relative;
-        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.25);
-    }
-
-    .modal-fechar {
-        position: absolute;
-        top: 12px;
-        right: 16px;
-        border: none;
-        background: transparent;
-        font-size: 30px;
-        line-height: 1;
-        color: #777;
-        cursor: pointer;
-        z-index: 3;
-    }
-
-    .modal-titulo {
-        font-size: 26px;
-        color: #163075;
-        margin-bottom: 8px;
-        padding-right: 45px;
-    }
-
-    .modal-tipo {
-        display: inline-block;
-        background: #eef1f8;
-        color: #163075;
-        padding: 6px 10px;
-        border-radius: 20px;
-        font-size: 12px;
-        font-weight: bold;
-        margin-bottom: 20px;
-    }
-
-    .modal-descricao {
-        color: #555;
-        line-height: 1.7;
-        white-space: pre-wrap;
-        margin-bottom: 20px;
-    }
-
-    .modal-embed {
-        width: 100%;
-        min-height: 520px;
-        border: 1px solid #e5e8ef;
-        border-radius: 12px;
-        overflow: hidden;
-        background: #f5f7fb;
-        margin-bottom: 15px;
-    }
-
-    .modal-embed iframe {
-        display: block;
-        width: 100%;
-        height: 520px;
-        border: none;
-        background: white;
-    }
-
-
-    /* ==========================================
-       YOUGLISH
-    ========================================== */
-
-    .youglish-widget {
-        width: 100%;
-        min-height: 520px;
-        border: 1px solid #e5e8ef;
-        border-radius: 12px;
-        overflow: hidden;
-        background: white;
-        margin-bottom: 15px;
-    }
-
-
-    .modal-link-aviso {
-        background: #f5f7fb;
-        border-radius: 10px;
-        padding: 14px;
-        color: #666;
-        font-size: 14px;
-        line-height: 1.5;
-        margin-bottom: 18px;
-    }
-
-    .modal-acoes {
-        display: flex;
-        gap: 10px;
-        flex-wrap: wrap;
-    }
-
-    .modal-botao {
-        background: #163075;
-        color: white;
-        text-decoration: none;
-        border: none;
-        padding: 12px 18px;
-        border-radius: 8px;
-        cursor: pointer;
-        font-weight: bold;
-    }
-
-    .modal-botao:hover {
-        opacity: 0.9;
-    }
-
-    .modal-botao.verde {
-        background: #218838;
-    }
-
-    .modal-botao.cinza {
-        background: #e9edf7;
-        color: #163075;
-    }
-
-
-    /* ==========================================
-       FOOTER
-    ========================================== */
-
-    footer {
-        text-align: center;
-        padding: 30px 20px;
-        color: #777;
-        font-size: 14px;
-    }
-
-
-    /* ==========================================
-       MOBILE
-    ========================================== */
-
-    @media (max-width: 700px) {
+        /* ==========================================
+           HEADER
+        ========================================== */
 
         header {
-            padding: 18px 5%;
+            background: #163075;
+            color: white;
+            padding: 18px 7%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 28px;
+            font-weight: bold;
+            letter-spacing: 1px;
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 20px;
         }
 
         .student-name {
-            display: none;
+            font-size: 14px;
+            opacity: 0.9;
         }
 
+        .logout {
+            background: #c82623;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .logout:hover {
+            opacity: 0.9;
+        }
+
+
+        /* ==========================================
+           MAIN
+        ========================================== */
+
         main {
-            padding: 35px 18px;
+            max-width: 1150px;
+            margin: 0 auto;
+            padding: 45px 25px;
+        }
+
+
+        /* ==========================================
+           BOAS-VINDAS
+        ========================================== */
+
+        .welcome {
+            margin-bottom: 35px;
         }
 
         .welcome h1 {
-            font-size: 28px;
+            font-size: 34px;
+            margin-bottom: 10px;
         }
 
-        .cards {
-            grid-template-columns: 1fr;
+        .welcome p {
+            color: #666;
+            font-size: 16px;
+        }
+
+
+        /* ==========================================
+           SEÇÕES
+        ========================================== */
+
+        .hoje-section,
+        .semana-section {
+            margin-bottom: 40px;
+        }
+
+        .section-title {
+            font-size: 26px;
+            margin-bottom: 8px;
+        }
+
+        .section-subtitle {
+            color: #666;
+            margin-bottom: 20px;
+        }
+
+
+        /* ==========================================
+           ATIVIDADES DE HOJE
+        ========================================== */
+
+        .atividades-hoje {
+            display: grid;
+            gap: 18px;
+        }
+
+        .atividade-hoje {
+            background: white;
+            border-radius: 16px;
+            padding: 25px;
+            box-shadow: 0 4px 18px rgba(0, 0, 0, 0.07);
+            border-left: 6px solid #163075;
+        }
+
+        .atividade-hoje.concluida {
+            border-left-color: #218838;
         }
 
         .atividade-cabecalho {
-            flex-direction: column;
-        }
-
-        .atividade-semana {
-            flex-direction: column;
+            display: flex;
+            justify-content: space-between;
             align-items: flex-start;
+            gap: 15px;
+            margin-bottom: 12px;
         }
 
-        .atividade-semana-acoes {
+        .atividade-titulo {
+            font-size: 21px;
+            font-weight: bold;
+            color: #163075;
+        }
+
+        .atividade-hoje.concluida .atividade-titulo {
+            color: #218838;
+        }
+
+        .atividade-tipo {
+            background: #eef1f8;
+            color: #163075;
+            padding: 6px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+            white-space: nowrap;
+        }
+
+        .atividade-descricao {
+            color: #666;
+            line-height: 1.6;
+            margin-bottom: 18px;
+            white-space: pre-wrap;
+        }
+
+        .atividade-meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            color: #777;
+            font-size: 14px;
+            margin-bottom: 18px;
+        }
+
+        .atividade-acoes {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .atividade-btn {
+            display: inline-block;
+            background: #163075;
+            color: white;
+            text-decoration: none;
+            border: none;
+            padding: 11px 18px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .atividade-btn:hover {
+            opacity: 0.9;
+        }
+
+        .concluir-btn {
+            background: #e9edf7;
+            color: #163075;
+        }
+
+        .concluir-btn.concluida {
+            background: #218838;
+            color: white;
+        }
+
+
+        /* ==========================================
+           PROGRAMAÇÃO DA SEMANA
+        ========================================== */
+
+        .semana-resumo {
+            background: white;
+            border-radius: 16px;
+            padding: 22px 25px;
+            margin-bottom: 15px;
+            box-shadow: 0 4px 18px rgba(0, 0, 0, 0.05);
+        }
+
+        .semana-nome {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 12px;
+        }
+
+        .semana-progresso-bar {
             width: 100%;
-            justify-content: flex-start;
+            height: 10px;
+            background: #e5e5e5;
+            border-radius: 10px;
+            overflow: hidden;
+            margin-bottom: 8px;
+        }
+
+        .semana-progresso-fill {
+            width: 0%;
+            height: 100%;
+            background: #218838;
+            transition: width 0.3s ease;
+        }
+
+        .semana-progresso-texto {
+            font-size: 14px;
+            color: #666;
+        }
+
+        .semana-lista {
+            display: grid;
+            gap: 12px;
+        }
+
+        .dia-programacao {
+            background: white;
+            border-radius: 14px;
+            padding: 20px;
+            box-shadow: 0 3px 12px rgba(0, 0, 0, 0.05);
+            border-left: 5px solid transparent;
+        }
+
+        .dia-programacao.hoje {
+            border-left-color: #163075;
+        }
+
+        .dia-programacao.concluido {
+            border-left-color: #218838;
         }
 
         .dia-cabecalho {
-            align-items: flex-start;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 14px;
+        }
+
+        .dia-nome {
+            font-size: 18px;
+            font-weight: bold;
+            color: #163075;
+        }
+
+        .dia-tag-hoje {
+            color: #163075;
+            font-size: 12px;
+            font-weight: bold;
+            background: #eef1f8;
+            padding: 5px 9px;
+            border-radius: 20px;
+        }
+
+        .atividades-dia {
+            display: grid;
+            gap: 10px;
+        }
+
+        .atividade-semana {
+            border: 1px solid #e5e8ef;
+            border-radius: 10px;
+            padding: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .atividade-semana-info {
+            min-width: 0;
+        }
+
+        .atividade-semana-titulo {
+            font-weight: bold;
+            color: #163075;
+            margin-bottom: 5px;
+        }
+
+        .atividade-semana-tipo {
+            color: #777;
+            font-size: 13px;
+        }
+
+        .atividade-semana-acoes {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-shrink: 0;
+        }
+
+        .status-concluida {
+            font-size: 13px;
+            color: #218838;
+            font-weight: bold;
+        }
+
+        .abrir-semana-btn {
+            background: #163075;
+            color: white;
+            border: none;
+            padding: 9px 14px;
+            border-radius: 7px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .abrir-semana-btn:hover {
+            opacity: 0.9;
+        }
+
+
+        /* ==========================================
+           CARDS PRINCIPAIS
+        ========================================== */
+
+        .cards {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 25px;
+        }
+
+        .card {
+            background: white;
+            padding: 30px;
+            border-radius: 16px;
+            box-shadow: 0 4px 18px rgba(0, 0, 0, 0.07);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.10);
+        }
+
+        .icon {
+            font-size: 38px;
+            margin-bottom: 18px;
+        }
+
+        .card h2 {
+            font-size: 22px;
+            margin-bottom: 10px;
+        }
+
+        .card p {
+            color: #666;
+            line-height: 1.5;
+            margin-bottom: 22px;
+        }
+
+        .card button {
+            background: #163075;
+            color: white;
+            border: none;
+            padding: 11px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .card-button {
+            display: inline-block;
+            background: #163075;
+            color: white;
+            text-decoration: none;
+            padding: 11px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .card-button:hover {
+            opacity: 0.9;
+        }
+
+
+        /* ==========================================
+           FLASHCARDS
+        ========================================== */
+
+        .flashcards-card {
+            border-top: 5px solid #c82623;
+        }
+
+        .flashcards-card .card-button {
+            background: #c82623;
+        }
+
+
+        /* ==========================================
+           PROGRESSO
+        ========================================== */
+
+        .progress-card {
+            border-top: 5px solid #c82623;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 10px;
+            background: #e5e5e5;
+            border-radius: 10px;
+            overflow: hidden;
+            margin: 15px 0;
+        }
+
+        .progress-fill {
+            width: 0%;
+            height: 100%;
+            background: #c82623;
+            transition: width 0.3s ease;
+        }
+
+        .progress-text {
+            font-size: 14px;
+            color: #666;
+        }
+
+
+        /* ==========================================
+           MENSAGENS
+        ========================================== */
+
+        .mensagem {
+            background: white;
+            border-radius: 16px;
+            padding: 25px;
+            color: #666;
+            box-shadow: 0 4px 18px rgba(0, 0, 0, 0.05);
+        }
+
+        .erro {
+            color: #c82623;
+        }
+
+
+        /* ==========================================
+           MODAL
+        ========================================== */
+
+        .modal {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.60);
+            z-index: 1000;
+            padding: 20px;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal.ativo {
+            display: flex;
         }
 
         .modal-conteudo {
-            padding: 22px 18px;
+            background: white;
+            width: 100%;
+            max-width: 1000px;
+            max-height: 92vh;
+            overflow-y: auto;
+            border-radius: 18px;
+            padding: 25px;
+            position: relative;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.25);
+        }
+
+        .modal-fechar {
+            position: absolute;
+            top: 12px;
+            right: 16px;
+            border: none;
+            background: transparent;
+            font-size: 30px;
+            line-height: 1;
+            color: #777;
+            cursor: pointer;
+            z-index: 3;
+        }
+
+        .modal-titulo {
+            font-size: 26px;
+            color: #163075;
+            margin-bottom: 8px;
+            padding-right: 45px;
+        }
+
+        .modal-tipo {
+            display: inline-block;
+            background: #eef1f8;
+            color: #163075;
+            padding: 6px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+
+        .modal-descricao {
+            color: #555;
+            line-height: 1.7;
+            white-space: pre-wrap;
+            margin-bottom: 20px;
         }
 
         .modal-embed {
-            min-height: 350px;
+            width: 100%;
+            min-height: 520px;
+            border: 1px solid #e5e8ef;
+            border-radius: 12px;
+            overflow: hidden;
+            background: #f5f7fb;
+            margin-bottom: 15px;
         }
 
         .modal-embed iframe {
-            height: 350px;
+            display: block;
+            width: 100%;
+            height: 520px;
+            border: none;
+            background: white;
         }
+
+
+        /* ==========================================
+           YOUGLISH
+        ========================================== */
 
         .youglish-widget {
-            min-height: 420px;
+            width: 100%;
+            min-height: 520px;
+            border: 1px solid #e5e8ef;
+            border-radius: 12px;
+            overflow: hidden;
+            background: white;
+            margin-bottom: 15px;
         }
 
-    }
 
-</style>
-```
+        .modal-link-aviso {
+            background: #f5f7fb;
+            border-radius: 10px;
+            padding: 14px;
+            color: #666;
+            font-size: 14px;
+            line-height: 1.5;
+            margin-bottom: 18px;
+        }
+
+        .modal-acoes {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .modal-botao {
+            background: #163075;
+            color: white;
+            text-decoration: none;
+            border: none;
+            padding: 12px 18px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .modal-botao:hover {
+            opacity: 0.9;
+        }
+
+        .modal-botao.verde {
+            background: #218838;
+        }
+
+        .modal-botao.cinza {
+            background: #e9edf7;
+            color: #163075;
+        }
+
+
+        /* ==========================================
+           FOOTER
+        ========================================== */
+
+        footer {
+            text-align: center;
+            padding: 30px 20px;
+            color: #777;
+            font-size: 14px;
+        }
+
+
+        /* ==========================================
+           MOBILE
+        ========================================== */
+
+        @media (max-width: 700px) {
+
+            header {
+                padding: 18px 5%;
+            }
+
+            .student-name {
+                display: none;
+            }
+
+            main {
+                padding: 35px 18px;
+            }
+
+            .welcome h1 {
+                font-size: 28px;
+            }
+
+            .cards {
+                grid-template-columns: 1fr;
+            }
+
+            .atividade-cabecalho {
+                flex-direction: column;
+            }
+
+            .atividade-semana {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .atividade-semana-acoes {
+                width: 100%;
+                justify-content: flex-start;
+            }
+
+            .dia-cabecalho {
+                align-items: flex-start;
+            }
+
+            .modal-conteudo {
+                padding: 22px 18px;
+            }
+
+            .modal-embed {
+                min-height: 350px;
+            }
+
+            .modal-embed iframe {
+                height: 350px;
+            }
+
+            .youglish-widget {
+                min-height: 450px;
+            }
+
+        }
+
+    </style>
 
 </head>
 
+
 <body>
 
-```
-<header>
+    <header>
 
-    <div class="logo">
-        GUTALKS
-    </div>
+        <div class="logo">
+            GUTALKS
+        </div>
 
-    <div class="header-right">
+        <div class="header-right">
 
-        <span
-            class="student-name"
-            id="emailAluno">
+            <span
+                class="student-name"
+                id="emailAluno">
 
-            Carregando...
+                Carregando...
 
-        </span>
+            </span>
 
-        <button
-            class="logout"
-            onclick="logout()">
+            <button
+                class="logout"
+                onclick="logout()">
 
-            Sair
+                Sair
 
-        </button>
-
-    </div>
-
-</header>
-
-
-<main>
-
-
-    <!-- ==========================================
-         BOAS-VINDAS
-    ========================================== -->
-
-    <section class="welcome">
-
-        <h1 id="nomeAluno">
-            Olá, aluno! 👋
-        </h1>
-
-        <p>
-            Seja bem-vindo à sua plataforma de aprendizagem.
-        </p>
-
-    </section>
-
-
-    <!-- ==========================================
-         O QUE FAZER HOJE
-    ========================================== -->
-
-    <section class="hoje-section">
-
-        <h2 class="section-title">
-            🎯 O que você tem para fazer hoje?
-        </h2>
-
-        <p
-            class="section-subtitle"
-            id="dataHoje">
-
-            Carregando programação...
-
-        </p>
-
-        <div
-            id="atividadesHoje"
-            class="atividades-hoje">
-
-            <div class="mensagem">
-                Carregando sua programação...
-            </div>
+            </button>
 
         </div>
 
-    </section>
+    </header>
 
 
-    <!-- ==========================================
-         PROGRAMAÇÃO DA SEMANA
-    ========================================== -->
-
-    <section class="semana-section">
-
-        <h2 class="section-title">
-            📅 Sua programação da semana
-        </h2>
-
-        <p class="section-subtitle">
-            Todas as atividades estão disponíveis para você.
-        </p>
+    <main>
 
 
-        <div
-            id="semanaResumo"
-            class="semana-resumo">
+        <!-- ==========================================
+             BOAS-VINDAS
+        ========================================== -->
+
+        <section class="welcome">
+
+            <h1 id="nomeAluno">
+                Olá, aluno! 👋
+            </h1>
+
+            <p>
+                Seja bem-vindo à sua plataforma de aprendizagem.
+            </p>
+
+        </section>
+
+
+        <!-- ==========================================
+             O QUE FAZER HOJE
+        ========================================== -->
+
+        <section class="hoje-section">
+
+            <h2 class="section-title">
+                🎯 O que você tem para fazer hoje?
+            </h2>
+
+            <p
+                class="section-subtitle"
+                id="dataHoje">
+
+                Carregando programação...
+
+            </p>
 
             <div
-                id="semanaNome"
-                class="semana-nome">
+                id="atividadesHoje"
+                class="atividades-hoje">
 
-                Carregando semana...
+                <div class="mensagem">
+                    Carregando sua programação...
+                </div>
 
             </div>
 
+        </section>
 
-            <div class="semana-progresso-bar">
+
+        <!-- ==========================================
+             PROGRAMAÇÃO DA SEMANA
+        ========================================== -->
+
+        <section class="semana-section">
+
+            <h2 class="section-title">
+                📅 Sua programação da semana
+            </h2>
+
+            <p class="section-subtitle">
+                Todas as atividades estão disponíveis para você.
+            </p>
+
+
+            <div
+                id="semanaResumo"
+                class="semana-resumo">
 
                 <div
-                    id="semanaProgressoFill"
-                    class="semana-progresso-fill">
+                    id="semanaNome"
+                    class="semana-nome">
+
+                    Carregando semana...
+
+                </div>
+
+
+                <div class="semana-progresso-bar">
+
+                    <div
+                        id="semanaProgressoFill"
+                        class="semana-progresso-fill">
+
+                    </div>
+
+                </div>
+
+
+                <div
+                    id="semanaProgressoTexto"
+                    class="semana-progresso-texto">
+
+                    Carregando progresso...
 
                 </div>
 
@@ -857,1052 +873,952 @@
 
 
             <div
-                id="semanaProgressoTexto"
-                class="semana-progresso-texto">
+                id="semanaLista"
+                class="semana-lista">
 
-                Carregando progresso...
+                <div class="mensagem">
+                    Carregando semana...
+                </div>
 
             </div>
 
-        </div>
+        </section>
 
 
-        <div
-            id="semanaLista"
-            class="semana-lista">
+        <!-- ==========================================
+             CARDS PRINCIPAIS
+        ========================================== -->
 
-            <div class="mensagem">
-                Carregando semana...
+        <section class="cards">
+
+
+            <!-- AULAS -->
+
+            <div class="card">
+
+                <div class="icon">
+                    📚
+                </div>
+
+                <h2>
+                    Aulas
+                </h2>
+
+                <p>
+                    Acesse suas aulas de inglês e continue
+                    sua jornada de aprendizagem.
+                </p>
+
+                <a
+                    href="aulas.html"
+                    class="card-button">
+
+                    Acessar aulas
+
+                </a>
+
             </div>
 
-        </div>
 
-    </section>
+            <!-- FLASHCARDS -->
 
+            <div class="card flashcards-card">
 
-    <!-- ==========================================
-         CARDS PRINCIPAIS
-    ========================================== -->
+                <div class="icon">
+                    🧠
+                </div>
 
-    <section class="cards">
+                <h2>
+                    Flashcards
+                </h2>
 
+                <p>
+                    Revise o conteúdo de todas as aulas
+                    através de flashcards e fortaleça sua memória.
+                </p>
 
-        <!-- AULAS -->
+                <a
+                    href="flashcards.html"
+                    class="card-button">
 
-        <div class="card">
+                    Estudar flashcards
 
-            <div class="icon">
-                📚
+                </a>
+
             </div>
 
-            <h2>
-                Aulas
-            </h2>
 
-            <p>
-                Acesse suas aulas de inglês e continue
-                sua jornada de aprendizagem.
-            </p>
+            <!-- EXERCÍCIOS -->
 
-            <a
-                href="aulas.html"
-                class="card-button">
+            <div class="card">
 
-                Acessar aulas
+                <div class="icon">
+                    📝
+                </div>
 
-            </a>
+                <h2>
+                    Exercícios
+                </h2>
 
-        </div>
+                <p>
+                    Pratique o conteúdo das aulas através
+                    de exercícios interativos.
+                </p>
 
+                <button>
+                    Ver exercícios
+                </button>
 
-        <!-- FLASHCARDS -->
-
-        <div class="card flashcards-card">
-
-            <div class="icon">
-                🧠
             </div>
 
-            <h2>
-                Flashcards
-            </h2>
 
-            <p>
-                Revise o conteúdo de todas as aulas
-                através de flashcards e fortaleça sua memória.
-            </p>
+            <!-- MATERIAIS -->
 
-            <a
-                href="flashcards.html"
-                class="card-button">
+            <div class="card">
 
-                Estudar flashcards
+                <div class="icon">
+                    📖
+                </div>
 
-            </a>
+                <h2>
+                    Materiais
+                </h2>
 
-        </div>
+                <p>
+                    Encontre apresentações, materiais de apoio
+                    e conteúdos complementares.
+                </p>
 
+                <button>
+                    Ver materiais
+                </button>
 
-        <!-- EXERCÍCIOS -->
-
-        <div class="card">
-
-            <div class="icon">
-                📝
             </div>
 
-            <h2>
-                Exercícios
-            </h2>
 
-            <p>
-                Pratique o conteúdo das aulas através
-                de exercícios interativos.
-            </p>
+            <!-- PROGRESSO -->
 
-            <button>
-                Ver exercícios
-            </button>
+            <div class="card progress-card">
 
-        </div>
+                <div class="icon">
+                    📊
+                </div>
 
+                <h2>
+                    Meu progresso
+                </h2>
 
-        <!-- MATERIAIS -->
+                <p>
+                    Acompanhe sua evolução durante o curso.
+                </p>
 
-        <div class="card">
+                <div class="progress-bar">
 
-            <div class="icon">
-                📖
-            </div>
+                    <div
+                        class="progress-fill"
+                        id="progressFill">
 
-            <h2>
-                Materiais
-            </h2>
+                    </div>
 
-            <p>
-                Encontre apresentações, materiais de apoio
-                e conteúdos complementares.
-            </p>
-
-            <button>
-                Ver materiais
-            </button>
-
-        </div>
-
-
-        <!-- PROGRESSO -->
-
-        <div class="card progress-card">
-
-            <div class="icon">
-                📊
-            </div>
-
-            <h2>
-                Meu progresso
-            </h2>
-
-            <p>
-                Acompanhe sua evolução durante o curso.
-            </p>
-
-            <div class="progress-bar">
+                </div>
 
                 <div
-                    class="progress-fill"
-                    id="progressFill">
+                    class="progress-text"
+                    id="progressText">
+
+                    Seu progresso semanal será exibido aqui.
 
                 </div>
 
             </div>
 
-            <div
-                class="progress-text"
-                id="progressText">
+        </section>
 
-                Seu progresso semanal será exibido aqui.
+    </main>
+
+
+    <!-- ==========================================
+         MODAL DE ATIVIDADE
+    ========================================== -->
+
+    <div
+        id="modalAtividade"
+        class="modal"
+        onclick="fecharModalFora(event)">
+
+        <div class="modal-conteudo">
+
+            <button
+                class="modal-fechar"
+                onclick="fecharModal()">
+
+                ×
+
+            </button>
+
+
+            <div
+                id="modalTipo"
+                class="modal-tipo">
+
+                Atividade
+
+            </div>
+
+
+            <h2
+                id="modalTitulo"
+                class="modal-titulo">
+
+            </h2>
+
+
+            <div
+                id="modalDescricao"
+                class="modal-descricao">
+
+            </div>
+
+
+            <!-- IFRAME NORMAL -->
+
+            <div
+                id="modalEmbed"
+                class="modal-embed"
+                style="display:none;">
+
+            </div>
+
+
+            <!-- YOUGLISH -->
+
+            <div
+                id="youglishWidget"
+                class="youglish-widget"
+                style="display:none;">
+
+            </div>
+
+
+            <div
+                id="modalAviso"
+                class="modal-link-aviso"
+                style="display:none;">
+
+            </div>
+
+
+            <div
+                id="modalAcoes"
+                class="modal-acoes">
 
             </div>
 
         </div>
 
-    </section>
-
-</main>
-
-
-<!-- ==========================================
-     MODAL
-========================================== -->
-
-<div
-    id="modalAtividade"
-    class="modal"
-    onclick="fecharModalFora(event)">
-
-    <div class="modal-conteudo">
-
-        <button
-            class="modal-fechar"
-            onclick="fecharModal()">
-
-            ×
-
-        </button>
-
-
-        <div
-            id="modalTipo"
-            class="modal-tipo">
-
-            Atividade
-
-        </div>
-
-
-        <h2
-            id="modalTitulo"
-            class="modal-titulo">
-
-        </h2>
-
-
-        <div
-            id="modalDescricao"
-            class="modal-descricao">
-
-        </div>
-
-
-        <!-- IFRAME NORMAL -->
-
-        <div
-            id="modalEmbed"
-            class="modal-embed"
-            style="display:none;">
-
-        </div>
-
-
-        <!-- YOUGLISH -->
-
-        <div
-            id="youglishWidget"
-            class="youglish-widget"
-            style="display:none;">
-
-        </div>
-
-
-        <div
-            id="modalAviso"
-            class="modal-link-aviso"
-            style="display:none;">
-
-        </div>
-
-
-        <div
-            id="modalAcoes"
-            class="modal-acoes">
-
-        </div>
-
     </div>
 
-</div>
 
+    <footer>
 
-<footer>
+        © 2026 Gutalks — Área do aluno
 
-    © 2026 Gutalks — Área do aluno
+    </footer>
 
-</footer>
 
+    <script>
 
-<script>
 
+        // ==========================================
+        // VARIÁVEIS
+        // ==========================================
 
-    // ==========================================
-    // VARIÁVEIS
-    // ==========================================
+        let usuarioLogado = null;
 
-    let usuarioLogado = null;
+        let semanaAtualAluno = 1;
 
-    let semanaAtualAluno = 1;
+        let programacaoCache = {};
 
-    let programacaoCache = {};
 
+        // ==========================================
+        // ESCAPAR HTML
+        // ==========================================
 
-    // ==========================================
-    // ESCAPAR HTML
-    // ==========================================
-
-    function escaparHTML(texto) {
-
-        if (
-            texto === null ||
-            texto === undefined
-        ) {
-
-            return "";
-
-        }
-
-
-        return String(texto)
-            .replace(/&/g, "&amp;")
-            .replace(/</g, "&lt;")
-            .replace(/>/g, "&gt;")
-            .replace(/"/g, "&quot;")
-            .replace(/'/g, "&#039;");
-
-    }
-
-
-    // ==========================================
-    // DATA DE HOJE
-    // ==========================================
-
-    function obterDataHoje() {
-
-        return new Intl.DateTimeFormat(
-            "en-CA",
-            {
-                timeZone: "America/Sao_Paulo",
-                year: "numeric",
-                month: "2-digit",
-                day: "2-digit"
-            }
-        ).format(
-            new Date()
-        );
-
-    }
-
-
-    // ==========================================
-    // DIA DA SEMANA
-    //
-    // 1 = Segunda
-    // 2 = Terça
-    // 3 = Quarta
-    // 4 = Quinta
-    // 5 = Sexta
-    // 6 = Sábado
-    // 7 = Domingo
-    // ==========================================
-
-    function obterDiaSemanaAtual() {
-
-        const hoje =
-            criarDataLocal(
-                obterDataHoje()
-            );
-
-
-        const dia =
-            hoje.getDay();
-
-
-        return dia === 0
-            ? 7
-            : dia;
-
-    }
-
-
-    // ==========================================
-    // CRIAR DATA LOCAL
-    // ==========================================
-
-    function criarDataLocal(
-        dataTexto
-    ) {
-
-        return new Date(
-            dataTexto + "T12:00:00"
-        );
-
-    }
-
-
-    // ==========================================
-    // FORMATAR DATA
-    // ==========================================
-
-    function formatarData(
-        dataTexto
-    ) {
-
-        const data =
-            criarDataLocal(
-                dataTexto
-            );
-
-
-        return new Intl.DateTimeFormat(
-            "pt-BR",
-            {
-                weekday: "long",
-                day: "2-digit",
-                month: "long"
-            }
-        ).format(
-            data
-        );
-
-    }
-
-
-    // ==========================================
-    // FORMATAR DATA DE HOJE
-    // ==========================================
-
-    function formatarDataHoje() {
-
-        return new Intl.DateTimeFormat(
-            "pt-BR",
-            {
-                timeZone:
-                    "America/Sao_Paulo",
-                weekday: "long",
-                day: "2-digit",
-                month: "long"
-            }
-        ).format(
-            new Date()
-        );
-
-    }
-
-
-    // ==========================================
-    // SEGUNDA-FEIRA
-    // ==========================================
-
-    function obterSegundaFeira(
-        dataTexto
-    ) {
-
-        const data =
-            criarDataLocal(
-                dataTexto
-            );
-
-
-        const dia =
-            data.getDay();
-
-
-        const diferenca =
-            dia === 0
-                ? -6
-                : 1 - dia;
-
-
-        data.setDate(
-            data.getDate() + diferenca
-        );
-
-
-        return data;
-
-    }
-
-
-    // ==========================================
-    // FORMATAR ISO
-    // ==========================================
-
-    function formatarISO(
-        data
-    ) {
-
-        const ano =
-            data.getFullYear();
-
-
-        const mes =
-            String(
-                data.getMonth() + 1
-            ).padStart(
-                2,
-                "0"
-            );
-
-
-        const dia =
-            String(
-                data.getDate()
-            ).padStart(
-                2,
-                "0"
-            );
-
-
-        return `${ano}-${mes}-${dia}`;
-
-    }
-
-
-    // ==========================================
-    // NOME DO DIA
-    // ==========================================
-
-    function obterNomeDia(
-        numeroDia
-    ) {
-
-        const nomes = {
-
-            1: "Segunda-feira",
-            2: "Terça-feira",
-            3: "Quarta-feira",
-            4: "Quinta-feira",
-            5: "Sexta-feira",
-            6: "Sábado",
-            7: "Domingo"
-
-        };
-
-
-        return nomes[numeroDia] ||
-            "Dia";
-
-    }
-
-
-    // ==========================================
-    // CAPITALIZAR
-    // ==========================================
-
-    function capitalizar(
-        texto
-    ) {
-
-        if (!texto) {
-
-            return "";
-
-        }
-
-
-        return texto.charAt(0).toUpperCase()
-            + texto.slice(1);
-
-    }
-
-
-    // ==========================================
-    // NOME DO TIPO
-    // ==========================================
-
-    function nomeTipo(
-        tipo
-    ) {
-
-        const tipos = {
-
-            flashcards: "Flashcards",
-            pratica_oral: "Prática oral",
-            listening: "Listening",
-            reading: "Reading",
-            revisao: "Revisão",
-            pronuncia: "Pronúncia",
-            escrita: "Escrita",
-            conversacao: "Conversação",
-            midia: "Mídia"
-
-        };
-
-
-        return tipos[tipo] ||
-            "Atividade";
-
-    }
-
-
-    // ==========================================
-    // TRANSFORMAR LINK EM EMBED
-    // ==========================================
-
-    function obterUrlEmbed(
-        link
-    ) {
-
-        if (!link) {
-
-            return null;
-
-        }
-
-
-        try {
-
-            const url =
-                new URL(link);
-
-
-            // ==========================================
-            // YOUTUBE
-            // ==========================================
+        function escaparHTML(texto) {
 
             if (
-                url.hostname === "www.youtube.com" ||
-                url.hostname === "youtube.com" ||
-                url.hostname === "m.youtube.com"
+                texto === null ||
+                texto === undefined
             ) {
 
-                const videoId =
-                    url.searchParams.get("v");
+                return "";
+
+            }
 
 
-                if (videoId) {
+            return String(texto)
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/"/g, "&quot;")
+                .replace(/'/g, "&#039;");
 
-                    return {
+        }
 
-                        tipo: "youtube",
 
-                        url:
-                            "https://www.youtube.com/embed/" +
-                            encodeURIComponent(
-                                videoId
-                            ) +
-                            "?rel=0"
+        // ==========================================
+        // DATA DE HOJE
+        // ==========================================
 
-                    };
+        function obterDataHoje() {
 
+            return new Intl.DateTimeFormat(
+                "en-CA",
+                {
+                    timeZone: "America/Sao_Paulo",
+                    year: "numeric",
+                    month: "2-digit",
+                    day: "2-digit"
                 }
+            ).format(
+                new Date()
+            );
+
+        }
 
 
-                const partes =
-                    url.pathname.split("/");
+        // ==========================================
+        // DIA DA SEMANA
+        //
+        // 1 = Segunda
+        // 2 = Terça
+        // 3 = Quarta
+        // 4 = Quinta
+        // 5 = Sexta
+        // 6 = Sábado
+        // 7 = Domingo
+        // ==========================================
 
+        function obterDiaSemanaAtual() {
+
+            const hoje =
+                criarDataLocal(
+                    obterDataHoje()
+                );
+
+
+            const dia =
+                hoje.getDay();
+
+
+            return dia === 0
+                ? 7
+                : dia;
+
+        }
+
+
+        // ==========================================
+        // CRIAR DATA LOCAL
+        // ==========================================
+
+        function criarDataLocal(
+            dataTexto
+        ) {
+
+            return new Date(
+                dataTexto + "T12:00:00"
+            );
+
+        }
+
+
+        // ==========================================
+        // FORMATAR DATA
+        // ==========================================
+
+        function formatarData(
+            dataTexto
+        ) {
+
+            const data =
+                criarDataLocal(
+                    dataTexto
+                );
+
+
+            return new Intl.DateTimeFormat(
+                "pt-BR",
+                {
+                    weekday: "long",
+                    day: "2-digit",
+                    month: "long"
+                }
+            ).format(
+                data
+            );
+
+        }
+
+
+        // ==========================================
+        // FORMATAR DATA DE HOJE
+        // ==========================================
+
+        function formatarDataHoje() {
+
+            return new Intl.DateTimeFormat(
+                "pt-BR",
+                {
+                    timeZone:
+                        "America/Sao_Paulo",
+                    weekday: "long",
+                    day: "2-digit",
+                    month: "long"
+                }
+            ).format(
+                new Date()
+            );
+
+        }
+
+
+        // ==========================================
+        // SEGUNDA-FEIRA
+        // ==========================================
+
+        function obterSegundaFeira(
+            dataTexto
+        ) {
+
+            const data =
+                criarDataLocal(
+                    dataTexto
+                );
+
+
+            const dia =
+                data.getDay();
+
+
+            const diferenca =
+                dia === 0
+                    ? -6
+                    : 1 - dia;
+
+
+            data.setDate(
+                data.getDate() + diferenca
+            );
+
+
+            return data;
+
+        }
+
+
+        // ==========================================
+        // FORMATAR ISO
+        // ==========================================
+
+        function formatarISO(
+            data
+        ) {
+
+            const ano =
+                data.getFullYear();
+
+
+            const mes =
+                String(
+                    data.getMonth() + 1
+                ).padStart(
+                    2,
+                    "0"
+                );
+
+
+            const dia =
+                String(
+                    data.getDate()
+                ).padStart(
+                    2,
+                    "0"
+                );
+
+
+            return `${ano}-${mes}-${dia}`;
+
+        }
+
+
+        // ==========================================
+        // NOME DO DIA
+        // ==========================================
+
+        function obterNomeDia(
+            numeroDia
+        ) {
+
+            const nomes = {
+
+                1: "Segunda-feira",
+                2: "Terça-feira",
+                3: "Quarta-feira",
+                4: "Quinta-feira",
+                5: "Sexta-feira",
+                6: "Sábado",
+                7: "Domingo"
+
+            };
+
+
+            return nomes[numeroDia] ||
+                "Dia";
+
+        }
+
+
+        // ==========================================
+        // CAPITALIZAR
+        // ==========================================
+
+        function capitalizar(
+            texto
+        ) {
+
+            if (!texto) {
+
+                return "";
+
+            }
+
+
+            return texto.charAt(0).toUpperCase()
+                + texto.slice(1);
+
+        }
+
+
+        // ==========================================
+        // NOME DO TIPO
+        // ==========================================
+
+        function nomeTipo(
+            tipo
+        ) {
+
+            const tipos = {
+
+                flashcards: "Flashcards",
+                pratica_oral: "Prática oral",
+                listening: "Listening",
+                reading: "Reading",
+                revisao: "Revisão",
+                pronuncia: "Pronúncia",
+                escrita: "Escrita",
+                conversacao: "Conversação",
+                midia: "Mídia"
+
+            };
+
+
+            return tipos[tipo] ||
+                "Atividade";
+
+        }
+
+
+        // ==========================================
+        // TRANSFORMAR LINK EM EMBED
+        // ==========================================
+
+        function obterUrlEmbed(
+            link
+        ) {
+
+            if (!link) {
+
+                return null;
+
+            }
+
+
+            try {
+
+                const url =
+                    new URL(link);
+
+
+                // ==========================================
+                // YOUTUBE
+                // ==========================================
 
                 if (
-                    partes[1] === "shorts" &&
-                    partes[2]
+                    url.hostname === "www.youtube.com" ||
+                    url.hostname === "youtube.com" ||
+                    url.hostname === "m.youtube.com"
                 ) {
 
-                    return {
-
-                        tipo: "youtube",
-
-                        url:
-                            "https://www.youtube.com/embed/" +
-                            encodeURIComponent(
-                                partes[2]
-                            ) +
-                            "?rel=0"
-
-                    };
-
-                }
-
-            }
+                    const videoId =
+                        url.searchParams.get("v");
 
 
-            // ==========================================
-            // YOUTUBE SHORT LINK
-            // ==========================================
+                    if (videoId) {
 
-            if (
-                url.hostname === "youtu.be"
-            ) {
+                        return {
 
-                const videoId =
-                    url.pathname
-                        .replace("/", "")
-                        .trim();
+                            tipo: "youtube",
 
+                            url:
+                                "https://www.youtube.com/embed/" +
+                                encodeURIComponent(
+                                    videoId
+                                ) +
+                                "?rel=0"
 
-                if (videoId) {
+                        };
 
-                    return {
-
-                        tipo: "youtube",
-
-                        url:
-                            "https://www.youtube.com/embed/" +
-                            encodeURIComponent(
-                                videoId
-                            ) +
-                            "?rel=0"
-
-                    };
-
-                }
-
-            }
+                    }
 
 
-            // ==========================================
-            // INSTAGRAM
-            // ==========================================
-
-            if (
-                url.hostname === "instagram.com" ||
-                url.hostname === "www.instagram.com"
-            ) {
-
-                const match =
-                    url.pathname.match(
-                        /\/(reel|p)\/([^\/?#]+)/
-                    );
+                    const partes =
+                        url.pathname.split("/");
 
 
-                if (match) {
+                    if (
+                        partes[1] === "shorts" &&
+                        partes[2]
+                    ) {
 
-                    return {
+                        return {
 
-                        tipo: "instagram",
+                            tipo: "youtube",
 
-                        url:
-                            "https://www.instagram.com/" +
-                            match[1] +
-                            "/" +
-                            match[2] +
-                            "/embed/"
+                            url:
+                                "https://www.youtube.com/embed/" +
+                                encodeURIComponent(
+                                    partes[2]
+                                ) +
+                                "?rel=0"
 
-                    };
+                        };
+
+                    }
 
                 }
 
+
+                // ==========================================
+                // YOUTUBE SHORT LINK
+                // ==========================================
+
+                if (
+                    url.hostname === "youtu.be"
+                ) {
+
+                    const videoId =
+                        url.pathname
+                            .replace("/", "")
+                            .trim();
+
+
+                    if (videoId) {
+
+                        return {
+
+                            tipo: "youtube",
+
+                            url:
+                                "https://www.youtube.com/embed/" +
+                                encodeURIComponent(
+                                    videoId
+                                ) +
+                                "?rel=0"
+
+                        };
+
+                    }
+
+                }
+
+
+                // ==========================================
+                // INSTAGRAM
+                // ==========================================
+
+                if (
+                    url.hostname === "instagram.com" ||
+                    url.hostname === "www.instagram.com"
+                ) {
+
+                    const match =
+                        url.pathname.match(
+                            /\/(reel|p)\/([^\/?#]+)/
+                        );
+
+
+                    if (match) {
+
+                        return {
+
+                            tipo: "instagram",
+
+                            url:
+                                "https://www.instagram.com/" +
+                                match[1] +
+                                "/" +
+                                match[2] +
+                                "/embed/"
+
+                        };
+
+                    }
+
+                }
+
+
+                // ==========================================
+                // QUALQUER OUTRO SITE
+                // ==========================================
+
+                return {
+
+                    tipo: "pagina",
+
+                    url: link
+
+                };
+
             }
 
+            catch (erro) {
 
-            // ==========================================
-            // QUALQUER OUTRO SITE
-            // ==========================================
+                console.error(
+                    "Erro ao interpretar o link:",
+                    erro
+                );
 
-            return {
 
-                tipo: "pagina",
+                return {
 
-                url: link
+                    tipo: "pagina",
 
-            };
+                    url: link
+
+                };
+
+            }
 
         }
 
-        catch (erro) {
 
-            console.error(
-                "Erro ao interpretar o link:",
-                erro
-            );
+        // ==========================================
+        // RENDERIZAR ATIVIDADES DE HOJE
+        // ==========================================
 
-
-            return {
-
-                tipo: "pagina",
-
-                url: link
-
-            };
-
-        }
-
-    }
-
-
-    // ==========================================
-    // RENDERIZAR ATIVIDADES DE HOJE
-    // ==========================================
-
-    function renderizarAtividadesHoje(
-        atividades
-    ) {
-
-        const container =
-            document.getElementById(
-                "atividadesHoje"
-            );
-
-
-        if (
-            !atividades ||
-            atividades.length === 0
+        function renderizarAtividadesHoje(
+            atividades
         ) {
 
-            container.innerHTML = `
-                <div class="mensagem">
-                    🎉 Você não tem atividades programadas para hoje.
-                    <br><br>
-                    Aproveite para revisar algum conteúdo.
-                </div>
-            `;
-
-            return;
-
-        }
+            const container =
+                document.getElementById(
+                    "atividadesHoje"
+                );
 
 
-        container.innerHTML =
-            atividades
-                .map(
-                    atividade => {
+            if (
+                !atividades ||
+                atividades.length === 0
+            ) {
 
-                        programacaoCache[
-                            atividade.id
-                        ] =
-                            atividade;
+                container.innerHTML = `
+                    <div class="mensagem">
+                        🎉 Você não tem atividades programadas para hoje.
+                        <br><br>
+                        Aproveite para revisar algum conteúdo.
+                    </div>
+                `;
 
+                return;
 
-                        const concluida =
-                            Boolean(
-                                atividade.concluida
-                            );
-
-
-                        const tempo =
-                            atividade.tempo_minutos
-                                ? `⏱️ ${atividade.tempo_minutos} min`
-                                : "";
+            }
 
 
-                        let botaoAbrir;
+            container.innerHTML =
+                atividades
+                    .map(
+                        atividade => {
+
+                            programacaoCache[
+                                atividade.id
+                            ] =
+                                atividade;
 
 
-                        if (
-                            atividade.link ===
-                            "flashcards.html"
-                        ) {
-
-                            botaoAbrir = `
-
-                                <a
-                                    class="atividade-btn"
-                                    href="flashcards.html"
-                                >
-
-                                    🧠 Começar
-
-                                </a>
-
-                            `;
-
-                        }
-
-                        else {
-
-                            botaoAbrir = `
-
-                                <button
-                                    class="atividade-btn"
-                                    onclick="
-                                        abrirAtividade(
-                                            ${atividade.id}
-                                        )
-                                    "
-                                >
-
-                                    ${
-                                        atividade.link
-                                            ? "▶️ Abrir atividade"
-                                            : "📋 Ver atividade"
-                                    }
-
-                                </button>
-
-                            `;
-
-                        }
+                            const concluida =
+                                Boolean(
+                                    atividade.concluida
+                                );
 
 
-                        return `
+                            const tempo =
+                                atividade.tempo_minutos
+                                    ? `⏱️ ${atividade.tempo_minutos} min`
+                                    : "";
 
-                            <div
-                                class="
-                                    atividade-hoje
-                                    ${concluida ? "concluida" : ""}
-                                "
-                            >
 
-                                <div
-                                    class="atividade-cabecalho"
-                                >
+                            let botaoAbrir;
 
-                                    <div
-                                        class="atividade-titulo"
+
+                            if (
+                                atividade.link ===
+                                "flashcards.html"
+                            ) {
+
+                                botaoAbrir = `
+
+                                    <a
+                                        class="atividade-btn"
+                                        href="flashcards.html"
                                     >
 
-                                        ${escaparHTML(
-                                            atividade.titulo
-                                        )}
+                                        🧠 Começar
 
-                                    </div>
+                                    </a>
 
+                                `;
 
-                                    <div
-                                        class="atividade-tipo"
-                                    >
+                            }
 
-                                        ${escaparHTML(
-                                            nomeTipo(
-                                                atividade.tipo
-                                            )
-                                        )}
+                            else {
 
-                                    </div>
-
-                                </div>
-
-
-                                <div
-                                    class="atividade-descricao"
-                                >
-
-                                    ${escaparHTML(
-                                        atividade.descricao
-                                    )}
-
-                                </div>
-
-
-                                <div
-                                    class="atividade-meta"
-                                >
-
-                                    ${
-                                        tempo
-                                            ? `<span>${tempo}</span>`
-                                            : ""
-                                    }
-
-
-                                    <span>
-                                        📅
-                                        ${escaparHTML(
-                                            obterNomeDia(
-                                                atividade.dia_semana
-                                            )
-                                        )}
-                                    </span>
-
-                                </div>
-
-
-                                <div
-                                    class="atividade-acoes"
-                                >
-
-                                    ${botaoAbrir}
-
+                                botaoAbrir = `
 
                                     <button
-                                        class="
-                                            atividade-btn
-                                            concluir-btn
-                                            ${concluida ? "concluida" : ""}
-                                        "
+                                        class="atividade-btn"
                                         onclick="
-                                            alternarConclusao(
-                                                ${atividade.id},
-                                                ${concluida}
+                                            abrirAtividade(
+                                                ${atividade.id}
                                             )
                                         "
                                     >
 
                                         ${
-                                            concluida
-                                                ? "✅ Concluída"
-                                                : "☐ Marcar como concluída"
+                                            atividade.link ||
+                                            atividade.tipo === "pronuncia"
+                                                ? "▶️ Abrir atividade"
+                                                : "📋 Ver atividade"
                                         }
 
                                     </button>
 
-                                </div>
+                                `;
 
-                            </div>
-
-                        `;
-
-                    }
-                )
-                .join("");
-
-    }
+                            }
 
 
-    // ==========================================
-    // RENDERIZAR SEMANA
-    // ==========================================
-
-    function renderizarSemana(
-        atividades,
-        diaAtual
-    ) {
-
-        const container =
-            document.getElementById(
-                "semanaLista"
-            );
-
-
-        const dias = [
-            1,
-            2,
-            3,
-            4,
-            5,
-            6,
-            7
-        ];
-
-
-        container.innerHTML =
-            dias
-                .map(
-                    dia => {
-
-                        const atividadesDoDia =
-                            atividades.filter(
-                                atividade =>
-                                    Number(
-                                        atividade.dia_semana
-                                    ) === dia
-                            );
-
-
-                        const estaHoje =
-                            dia === diaAtual;
-
-
-                        const todasConcluidas =
-                            atividadesDoDia.length > 0 &&
-                            atividadesDoDia.every(
-                                atividade =>
-                                    atividade.concluida
-                            );
-
-
-                        let conteudo;
-
-
-                        if (
-                            atividadesDoDia.length === 0
-                        ) {
-
-                            conteudo = `
+                            return `
 
                                 <div
-                                    class="atividade-semana"
+                                    class="
+                                        atividade-hoje
+                                        ${concluida ? "concluida" : ""}
+                                    "
                                 >
 
                                     <div
-                                        class="atividade-semana-info"
+                                        class="atividade-cabecalho"
                                     >
 
                                         <div
-                                            class="atividade-semana-tipo"
+                                            class="atividade-titulo"
                                         >
 
-                                            Sem atividade programada
+                                            ${escaparHTML(
+                                                atividade.titulo
+                                            )}
 
                                         </div>
+
+
+                                        <div
+                                            class="atividade-tipo"
+                                        >
+
+                                            ${escaparHTML(
+                                                nomeTipo(
+                                                    atividade.tipo
+                                                )
+                                            )}
+
+                                        </div>
+
+                                    </div>
+
+
+                                    <div
+                                        class="atividade-descricao"
+                                    >
+
+                                        ${escaparHTML(
+                                            atividade.descricao
+                                        )}
+
+                                    </div>
+
+
+                                    <div
+                                        class="atividade-meta"
+                                    >
+
+                                        ${
+                                            tempo
+                                                ? `<span>${tempo}</span>`
+                                                : ""
+                                        }
+
+
+                                        <span>
+                                            📅
+                                            ${escaparHTML(
+                                                obterNomeDia(
+                                                    atividade.dia_semana
+                                                )
+                                            )}
+                                        </span>
+
+                                    </div>
+
+
+                                    <div
+                                        class="atividade-acoes"
+                                    >
+
+                                        ${botaoAbrir}
+
+
+                                        <button
+                                            class="
+                                                atividade-btn
+                                                concluir-btn
+                                                ${concluida ? "concluida" : ""}
+                                            "
+                                            onclick="
+                                                alternarConclusao(
+                                                    ${atividade.id},
+                                                    ${concluida}
+                                                )
+                                            "
+                                        >
+
+                                            ${
+                                                concluida
+                                                    ? "✅ Concluída"
+                                                    : "☐ Marcar como concluída"
+                                            }
+
+                                        </button>
 
                                     </div>
 
@@ -1911,603 +1827,630 @@
                             `;
 
                         }
+                    )
+                    .join("");
 
-                        else {
-
-                            conteudo =
-                                atividadesDoDia
-                                    .map(
-                                        atividade => {
-
-                                            programacaoCache[
-                                                atividade.id
-                                            ] =
-                                                atividade;
+        }
 
 
-                                            const concluida =
-                                                Boolean(
-                                                    atividade.concluida
-                                                );
+        // ==========================================
+        // RENDERIZAR SEMANA
+        // ==========================================
+
+        function renderizarSemana(
+            atividades,
+            diaAtual
+        ) {
+
+            const container =
+                document.getElementById(
+                    "semanaLista"
+                );
 
 
-                                            return `
+            const dias = [
+                1,
+                2,
+                3,
+                4,
+                5,
+                6,
+                7
+            ];
 
-                                                <div
-                                                    class="atividade-semana"
-                                                >
+
+            container.innerHTML =
+                dias
+                    .map(
+                        dia => {
+
+                            const atividadesDoDia =
+                                atividades.filter(
+                                    atividade =>
+                                        Number(
+                                            atividade.dia_semana
+                                        ) === dia
+                                );
+
+
+                            const estaHoje =
+                                dia === diaAtual;
+
+
+                            const todasConcluidas =
+                                atividadesDoDia.length > 0 &&
+                                atividadesDoDia.every(
+                                    atividade =>
+                                        atividade.concluida
+                                );
+
+
+                            let conteudo;
+
+
+                            if (
+                                atividadesDoDia.length === 0
+                            ) {
+
+                                conteudo = `
+
+                                    <div
+                                        class="atividade-semana"
+                                    >
+
+                                        <div
+                                            class="atividade-semana-info"
+                                        >
+
+                                            <div
+                                                class="atividade-semana-tipo"
+                                            >
+
+                                                Sem atividade programada
+
+                                            </div>
+
+                                        </div>
+
+                                    </div>
+
+                                `;
+
+                            }
+
+                            else {
+
+                                conteudo =
+                                    atividadesDoDia
+                                        .map(
+                                            atividade => {
+
+                                                programacaoCache[
+                                                    atividade.id
+                                                ] =
+                                                    atividade;
+
+
+                                                const concluida =
+                                                    Boolean(
+                                                        atividade.concluida
+                                                    );
+
+
+                                                return `
 
                                                     <div
-                                                        class="atividade-semana-info"
+                                                        class="atividade-semana"
                                                     >
 
                                                         <div
+                                                            class="atividade-semana-info"
+                                                        >
+
+                                                            <div
+                                                                class="
+                                                                    atividade-semana-titulo
+                                                                "
+                                                            >
+
+                                                                ${
+                                                                    concluida
+                                                                        ? "✅ "
+                                                                        : ""
+                                                                }
+
+                                                                ${escaparHTML(
+                                                                    atividade.titulo
+                                                                )}
+
+                                                            </div>
+
+
+                                                            <div
+                                                                class="
+                                                                    atividade-semana-tipo
+                                                                "
+                                                            >
+
+                                                                ${escaparHTML(
+                                                                    nomeTipo(
+                                                                        atividade.tipo
+                                                                    )
+                                                                )}
+
+                                                                ${
+                                                                    atividade.tempo_minutos
+                                                                        ? ` • ${atividade.tempo_minutos} min`
+                                                                        : ""
+                                                                }
+
+                                                            </div>
+
+                                                        </div>
+
+
+                                                        <div
                                                             class="
-                                                                atividade-semana-titulo
+                                                                atividade-semana-acoes
                                                             "
                                                         >
 
                                                             ${
                                                                 concluida
-                                                                    ? "✅ "
+                                                                    ? `
+                                                                        <span
+                                                                            class="status-concluida"
+                                                                        >
+                                                                            Concluída
+                                                                        </span>
+                                                                    `
                                                                     : ""
                                                             }
 
-                                                            ${escaparHTML(
-                                                                atividade.titulo
-                                                            )}
 
-                                                        </div>
+                                                            <button
+                                                                class="abrir-semana-btn"
+                                                                onclick="
+                                                                    abrirAtividade(
+                                                                        ${atividade.id}
+                                                                    )
+                                                                "
+                                                            >
 
+                                                                ${
+                                                                    atividade.link ||
+                                                                    atividade.tipo === "pronuncia"
+                                                                        ? "▶️ Acessar"
+                                                                        : "📋 Ver"
+                                                                }
 
-                                                        <div
-                                                            class="
-                                                                atividade-semana-tipo
-                                                            "
-                                                        >
-
-                                                            ${escaparHTML(
-                                                                nomeTipo(
-                                                                    atividade.tipo
-                                                                )
-                                                            )}
-
-                                                            ${
-                                                                atividade.tempo_minutos
-                                                                    ? ` • ${atividade.tempo_minutos} min`
-                                                                    : ""
-                                                            }
+                                                            </button>
 
                                                         </div>
 
                                                     </div>
 
+                                                `;
 
-                                                    <div
-                                                        class="
-                                                            atividade-semana-acoes
-                                                        "
-                                                    >
+                                            }
+                                        )
+                                        .join("");
 
-                                                        ${
-                                                            concluida
-                                                                ? `
-                                                                    <span
-                                                                        class="status-concluida"
-                                                                    >
-                                                                        Concluída
-                                                                    </span>
-                                                                `
-                                                                : ""
-                                                        }
+                            }
 
 
-                                                        <button
-                                                            class="
-                                                                abrir-semana-btn
-                                                            "
-                                                            onclick="
-                                                                abrirAtividade(
-                                                                    ${atividade.id}
-                                                                )
-                                                            "
-                                                        >
-
-                                                            ${
-                                                                atividade.link
-                                                                    ? "▶️ Acessar"
-                                                                    : "📋 Ver"
-                                                            }
-
-                                                        </button>
-
-                                                    </div>
-
-                                                </div>
-
-                                            `;
-
-                                        }
-                                    )
-                                    .join("");
-
-                        }
-
-
-                        return `
-
-                            <div
-                                class="
-                                    dia-programacao
-                                    ${estaHoje ? "hoje" : ""}
-                                    ${todasConcluidas ? "concluido" : ""}
-                                "
-                            >
+                            return `
 
                                 <div
-                                    class="dia-cabecalho"
+                                    class="
+                                        dia-programacao
+                                        ${estaHoje ? "hoje" : ""}
+                                        ${todasConcluidas ? "concluido" : ""}
+                                    "
                                 >
 
                                     <div
-                                        class="dia-nome"
+                                        class="dia-cabecalho"
                                     >
 
-                                        ${escaparHTML(
-                                            obterNomeDia(
-                                                dia
-                                            )
-                                        )}
+                                        <div
+                                            class="dia-nome"
+                                        >
+
+                                            ${escaparHTML(
+                                                obterNomeDia(
+                                                    dia
+                                                )
+                                            )}
+
+                                        </div>
+
+
+                                        ${
+                                            estaHoje
+                                                ? `
+                                                    <div
+                                                        class="dia-tag-hoje"
+                                                    >
+
+                                                        HOJE
+
+                                                    </div>
+                                                `
+                                                : ""
+                                        }
 
                                     </div>
 
 
-                                    ${
-                                        estaHoje
-                                            ? `
-                                                <div
-                                                    class="dia-tag-hoje"
-                                                >
+                                    <div
+                                        class="atividades-dia"
+                                    >
 
-                                                    HOJE
+                                        ${conteudo}
 
-                                                </div>
-                                            `
-                                            : ""
-                                    }
+                                    </div>
 
                                 </div>
 
+                            `;
 
-                                <div
-                                    class="atividades-dia"
-                                >
-
-                                    ${conteudo}
-
-                                </div>
-
-                            </div>
-
-                        `;
-
-                    }
-                )
-                .join("");
-
-    }
-
-
-    // ==========================================
-    // ATUALIZAR PROGRESSO
-    // ==========================================
-
-    function atualizarProgressoSemana(
-        atividades
-    ) {
-
-        const total =
-            atividades.length;
-
-
-        const concluidas =
-            atividades.filter(
-                atividade =>
-                    atividade.concluida
-            ).length;
-
-
-        const percentual =
-            total > 0
-                ? Math.round(
-                    (concluidas / total) * 100
-                )
-                : 0;
-
-
-        document.getElementById(
-            "semanaNome"
-        ).textContent =
-            `📚 Semana ${semanaAtualAluno}`;
-
-
-        document.getElementById(
-            "semanaProgressoFill"
-        ).style.width =
-            percentual + "%";
-
-
-        document.getElementById(
-            "semanaProgressoTexto"
-        ).textContent =
-            `${concluidas} de ${total} atividades concluídas (${percentual}%)`;
-
-
-        document.getElementById(
-            "progressFill"
-        ).style.width =
-            percentual + "%";
-
-
-        document.getElementById(
-            "progressText"
-        ).textContent =
-            `${percentual}% da programação da Semana ${semanaAtualAluno} concluída.`;
-
-    }
-
-
-    // ==========================================
-    // ABRIR YOUGLISH
-    // ==========================================
-
-    function abrirYouGlish(
-        palavra
-    ) {
-
-        const container =
-            document.getElementById(
-                "youglishWidget"
-            );
-
-
-        container.innerHTML = "";
-
-        container.style.display =
-            "block";
-
-
-        if (
-            !youglishApiPronta ||
-            typeof YG === "undefined"
-        ) {
-
-            container.innerHTML = `
-
-                <div class="mensagem">
-
-                    Carregando ferramenta de pronúncia...
-
-                </div>
-
-            `;
-
-
-            setTimeout(
-                function() {
-
-                    abrirYouGlish(
-                        palavra
-                    );
-
-                },
-                500
-            );
-
-
-            return;
+                        }
+                    )
+                    .join("");
 
         }
 
 
-        console.log(
-            "Abrindo YouGlish:",
-            palavra
-        );
+        // ==========================================
+        // ATUALIZAR PROGRESSO
+        // ==========================================
+
+        function atualizarProgressoSemana(
+            atividades
+        ) {
+
+            const total =
+                atividades.length;
 
 
-        try {
+            const concluidas =
+                atividades.filter(
+                    atividade =>
+                        atividade.concluida
+                ).length;
 
-            youglishWidget =
-                new YG.Widget(
-                    "youglishWidget",
-                    {
-                        width: 850,
 
-                        components: 755,
+            const percentual =
+                total > 0
+                    ? Math.round(
+                        (concluidas / total) * 100
+                    )
+                    : 0;
 
-                        autoStart: 0,
 
-                        restrictionMode: 1
-                    }
+            document.getElementById(
+                "semanaNome"
+            ).textContent =
+                `📚 Semana ${semanaAtualAluno}`;
+
+
+            document.getElementById(
+                "semanaProgressoFill"
+            ).style.width =
+                percentual + "%";
+
+
+            document.getElementById(
+                "semanaProgressoTexto"
+            ).textContent =
+                `${concluidas} de ${total} atividades concluídas (${percentual}%)`;
+
+
+            document.getElementById(
+                "progressFill"
+            ).style.width =
+                percentual + "%";
+
+
+            document.getElementById(
+                "progressText"
+            ).textContent =
+                `${percentual}% da programação da Semana ${semanaAtualAluno} concluída.`;
+
+        }
+
+
+        // ==========================================
+        // INICIAR YOUGLISH GENÉRICO
+        // ==========================================
+
+        function iniciarYouGlish() {
+
+            const container =
+                document.getElementById(
+                    "youglishWidget"
                 );
 
 
-            youglishWidget.fetch(
-                palavra,
-                "english",
-                "us"
-            );
+            container.innerHTML = "";
 
-        }
-
-        catch (erro) {
-
-            console.error(
-                "Erro ao abrir YouGlish:",
-                erro
-            );
-
-
-            container.innerHTML = `
-
-                <div class="mensagem erro">
-
-                    Não foi possível carregar o YouGlish.
-
-                </div>
-
-            `;
-
-        }
-
-    }
-
-
-    // ==========================================
-    // ABRIR ATIVIDADE
-    // ==========================================
-
-    function abrirAtividade(
-        id
-    ) {
-
-        const atividade =
-            programacaoCache[id];
-
-
-        if (!atividade) {
-
-            console.error(
-                "Atividade não encontrada:",
-                id
-            );
-
-            return;
-
-        }
-
-
-        // ==========================================
-        // FLASHCARDS
-        // ==========================================
-
-        if (
-            atividade.link ===
-            "flashcards.html"
-        ) {
-
-            window.location.href =
-                "flashcards.html";
-
-            return;
-
-        }
-
-
-        // ==========================================
-        // ELEMENTOS DO MODAL
-        // ==========================================
-
-        const modal =
-            document.getElementById(
-                "modalAtividade"
-            );
-
-
-        const embed =
-            document.getElementById(
-                "modalEmbed"
-            );
-
-
-        const youglish =
-            document.getElementById(
-                "youglishWidget"
-            );
-
-
-        const aviso =
-            document.getElementById(
-                "modalAviso"
-            );
-
-
-        const acoes =
-            document.getElementById(
-                "modalAcoes"
-            );
-
-
-        // ==========================================
-        // LIMPAR
-        // ==========================================
-
-        embed.innerHTML = "";
-
-        embed.style.display =
-            "none";
-
-
-        youglish.innerHTML = "";
-
-        youglish.style.display =
-            "none";
-
-
-        aviso.innerHTML = "";
-
-        aviso.style.display =
-            "none";
-
-
-        acoes.innerHTML = "";
-
-
-        // ==========================================
-        // TÍTULO E DESCRIÇÃO
-        // ==========================================
-
-        document.getElementById(
-            "modalTipo"
-        ).textContent =
-            nomeTipo(
-                atividade.tipo
-            );
-
-
-        document.getElementById(
-            "modalTitulo"
-        ).textContent =
-            atividade.titulo;
-
-
-        document.getElementById(
-            "modalDescricao"
-        ).textContent =
-            atividade.descricao || "";
-
-
-        // ==========================================
-        // DESAFIO DE PRONÚNCIA
-        // ==========================================
-
-        if (
-            atividade.tipo === "pronuncia" &&
-            atividade.link
-        ) {
-
-            abrirYouGlish(
-                atividade.link
-            );
-
-
-            aviso.innerHTML = `
-
-                <strong>YouGlish</strong><br>
-
-                Veja exemplos reais de pronúncia
-                da palavra em inglês.
-
-            `;
-
-
-            aviso.style.display =
+            container.style.display =
                 "block";
 
 
-            acoes.innerHTML = `
-
-                <button
-                    class="modal-botao verde"
-                    onclick="
-                        alternarConclusao(
-                            ${atividade.id},
-                            ${Boolean(atividade.concluida)}
-                        );
-
-                        fecharModal();
-                    "
-                >
-
-                    ${
-                        atividade.concluida
-                            ? "↩️ Marcar como não concluída"
-                            : "✅ Marcar como concluída"
-                    }
-
-                </button>
-
-            `;
-
-
-            modal.classList.add(
-                "ativo"
-            );
-
-
-            return;
-
-        }
-
-
-        // ==========================================
-        // OUTROS CONTEÚDOS COM LINK
-        // ==========================================
-
-        if (
-            atividade.link
-        ) {
-
-            const embedData =
-                obterUrlEmbed(
-                    atividade.link
-                );
-
+            // ==========================================
+            // API AINDA NÃO CARREGOU
+            // ==========================================
 
             if (
-                embedData &&
-                embedData.url
+                !youglishApiPronta ||
+                typeof YG === "undefined"
             ) {
 
-                embed.innerHTML = `
+                container.innerHTML = `
 
-                    <iframe
-                        src="${escaparHTML(
-                            embedData.url
-                        )}"
-                        title="${escaparHTML(
-                            atividade.titulo
-                        )}"
-                        loading="lazy"
-                        allow="
-                            accelerometer;
-                            autoplay;
-                            clipboard-write;
-                            encrypted-media;
-                            gyroscope;
-                            picture-in-picture;
-                            web-share
-                        "
-                        allowfullscreen
-                        referrerpolicy="
-                            strict-origin-when-cross-origin
-                        "
-                    ></iframe>
+                    <div
+                        class="mensagem"
+                        style="text-align:center;"
+                    >
+
+                        🎙️ Carregando ferramenta de pronúncia...
+
+                    </div>
 
                 `;
 
 
-                embed.style.display =
-                    "block";
+                setTimeout(
+                    function() {
+
+                        iniciarYouGlish();
+
+                    },
+                    500
+                );
+
+
+                return;
+
+            }
+
+
+            // ==========================================
+            // CRIAR WIDGET
+            // ==========================================
+
+            try {
+
+                youglishWidget =
+                    new YG.Widget(
+                        "youglishWidget",
+                        {
+
+                            width: 900,
+
+                            height: 500,
+
+                            /*
+                               1   = Search
+                               2   = Accent panel
+                               4   = Title
+                               8   = Caption
+                               16  = Speed
+                               64  = Controls
+                               128 = Dictionary
+                               512 = Phonetic
+                            */
+
+                            components:
+                                735,
+
+                            autoStart:
+                                0,
+
+                            restrictionMode:
+                                1
+
+                        }
+                    );
+
+
+                console.log(
+                    "YouGlish genérico iniciado."
+                );
+
+
+                /*
+                    IMPORTANTE:
+
+                    Não usamos fetch() aqui.
+
+                    O aluno terá a própria
+                    caixa de pesquisa do YouGlish.
+                */
+
+            }
+
+            catch (erro) {
+
+                console.error(
+                    "Erro ao criar YouGlish:",
+                    erro
+                );
+
+
+                container.innerHTML = `
+
+                    <div
+                        class="mensagem erro"
+                    >
+
+                        Não foi possível carregar
+                        a ferramenta de pronúncia.
+
+                    </div>
+
+                `;
+
+            }
+
+        }
+
+
+        // ==========================================
+        // ABRIR ATIVIDADE
+        // ==========================================
+
+        function abrirAtividade(
+            id
+        ) {
+
+            const atividade =
+                programacaoCache[id];
+
+
+            if (!atividade) {
+
+                console.error(
+                    "Atividade não encontrada:",
+                    id
+                );
+
+                return;
+
+            }
+
+
+            // ==========================================
+            // FLASHCARDS
+            // ==========================================
+
+            if (
+                atividade.link ===
+                "flashcards.html"
+            ) {
+
+                window.location.href =
+                    "flashcards.html";
+
+                return;
+
+            }
+
+
+            // ==========================================
+            // ELEMENTOS
+            // ==========================================
+
+            const modal =
+                document.getElementById(
+                    "modalAtividade"
+                );
+
+
+            const embed =
+                document.getElementById(
+                    "modalEmbed"
+                );
+
+
+            const youglish =
+                document.getElementById(
+                    "youglishWidget"
+                );
+
+
+            const aviso =
+                document.getElementById(
+                    "modalAviso"
+                );
+
+
+            const acoes =
+                document.getElementById(
+                    "modalAcoes"
+                );
+
+
+            // ==========================================
+            // LIMPAR
+            // ==========================================
+
+            embed.innerHTML = "";
+
+            embed.style.display =
+                "none";
+
+
+            youglish.innerHTML = "";
+
+            youglish.style.display =
+                "none";
+
+
+            aviso.innerHTML = "";
+
+            aviso.style.display =
+                "none";
+
+
+            acoes.innerHTML = "";
+
+
+            // ==========================================
+            // CABEÇALHO
+            // ==========================================
+
+            document.getElementById(
+                "modalTipo"
+            ).textContent =
+                nomeTipo(
+                    atividade.tipo
+                );
+
+
+            document.getElementById(
+                "modalTitulo"
+            ).textContent =
+                atividade.titulo;
+
+
+            document.getElementById(
+                "modalDescricao"
+            ).textContent =
+                atividade.descricao || "";
+
+
+            // ==========================================
+            // PRONÚNCIA
+            //
+            // NÃO DEPENDE DO LINK
+            // ==========================================
+
+            if (
+                atividade.tipo ===
+                "pronuncia"
+            ) {
+
+                modal.classList.add(
+                    "ativo"
+                );
+
+
+                iniciarYouGlish();
 
 
                 aviso.innerHTML = `
 
-                    <strong>Conteúdo incorporado</strong><br>
+                    <strong>
+                        🎙️ Pratique sua pronúncia
+                    </strong>
+                    <br>
 
-                    O Gutalks está tentando carregar este conteúdo
-                    dentro da plataforma. Alguns sites externos podem
-                    bloquear a incorporação por motivos de segurança.
+                    Digite uma palavra ou expressão
+                    na caixa de pesquisa do YouGlish
+                    para ouvir exemplos reais em inglês.
 
                 `;
 
@@ -2518,19 +2461,152 @@
 
                 acoes.innerHTML = `
 
-                    <a
-                        class="modal-botao"
-                        href="${escaparHTML(
-                            atividade.link
-                        )}"
-                        target="_blank"
-                        rel="noopener noreferrer"
+                    <button
+                        class="modal-botao verde"
+                        onclick="
+                            alternarConclusao(
+                                ${atividade.id},
+                                ${Boolean(atividade.concluida)}
+                            );
+
+                            fecharModal();
+                        "
                     >
 
-                        🔗 Abrir em nova aba
+                        ${
+                            atividade.concluida
+                                ? "↩️ Marcar como não concluída"
+                                : "✅ Marcar como concluída"
+                        }
 
-                    </a>
+                    </button>
 
+                `;
+
+
+                return;
+
+            }
+
+
+            // ==========================================
+            // OUTROS CONTEÚDOS COM LINK
+            // ==========================================
+
+            if (
+                atividade.link
+            ) {
+
+                const embedData =
+                    obterUrlEmbed(
+                        atividade.link
+                    );
+
+
+                if (
+                    embedData &&
+                    embedData.url
+                ) {
+
+                    embed.innerHTML = `
+
+                        <iframe
+                            src="${escaparHTML(
+                                embedData.url
+                            )}"
+                            title="${escaparHTML(
+                                atividade.titulo
+                            )}"
+                            loading="lazy"
+                            allow="
+                                accelerometer;
+                                autoplay;
+                                clipboard-write;
+                                encrypted-media;
+                                gyroscope;
+                                picture-in-picture;
+                                web-share
+                            "
+                            allowfullscreen
+                            referrerpolicy="
+                                strict-origin-when-cross-origin
+                            "
+                        ></iframe>
+
+                    `;
+
+
+                    embed.style.display =
+                        "block";
+
+
+                    aviso.innerHTML = `
+
+                        <strong>
+                            Conteúdo incorporado
+                        </strong>
+
+                        <br>
+
+                        O Gutalks está carregando
+                        este conteúdo dentro da plataforma.
+
+                    `;
+
+
+                    aviso.style.display =
+                        "block";
+
+
+                    acoes.innerHTML = `
+
+                        <a
+                            class="modal-botao"
+                            href="${escaparHTML(
+                                atividade.link
+                            )}"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                        >
+
+                            🔗 Abrir em nova aba
+
+                        </a>
+
+
+                        <button
+                            class="modal-botao verde"
+                            onclick="
+                                alternarConclusao(
+                                    ${atividade.id},
+                                    ${Boolean(atividade.concluida)}
+                                );
+
+                                fecharModal();
+                            "
+                        >
+
+                            ${
+                                atividade.concluida
+                                    ? "↩️ Marcar como não concluída"
+                                    : "✅ Marcar como concluída"
+                            }
+
+                        </button>
+
+                    `;
+
+                }
+
+            }
+
+            else {
+
+                // ==========================================
+                // SEM LINK
+                // ==========================================
+
+                acoes.innerHTML = `
 
                     <button
                         class="modal-botao verde"
@@ -2556,403 +2632,220 @@
 
             }
 
+
+            modal.classList.add(
+                "ativo"
+            );
+
         }
 
 
         // ==========================================
-        // ATIVIDADE SEM LINK
+        // FECHAR MODAL
         // ==========================================
 
-        else {
+        function fecharModal() {
 
-            acoes.innerHTML = `
+            const modal =
+                document.getElementById(
+                    "modalAtividade"
+                );
 
-                <button
-                    class="modal-botao verde"
-                    onclick="
-                        alternarConclusao(
-                            ${atividade.id},
-                            ${Boolean(atividade.concluida)}
-                        );
 
-                        fecharModal();
-                    "
-                >
+            const embed =
+                document.getElementById(
+                    "modalEmbed"
+                );
 
-                    ${
-                        atividade.concluida
-                            ? "↩️ Marcar como não concluída"
-                            : "✅ Marcar como concluída"
-                    }
 
-                </button>
+            const youglish =
+                document.getElementById(
+                    "youglishWidget"
+                );
 
-            `;
+
+            embed.innerHTML = "";
+
+
+            youglish.innerHTML = "";
+
+            youglish.style.display =
+                "none";
+
+
+            modal.classList.remove(
+                "ativo"
+            );
 
         }
 
 
-        modal.classList.add(
-            "ativo"
-        );
+        // ==========================================
+        // FECHAR CLICANDO FORA
+        // ==========================================
 
-    }
-
-
-    // ==========================================
-    // FECHAR MODAL
-    // ==========================================
-
-    function fecharModal() {
-
-        const modal =
-            document.getElementById(
-                "modalAtividade"
-            );
-
-
-        const embed =
-            document.getElementById(
-                "modalEmbed"
-            );
-
-
-        const youglish =
-            document.getElementById(
-                "youglishWidget"
-            );
-
-
-        embed.innerHTML = "";
-
-        youglish.innerHTML = "";
-
-        youglish.style.display =
-            "none";
-
-
-        modal.classList.remove(
-            "ativo"
-        );
-
-    }
-
-
-    // ==========================================
-    // FECHAR CLICANDO FORA
-    // ==========================================
-
-    function fecharModalFora(
-        event
-    ) {
-
-        if (
-            event.target.id ===
-            "modalAtividade"
+        function fecharModalFora(
+            event
         ) {
 
-            fecharModal();
-
-        }
-
-    }
-
-
-    // ==========================================
-    // ALTERNAR CONCLUSÃO
-    // ==========================================
-
-    async function alternarConclusao(
-        id,
-        concluidaAtual
-    ) {
-
-        if (!usuarioLogado) {
-
-            return;
-
-        }
-
-
-        const novaConclusao =
-            !concluidaAtual;
-
-
-        const dados = {
-
-            concluida:
-                novaConclusao,
-
-            data_conclusao:
-                novaConclusao
-                    ? new Date().toISOString()
-                    : null
-
-        };
-
-
-        const {
-            error
-        } = await supabaseClient
-            .from(
-                "programacao_semanal"
-            )
-            .update(
-                dados
-            )
-            .eq(
-                "id",
-                id
-            )
-            .eq(
-                "user_id",
-                usuarioLogado.id
-            );
-
-
-        if (error) {
-
-            console.error(
-                "Erro ao atualizar atividade:",
-                error
-            );
-
-
-            alert(
-                "Não foi possível atualizar a atividade."
-            );
-
-
-            return;
-
-        }
-
-
-        await carregarProgramacao();
-
-    }
-
-
-    // ==========================================
-    // CARREGAR PROGRAMAÇÃO
-    // ==========================================
-
-    async function carregarProgramacao() {
-
-        if (!usuarioLogado) {
-
-            return;
-
-        }
-
-
-        const diaAtual =
-            obterDiaSemanaAtual();
-
-
-        document.getElementById(
-            "dataHoje"
-        ).textContent =
-            capitalizar(
-                formatarDataHoje()
-            );
-
-
-        const {
-            data,
-            error
-        } = await supabaseClient
-            .from(
-                "programacao_semanal"
-            )
-            .select("*")
-            .eq(
-                "user_id",
-                usuarioLogado.id
-            )
-            .eq(
-                "semana",
-                semanaAtualAluno
-            )
-            .order(
-                "dia_semana",
-                {
-                    ascending: true
-                }
-            );
-
-
-        if (error) {
-
-            console.error(
-                "Erro ao carregar programação:",
-                error
-            );
-
-
-            document.getElementById(
-                "atividadesHoje"
-            ).innerHTML = `
-                <div class="mensagem erro">
-                    Não foi possível carregar sua programação.
-                </div>
-            `;
-
-
-            document.getElementById(
-                "semanaLista"
-            ).innerHTML = `
-                <div class="mensagem erro">
-                    Não foi possível carregar sua programação.
-                </div>
-            `;
-
-
-            return;
-
-        }
-
-
-        const atividades =
-            data || [];
-
-
-        programacaoCache = {};
-
-
-        atividades.forEach(
-            atividade => {
-
-                programacaoCache[
-                    atividade.id
-                ] =
-                    atividade;
-
-            }
-        );
-
-
-        const atividadesHoje =
-            atividades.filter(
-                atividade =>
-                    Number(
-                        atividade.dia_semana
-                    ) === diaAtual
-            );
-
-
-        renderizarAtividadesHoje(
-            atividadesHoje
-        );
-
-
-        renderizarSemana(
-            atividades,
-            diaAtual
-        );
-
-
-        atualizarProgressoSemana(
-            atividades
-        );
-
-    }
-
-
-    // ==========================================
-    // VERIFICAR ALUNO
-    // ==========================================
-
-    async function verificarAluno() {
-
-        try {
-
-            const {
-                data: {
-                    session
-                },
-                error: sessionError
-            } = await supabaseClient
-                .auth
-                .getSession();
-
-
             if (
-                sessionError ||
-                !session
+                event.target.id ===
+                "modalAtividade"
             ) {
 
-                window.location.href =
-                    "login.html";
+                fecharModal();
+
+            }
+
+        }
+
+
+        // ==========================================
+        // ALTERNAR CONCLUSÃO
+        // ==========================================
+
+        async function alternarConclusao(
+            id,
+            concluidaAtual
+        ) {
+
+            if (!usuarioLogado) {
 
                 return;
 
             }
 
 
-            usuarioLogado =
-                session.user;
+            const novaConclusao =
+                !concluidaAtual;
+
+
+            const dados = {
+
+                concluida:
+                    novaConclusao,
+
+                data_conclusao:
+                    novaConclusao
+                        ? new Date().toISOString()
+                        : null
+
+            };
 
 
             const {
-                data: aluno,
-                error: alunoError
+                error
             } = await supabaseClient
                 .from(
-                    "Alunos"
+                    "programacao_semanal"
                 )
-                .select(
-                    "nome, email, semana_atual"
+                .update(
+                    dados
+                )
+                .eq(
+                    "id",
+                    id
                 )
                 .eq(
                     "user_id",
-                    session.user.id
+                    usuarioLogado.id
+                );
+
+
+            if (error) {
+
+                console.error(
+                    "Erro ao atualizar atividade:",
+                    error
+                );
+
+
+                alert(
+                    "Não foi possível atualizar a atividade."
+                );
+
+
+                return;
+
+            }
+
+
+            await carregarProgramacao();
+
+        }
+
+
+        // ==========================================
+        // CARREGAR PROGRAMAÇÃO
+        // ==========================================
+
+        async function carregarProgramacao() {
+
+            if (!usuarioLogado) {
+
+                return;
+
+            }
+
+
+            const diaAtual =
+                obterDiaSemanaAtual();
+
+
+            document.getElementById(
+                "dataHoje"
+            ).textContent =
+                capitalizar(
+                    formatarDataHoje()
+                );
+
+
+            const {
+                data,
+                error
+            } = await supabaseClient
+                .from(
+                    "programacao_semanal"
                 )
-                .single();
+                .select("*")
+                .eq(
+                    "user_id",
+                    usuarioLogado.id
+                )
+                .eq(
+                    "semana",
+                    semanaAtualAluno
+                )
+                .order(
+                    "dia_semana",
+                    {
+                        ascending: true
+                    }
+                );
 
 
-            console.log(
-                "Dados do aluno:",
-                aluno
-            );
+            if (error) {
 
-
-            console.log(
-                "Erro do aluno:",
-                alunoError
-            );
-
-
-            if (
-                alunoError ||
-                !aluno
-            ) {
-
-                document.getElementById(
-                    "nomeAluno"
-                ).textContent =
-                    "Olá, aluno! 👋";
-
-
-                document.getElementById(
-                    "emailAluno"
-                ).textContent =
-                    session.user.email;
+                console.error(
+                    "Erro ao carregar programação:",
+                    error
+                );
 
 
                 document.getElementById(
                     "atividadesHoje"
                 ).innerHTML = `
                     <div class="mensagem erro">
-                        Não foi possível carregar os dados do aluno.
-                        <br><br>
-                        ${
-                            alunoError
-                                ? escaparHTML(
-                                    alunoError.message
-                                )
-                                : "Aluno não encontrado."
-                        }
+                        Não foi possível carregar sua programação.
+                    </div>
+                `;
+
+
+                document.getElementById(
+                    "semanaLista"
+                ).innerHTML = `
+                    <div class="mensagem erro">
+                        Não foi possível carregar sua programação.
                     </div>
                 `;
 
@@ -2962,113 +2855,289 @@
             }
 
 
-            document.getElementById(
-                "nomeAluno"
-            ).textContent =
-                "Olá, " +
-                aluno.nome +
-                "! 👋";
+            const atividades =
+                data || [];
 
 
-            document.getElementById(
-                "emailAluno"
-            ).textContent =
-                aluno.email ||
-                session.user.email ||
-                "";
+            programacaoCache = {};
 
 
-            // ==========================================
-            // SEMANA ATUAL
-            // ==========================================
+            atividades.forEach(
+                atividade => {
 
-            semanaAtualAluno =
-                Number(
-                    aluno.semana_atual
-                ) || 1;
+                    programacaoCache[
+                        atividade.id
+                    ] =
+                        atividade;
 
-
-            console.log(
-                "Semana atual do aluno:",
-                semanaAtualAluno
+                }
             );
 
 
-            await carregarProgramacao();
+            // ==========================================
+            // ATIVIDADES DE HOJE
+            // ==========================================
 
-        }
+            const atividadesHoje =
+                atividades.filter(
+                    atividade =>
+                        Number(
+                            atividade.dia_semana
+                        ) === diaAtual
+                );
 
-        catch (erro) {
 
-            console.error(
-                "Erro ao verificar aluno:",
-                erro
+            renderizarAtividadesHoje(
+                atividadesHoje
             );
 
 
-            document.getElementById(
-                "atividadesHoje"
-            ).innerHTML = `
-                <div class="mensagem erro">
-                    Ocorreu um erro ao carregar a página.
-                    <br><br>
-                    ${escaparHTML(
-                        erro.message ||
-                        String(erro)
-                    )}
-                </div>
-            `;
+            // ==========================================
+            // SEMANA COMPLETA
+            // ==========================================
+
+            renderizarSemana(
+                atividades,
+                diaAtual
+            );
+
+
+            // ==========================================
+            // PROGRESSO
+            // ==========================================
+
+            atualizarProgressoSemana(
+                atividades
+            );
 
         }
 
-    }
+
+        // ==========================================
+        // VERIFICAR ALUNO
+        // ==========================================
+
+        async function verificarAluno() {
+
+            try {
+
+                const {
+                    data: {
+                        session
+                    },
+                    error: sessionError
+                } = await supabaseClient
+                    .auth
+                    .getSession();
 
 
-    // ==========================================
-    // LOGOUT
-    // ==========================================
+                if (
+                    sessionError ||
+                    !session
+                ) {
 
-    async function logout() {
+                    window.location.href =
+                        "login.html";
 
-        await supabaseClient
-            .auth
-            .signOut();
+                    return;
 
-
-        window.location.href =
-            "login.html";
-
-    }
+                }
 
 
-    // ==========================================
-    // ESC PARA FECHAR MODAL
-    // ==========================================
+                // ==========================================
+                // USUÁRIO LOGADO
+                // ==========================================
 
-    document.addEventListener(
-        "keydown",
-        function(event) {
+                usuarioLogado =
+                    session.user;
 
-            if (
-                event.key === "Escape"
-            ) {
 
-                fecharModal();
+                // ==========================================
+                // BUSCAR ALUNO
+                // ==========================================
+
+                const {
+                    data: aluno,
+                    error: alunoError
+                } = await supabaseClient
+                    .from(
+                        "Alunos"
+                    )
+                    .select(
+                        "nome, email, semana_atual"
+                    )
+                    .eq(
+                        "user_id",
+                        session.user.id
+                    )
+                    .single();
+
+
+                console.log(
+                    "Dados do aluno:",
+                    aluno
+                );
+
+
+                console.log(
+                    "Erro do aluno:",
+                    alunoError
+                );
+
+
+                if (
+                    alunoError ||
+                    !aluno
+                ) {
+
+                    document.getElementById(
+                        "nomeAluno"
+                    ).textContent =
+                        "Olá, aluno! 👋";
+
+
+                    document.getElementById(
+                        "emailAluno"
+                    ).textContent =
+                        session.user.email;
+
+
+                    document.getElementById(
+                        "atividadesHoje"
+                    ).innerHTML = `
+                        <div class="mensagem erro">
+                            Não foi possível carregar os dados do aluno.
+                            <br><br>
+                            ${
+                                alunoError
+                                    ? escaparHTML(
+                                        alunoError.message
+                                    )
+                                    : "Aluno não encontrado."
+                            }
+                        </div>
+                    `;
+
+
+                    return;
+
+                }
+
+
+                // ==========================================
+                // DADOS DO ALUNO
+                // ==========================================
+
+                document.getElementById(
+                    "nomeAluno"
+                ).textContent =
+                    "Olá, " +
+                    aluno.nome +
+                    "! 👋";
+
+
+                document.getElementById(
+                    "emailAluno"
+                ).textContent =
+                    aluno.email ||
+                    session.user.email ||
+                    "";
+
+
+                // ==========================================
+                // SEMANA ATUAL
+                // ==========================================
+
+                semanaAtualAluno =
+                    Number(
+                        aluno.semana_atual
+                    ) || 1;
+
+
+                console.log(
+                    "Semana atual do aluno:",
+                    semanaAtualAluno
+                );
+
+
+                // ==========================================
+                // CARREGAR PROGRAMAÇÃO
+                // ==========================================
+
+                await carregarProgramacao();
+
+            }
+
+            catch (erro) {
+
+                console.error(
+                    "Erro ao verificar aluno:",
+                    erro
+                );
+
+
+                document.getElementById(
+                    "atividadesHoje"
+                ).innerHTML = `
+                    <div class="mensagem erro">
+                        Ocorreu um erro ao carregar a página.
+                        <br><br>
+                        ${escaparHTML(
+                            erro.message ||
+                            String(erro)
+                        )}
+                    </div>
+                `;
 
             }
 
         }
-    );
 
 
-    // ==========================================
-    // INICIAR
-    // ==========================================
+        // ==========================================
+        // LOGOUT
+        // ==========================================
 
-    verificarAluno();
+        async function logout() {
 
-</script>
-```
+            await supabaseClient
+                .auth
+                .signOut();
+
+
+            window.location.href =
+                "login.html";
+
+        }
+
+
+        // ==========================================
+        // ESC PARA FECHAR MODAL
+        // ==========================================
+
+        document.addEventListener(
+            "keydown",
+            function(event) {
+
+                if (
+                    event.key === "Escape"
+                ) {
+
+                    fecharModal();
+
+                }
+
+            }
+        );
+
+
+        // ==========================================
+        // INICIAR
+        // ==========================================
+
+        verificarAluno();
+
+    </script>
 
 </body>
 
