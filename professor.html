@@ -1,3 +1,4 @@
+```html
 <!DOCTYPE html>
 <html lang="pt-BR">
 
@@ -1126,7 +1127,14 @@
                         </div>
 
 
-                        <div class="campo">
+                        <!-- ==========================================
+                             LINK
+                        ========================================== -->
+
+                        <div
+                            class="campo"
+                            id="campoLink"
+                        >
 
                             <label for="link">
                                 Link
@@ -1997,10 +2005,12 @@
                                         >
 
                                             ${atividade.data_atividade
-                                                ? formatarData(
+                                                ?
+                                                formatarData(
                                                     atividade.data_atividade
                                                 )
-                                                : obterNomeDia(
+                                                :
+                                                obterNomeDia(
                                                     atividade.dia_semana
                                                 )
                                             }
@@ -2020,11 +2030,8 @@
                                             ${
                                                 atividade.tempo_minutos
                                                     ?
-
                                                     ` • ${atividade.tempo_minutos} min`
-
                                                     :
-
                                                     ""
                                             }
 
@@ -2033,11 +2040,8 @@
                                             ${
                                                 atividade.concluida
                                                     ?
-
                                                     "✅ Concluída"
-
                                                     :
-
                                                     "⏳ Pendente"
                                             }
 
@@ -2223,13 +2227,40 @@
                 );
 
 
+            const campoLink =
+                document.getElementById(
+                    "campoLink"
+                );
+
+
+            const link =
+                document.getElementById(
+                    "link"
+                );
+
+
             if (
                 tipo === "flashcards"
             ) {
 
+                // Mostrar área dos flashcards
+
                 container.classList.add(
                     "visivel"
                 );
+
+
+                // Esconder campo de link
+
+                campoLink.style.display =
+                    "none";
+
+
+                // Definir automaticamente
+                // o destino dos flashcards
+
+                link.value =
+                    "flashcards.html";
 
 
                 const lista =
@@ -2250,9 +2281,31 @@
 
             else {
 
+                // Esconder área dos flashcards
+
                 container.classList.remove(
                     "visivel"
                 );
+
+
+                // Mostrar campo de link
+
+                campoLink.style.display =
+                    "flex";
+
+
+                // Se o link anterior era
+                // o link automático dos flashcards,
+                // limpar para o professor informar
+                // um novo link.
+
+                if (
+                    link.value === "flashcards.html"
+                ) {
+
+                    link.value = "";
+
+                }
 
             }
 
@@ -2696,10 +2749,23 @@
                 ).value.trim();
 
 
+            // ==========================================
+            // LINK
+            // ==========================================
+            //
+            // Flashcards SEMPRE usam:
+            // flashcards.html
+            //
+            // Os demais tipos usam o link
+            // informado pelo professor.
+            // ==========================================
+
             const link =
-                document.getElementById(
-                    "link"
-                ).value.trim();
+                tipo === "flashcards"
+                    ? "flashcards.html"
+                    : document.getElementById(
+                        "link"
+                    ).value.trim();
 
 
             const tempo =
@@ -2760,6 +2826,10 @@
 
             }
 
+
+            // ==========================================
+            // DADOS DA PROGRAMAÇÃO
+            // ==========================================
 
             const dados = {
 
@@ -3248,7 +3318,12 @@
 
 
             // Como o tipo padrão é Flashcards,
-            // cria automaticamente o primeiro card.
+            // alternarCamposFlashcards irá:
+            //
+            // 1. Mostrar os flashcards
+            // 2. Esconder o campo Link
+            // 3. Definir flashcards.html
+            // 4. Criar o primeiro card
 
             alternarCamposFlashcards();
 
@@ -3461,3 +3536,4 @@
 </body>
 
 </html>
+```
