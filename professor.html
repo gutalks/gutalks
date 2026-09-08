@@ -1,3 +1,4 @@
+```html
 <!DOCTYPE html>
 <html lang="pt-BR">
 
@@ -321,6 +322,155 @@
 
 
         /* ==========================================
+           FLASHCARDS
+        ========================================== */
+
+        .flashcards-area {
+            grid-column: 1 / -1;
+            display: none;
+            background: #f5f7fb;
+            border: 1px solid #dfe3eb;
+            border-radius: 12px;
+            padding: 20px;
+            margin-top: 5px;
+        }
+
+
+        .flashcards-area.visivel {
+            display: block;
+        }
+
+
+        .flashcards-cabecalho {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 18px;
+        }
+
+
+        .flashcards-cabecalho h3 {
+            color: #163075;
+            margin-bottom: 5px;
+        }
+
+
+        .flashcards-cabecalho p {
+            color: #666;
+            font-size: 14px;
+            line-height: 1.4;
+        }
+
+
+        .botao-adicionar-card {
+            background: #163075;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            white-space: nowrap;
+        }
+
+
+        .botao-adicionar-card:hover {
+            opacity: 0.9;
+        }
+
+
+        .lista-flashcards {
+            display: grid;
+            gap: 12px;
+        }
+
+
+        .flashcard-item {
+            background: white;
+            border: 1px solid #dfe3eb;
+            border-radius: 10px;
+            padding: 16px;
+        }
+
+
+        .flashcard-topo {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 12px;
+        }
+
+
+        .flashcard-numero {
+            font-weight: bold;
+            color: #163075;
+        }
+
+
+        .flashcard-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+
+        .flashcard-campo {
+            display: flex;
+            flex-direction: column;
+        }
+
+
+        .flashcard-campo label {
+            font-weight: bold;
+            margin-bottom: 7px;
+            color: #163075;
+            font-size: 14px;
+        }
+
+
+        .flashcard-campo input,
+        .flashcard-campo textarea {
+            width: 100%;
+            padding: 11px;
+            border: 1px solid #dfe3eb;
+            border-radius: 8px;
+            font-size: 15px;
+        }
+
+
+        .flashcard-campo textarea {
+            min-height: 80px;
+            resize: vertical;
+        }
+
+
+        .flashcard-campo input:focus,
+        .flashcard-campo textarea:focus {
+            outline: none;
+            border-color: #163075;
+        }
+
+
+        .botao-remover-card {
+            background: #fdecec;
+            color: #c82623;
+            border: none;
+            padding: 7px 10px;
+            border-radius: 7px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 12px;
+        }
+
+
+        .botao-remover-card:hover {
+            opacity: 0.85;
+        }
+
+
+        /* ==========================================
            ALUNO SELECIONADO
         ========================================== */
 
@@ -541,6 +691,19 @@
 
             .atividade-cabecalho {
                 flex-direction: column;
+            }
+
+            .flashcards-area {
+                grid-column: auto;
+            }
+
+            .flashcard-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .flashcards-cabecalho {
+                flex-direction: column;
+                align-items: flex-start;
             }
 
         }
@@ -918,6 +1081,7 @@
 
                             <select
                                 id="tipo"
+                                onchange="alternarCamposFlashcards()"
                                 required
                             >
 
@@ -1021,6 +1185,55 @@
                             >
 
                         </div>
+
+
+                        <!-- ==========================================
+                             FLASHCARDS
+                        ========================================== -->
+
+                        <div
+                            id="flashcardsContainer"
+                            class="flashcards-area"
+                        >
+
+                            <div class="flashcards-cabecalho">
+
+                                <div>
+
+                                    <h3>
+                                        🧠 Flashcards
+                                    </h3>
+
+                                    <p>
+                                        Adicione as palavras ou expressões
+                                        que entrarão no banco de revisão
+                                        deste aluno.
+                                    </p>
+
+                                </div>
+
+
+                                <button
+                                    type="button"
+                                    class="botao-adicionar-card"
+                                    onclick="adicionarFlashcard()"
+                                >
+
+                                    + Adicionar flashcard
+
+                                </button>
+
+                            </div>
+
+
+                            <div
+                                id="listaFlashcards"
+                                class="lista-flashcards"
+                            >
+                            </div>
+
+                        </div>
+
 
                     </div>
 
@@ -1981,6 +2194,388 @@
 
 
         // ==========================================
+        // FLASHCARDS
+        // ==========================================
+
+        function alternarCamposFlashcards() {
+
+            const tipo =
+                document.getElementById(
+                    "tipo"
+                ).value;
+
+
+            const container =
+                document.getElementById(
+                    "flashcardsContainer"
+                );
+
+
+            if (
+                tipo === "flashcards"
+            ) {
+
+                container.classList.add(
+                    "visivel"
+                );
+
+
+                const lista =
+                    document.getElementById(
+                        "listaFlashcards"
+                    );
+
+
+                if (
+                    lista.children.length === 0
+                ) {
+
+                    adicionarFlashcard();
+
+                }
+
+            }
+
+            else {
+
+                container.classList.remove(
+                    "visivel"
+                );
+
+            }
+
+        }
+
+
+        // ==========================================
+        // ADICIONAR FLASHCARD
+        // ==========================================
+
+        function adicionarFlashcard(
+            frente = "",
+            verso = ""
+        ) {
+
+            const lista =
+                document.getElementById(
+                    "listaFlashcards"
+                );
+
+
+            const item =
+                document.createElement(
+                    "div"
+                );
+
+
+            item.className =
+                "flashcard-item";
+
+
+            item.innerHTML = `
+
+                <div class="flashcard-topo">
+
+                    <span class="flashcard-numero">
+                        Flashcard
+                    </span>
+
+
+                    <button
+                        type="button"
+                        class="botao-remover-card"
+                        onclick="removerFlashcard(this)"
+                    >
+
+                        Remover
+
+                    </button>
+
+                </div>
+
+
+                <div class="flashcard-grid">
+
+
+                    <div class="flashcard-campo">
+
+                        <label>
+                            Frente
+                        </label>
+
+                        <input
+                            type="text"
+                            class="flashcard-frente"
+                            placeholder="Ex.: although"
+                            value="${escaparHTML(
+                                frente
+                            )}"
+                        >
+
+                    </div>
+
+
+                    <div class="flashcard-campo">
+
+                        <label>
+                            Verso
+                        </label>
+
+                        <textarea
+                            class="flashcard-verso"
+                            placeholder="Ex.: embora"
+                        >${escaparHTML(
+                            verso
+                        )}</textarea>
+
+                    </div>
+
+
+                </div>
+
+            `;
+
+
+            lista.appendChild(
+                item
+            );
+
+
+            atualizarNumeracaoFlashcards();
+
+        }
+
+
+        // ==========================================
+        // REMOVER FLASHCARD
+        // ==========================================
+
+        function removerFlashcard(
+            botao
+        ) {
+
+            const item =
+                botao.closest(
+                    ".flashcard-item"
+                );
+
+
+            if (item) {
+
+                item.remove();
+
+            }
+
+
+            atualizarNumeracaoFlashcards();
+
+        }
+
+
+        // ==========================================
+        // NUMERAÇÃO
+        // ==========================================
+
+        function atualizarNumeracaoFlashcards() {
+
+            const itens =
+                document.querySelectorAll(
+                    ".flashcard-item"
+                );
+
+
+            itens.forEach(
+                (
+                    item,
+                    index
+                ) => {
+
+                    const numero =
+                        item.querySelector(
+                            ".flashcard-numero"
+                        );
+
+
+                    numero.textContent =
+                        `Flashcard ${index + 1}`;
+
+                }
+            );
+
+        }
+
+
+        // ==========================================
+        // OBTER FLASHCARDS DO FORMULÁRIO
+        // ==========================================
+
+        function obterFlashcardsFormulario() {
+
+            const itens =
+                document.querySelectorAll(
+                    ".flashcard-item"
+                );
+
+
+            const cards = [];
+
+
+            itens.forEach(
+                item => {
+
+                    const frente =
+                        item
+                            .querySelector(
+                                ".flashcard-frente"
+                            )
+                            .value
+                            .trim();
+
+
+                    const verso =
+                        item
+                            .querySelector(
+                                ".flashcard-verso"
+                            )
+                            .value
+                            .trim();
+
+
+                    if (
+                        frente &&
+                        verso
+                    ) {
+
+                        cards.push({
+
+                            frente:
+                                frente,
+
+                            verso:
+                                verso
+
+                        });
+
+                    }
+
+                }
+            );
+
+
+            return cards;
+
+        }
+
+
+        // ==========================================
+        // SALVAR FLASHCARDS
+        // ==========================================
+
+        async function salvarFlashcards(
+            cards
+        ) {
+
+            if (
+                !cards ||
+                cards.length === 0
+            ) {
+
+                return {
+                    sucesso: true
+                };
+
+            }
+
+
+            const dadosFlashcards =
+                cards.map(
+                    card => ({
+
+                        user_id:
+                            alunoSelecionado.user_id,
+
+                        frente:
+                            card.frente,
+
+                        verso:
+                            card.verso,
+
+                        intervalo:
+                            0,
+
+                        facilidade:
+                            2.5,
+
+                        revisoes:
+                            0,
+
+                        proxima_revisao:
+                            null,
+
+                        data_introducao:
+                            null
+
+                    })
+                );
+
+
+            const {
+                data,
+                error
+            } = await supabaseClient
+
+                .from(
+                    "flashcards"
+                )
+
+                .insert(
+                    dadosFlashcards
+                )
+
+                .select();
+
+
+            if (error) {
+
+                console.error(
+                    "Erro ao salvar flashcards:",
+                    error
+                );
+
+
+                return {
+
+                    sucesso:
+                        false,
+
+                    erro:
+                        error
+
+                };
+
+            }
+
+
+            console.log(
+                "Flashcards salvos:",
+                data
+            );
+
+
+            return {
+
+                sucesso:
+                    true,
+
+                data:
+                    data
+
+            };
+
+        }
+
+
+        // ==========================================
         // SALVAR ATIVIDADE
         // ==========================================
 
@@ -2082,6 +2677,37 @@
             }
 
 
+            // ==========================================
+            // COLETAR FLASHCARDS
+            // ==========================================
+
+            let cards = [];
+
+
+            if (
+                tipo === "flashcards"
+            ) {
+
+                cards =
+                    obterFlashcardsFormulario();
+
+
+                if (
+                    cards.length === 0
+                ) {
+
+                    mostrarMensagemFormulario(
+                        "Adicione pelo menos um flashcard preenchido.",
+                        true
+                    );
+
+                    return;
+
+                }
+
+            }
+
+
             const dados = {
 
                 user_id:
@@ -2122,7 +2748,9 @@
                 );
 
 
-            button.disabled = true;
+            button.disabled =
+                true;
+
 
             button.textContent =
                 "Salvando...";
@@ -2130,6 +2758,10 @@
 
             let error;
 
+
+            // ==========================================
+            // ATUALIZAR ATIVIDADE
+            // ==========================================
 
             if (
                 atividadeId
@@ -2162,6 +2794,11 @@
 
             }
 
+
+            // ==========================================
+            // CRIAR NOVA ATIVIDADE
+            // ==========================================
+
             else {
 
                 const resposta =
@@ -2179,8 +2816,59 @@
                 error =
                     resposta.error;
 
+
+                // ==========================================
+                // SALVAR NOVOS FLASHCARDS
+                // ==========================================
+
+                if (
+                    !error &&
+                    tipo === "flashcards"
+                ) {
+
+                    const resultadoFlashcards =
+                        await salvarFlashcards(
+                            cards
+                        );
+
+
+                    if (
+                        !resultadoFlashcards.sucesso
+                    ) {
+
+                        mostrarMensagemFormulario(
+
+                            "A atividade foi salva, mas houve um erro ao salvar os flashcards: " +
+                            resultadoFlashcards.erro.message,
+
+                            true
+
+                        );
+
+
+                        button.disabled =
+                            false;
+
+
+                        button.textContent =
+                            "💾 Salvar atividade";
+
+
+                        await carregarAtividades();
+
+
+                        return;
+
+                    }
+
+                }
+
             }
 
+
+            // ==========================================
+            // ERRO AO SALVAR ATIVIDADE
+            // ==========================================
 
             if (error) {
 
@@ -2196,10 +2884,13 @@
                 );
 
 
-                button.disabled = false;
+                button.disabled =
+                    false;
+
 
                 button.textContent =
                     "💾 Salvar atividade";
+
 
                 return;
 
@@ -2207,7 +2898,9 @@
 
 
             mostrarMensagemFormulario(
-                "Atividade salva com sucesso!",
+                atividadeId
+                    ? "Atividade atualizada com sucesso!"
+                    : "Atividade salva com sucesso!",
                 false
             );
 
@@ -2218,7 +2911,9 @@
             await carregarAtividades();
 
 
-            button.disabled = false;
+            button.disabled =
+                false;
+
 
             button.textContent =
                 "💾 Salvar atividade";
@@ -2338,6 +3033,9 @@
                 "💾 Atualizar atividade";
 
 
+            alternarCamposFlashcards();
+
+
             mostrarMensagemFormulario(
                 "Editando atividade.",
                 false
@@ -2436,6 +3134,14 @@
                 "";
 
 
+            // Limpa os flashcards existentes
+
+            document.getElementById(
+                "listaFlashcards"
+            ).innerHTML =
+                "";
+
+
             if (
                 alunoSelecionado
             ) {
@@ -2485,9 +3191,21 @@
                 "flashcards";
 
 
+            // Como o tipo padrão é Flashcards,
+            // cria automaticamente o primeiro card.
+
+            alternarCamposFlashcards();
+
+
             document.getElementById(
                 "mensagemFormulario"
             ).textContent =
+                "";
+
+
+            document.getElementById(
+                "mensagemFormulario"
+            ).className =
                 "";
 
 
