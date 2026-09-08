@@ -1,2165 +1,2691 @@
-```html
 <!DOCTYPE html>
 <html lang="pt-BR">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Professor | GUTALKS</title>
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Gutalks | Painel do Professor</title>
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
     <script src="js/supabase.js"></script>
 
+
     <style>
+
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+            font-family: Arial, sans-serif;
         }
+
 
         body {
-            font-family: Arial, Helvetica, sans-serif;
             background: #f5f7fb;
-            color: #172033;
+            color: #163075;
         }
+
+
+        /* ==========================================
+           HEADER
+        ========================================== */
 
         header {
-            background: #0b1f3a;
+            background: #163075;
             color: white;
-            padding: 18px 40px;
+            padding: 18px 7%;
             display: flex;
-            align-items: center;
             justify-content: space-between;
+            align-items: center;
+            gap: 20px;
         }
 
+
         .logo {
-            font-size: 25px;
+            font-size: 28px;
             font-weight: bold;
             letter-spacing: 1px;
         }
 
-        .professor-info {
+
+        .header-right {
             display: flex;
             align-items: center;
-            gap: 20px;
+            gap: 18px;
         }
 
-        .professor-info span {
+
+        .professor-name {
             font-size: 14px;
+            opacity: 0.9;
         }
 
-        .botao-sair {
-            background: transparent;
-            border: 1px solid rgba(255,255,255,0.5);
+
+        .logout {
+            background: #c82623;
             color: white;
-            padding: 8px 15px;
-            border-radius: 7px;
+            border: none;
+            padding: 10px 18px;
+            border-radius: 8px;
             cursor: pointer;
+            font-weight: bold;
         }
 
-        .botao-sair:hover {
-            background: rgba(255,255,255,0.1);
+
+        .logout:hover {
+            opacity: 0.9;
         }
 
-        .container {
-            max-width: 1400px;
+
+        /* ==========================================
+           LAYOUT
+        ========================================== */
+
+        .layout {
+            max-width: 1250px;
             margin: 0 auto;
-            padding: 35px;
+            padding: 35px 25px;
         }
 
-        .titulo-pagina {
+
+        .welcome {
             margin-bottom: 30px;
         }
 
-        .titulo-pagina h1 {
-            font-size: 28px;
+
+        .welcome h1 {
+            font-size: 32px;
             margin-bottom: 8px;
         }
 
-        .titulo-pagina p {
-            color: #687386;
+
+        .welcome p {
+            color: #666;
         }
 
-        .cards-dashboard {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 20px;
-            margin-bottom: 35px;
-        }
 
-        .card-dashboard {
-            background: white;
-            padding: 25px;
-            border-radius: 14px;
-            box-shadow: 0 3px 15px rgba(0,0,0,0.05);
-        }
-
-        .card-dashboard .numero {
-            font-size: 30px;
-            font-weight: bold;
-            color: #0b1f3a;
-            margin-bottom: 5px;
-        }
-
-        .card-dashboard .descricao {
-            color: #687386;
-            font-size: 14px;
-        }
+        /* ==========================================
+           MENU
+        ========================================== */
 
         .menu {
-            display: flex;
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
             gap: 10px;
             margin-bottom: 25px;
-            flex-wrap: wrap;
         }
+
 
         .menu button {
             border: none;
             background: white;
-            color: #526075;
-            padding: 12px 18px;
-            border-radius: 8px;
+            padding: 15px 10px;
+            border-radius: 10px;
+            color: #163075;
+            font-weight: bold;
             cursor: pointer;
-            font-weight: 600;
+            box-shadow: 0 3px 12px rgba(0, 0, 0, 0.05);
         }
 
-        .menu button:hover,
+
+        .menu button:hover {
+            background: #eef1f8;
+        }
+
+
         .menu button.ativo {
-            background: #0b1f3a;
+            background: #163075;
             color: white;
         }
+
+
+        /* ==========================================
+           SEÇÃO
+        ========================================== */
 
         .secao {
             display: none;
         }
 
+
         .secao.ativa {
             display: block;
         }
 
+
         .painel {
             background: white;
-            border-radius: 14px;
+            border-radius: 16px;
             padding: 25px;
-            box-shadow: 0 3px 15px rgba(0,0,0,0.05);
-            margin-bottom: 25px;
+            box-shadow: 0 4px 18px rgba(0, 0, 0, 0.06);
+            margin-bottom: 20px;
         }
+
 
         .painel h2 {
-            margin-bottom: 20px;
-            font-size: 21px;
+            margin-bottom: 18px;
         }
 
-        .lista-alunos {
+
+        .subtitulo {
+            color: #666;
+            margin-bottom: 20px;
+        }
+
+
+        /* ==========================================
+           ALUNOS
+        ========================================== */
+
+        .alunos-lista {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 12px;
+        }
+
+
+        .aluno-item {
+            border: 1px solid #e4e7ee;
+            border-radius: 12px;
+            padding: 18px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
             gap: 15px;
         }
 
-        .aluno-card {
-            border: 1px solid #e4e8ef;
-            border-radius: 10px;
-            padding: 18px;
+
+        .aluno-info {
+            min-width: 0;
         }
 
-        .aluno-card h3 {
-            margin-bottom: 7px;
-        }
 
-        .aluno-card p {
-            color: #687386;
-            font-size: 14px;
+        .aluno-nome {
+            font-weight: bold;
+            font-size: 17px;
             margin-bottom: 5px;
         }
 
-        .botao {
-            border: none;
-            padding: 10px 16px;
-            border-radius: 7px;
-            cursor: pointer;
-            font-weight: 600;
+
+        .aluno-email {
+            color: #777;
+            font-size: 14px;
         }
 
+
+        .aluno-status {
+            color: #163075;
+            font-size: 13px;
+            background: #eef1f8;
+            padding: 5px 9px;
+            border-radius: 20px;
+            margin-top: 8px;
+            display: inline-block;
+        }
+
+
         .botao-principal {
-            background: #0b1f3a;
+            background: #163075;
+            color: white;
+            border: none;
+            padding: 11px 18px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+
+        .botao-principal:hover {
+            opacity: 0.9;
+        }
+
+
+        .botao-verde {
+            background: #218838;
             color: white;
         }
 
-        .botao-principal:hover {
-            background: #142f55;
+
+        .botao-vermelho {
+            background: #c82623;
+            color: white;
         }
 
-        .botao-perigo {
-            background: #fce8e8;
-            color: #b42318;
-        }
 
-        .botao-secundario {
-            background: #edf1f7;
-            color: #26364d;
-        }
+        /* ==========================================
+           CAMPOS
+        ========================================== */
 
-        .formulario {
+        .form-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
             gap: 18px;
         }
 
+
         .campo {
             display: flex;
             flex-direction: column;
-            gap: 7px;
         }
 
-        .campo label {
-            font-size: 14px;
-            font-weight: 600;
-            color: #334155;
+
+        .campo.full {
+            grid-column: 1 / -1;
         }
+
+
+        .campo label {
+            font-weight: bold;
+            margin-bottom: 7px;
+            color: #163075;
+        }
+
 
         .campo input,
         .campo select,
         .campo textarea {
             width: 100%;
-            border: 1px solid #d8dee8;
-            border-radius: 7px;
-            padding: 11px 12px;
-            font-family: inherit;
-            font-size: 14px;
-            outline: none;
+            padding: 12px;
+            border: 1px solid #dfe3eb;
+            border-radius: 8px;
+            font-size: 15px;
         }
+
+
+        .campo textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+
 
         .campo input:focus,
         .campo select:focus,
         .campo textarea:focus {
-            border-color: #0b1f3a;
+            outline: none;
+            border-color: #163075;
         }
 
-        .campo textarea {
-            resize: vertical;
-            min-height: 100px;
-        }
 
-        .campo-completo {
-            grid-column: 1 / -1;
-        }
-
-        .botoes-formulario {
-            grid-column: 1 / -1;
+        .acoes-formulario {
             display: flex;
             gap: 10px;
-            margin-top: 5px;
+            flex-wrap: wrap;
+            margin-top: 20px;
         }
+
+
+        /* ==========================================
+           ALUNO SELECIONADO
+        ========================================== */
+
+        .aluno-selecionado {
+            background: #eef1f8;
+            border-radius: 12px;
+            padding: 18px;
+            margin-bottom: 20px;
+        }
+
+
+        .aluno-selecionado strong {
+            display: block;
+            margin-bottom: 5px;
+        }
+
+
+        .aluno-selecionado span {
+            color: #666;
+            font-size: 14px;
+        }
+
+
+        /* ==========================================
+           ATIVIDADES
+        ========================================== */
+
+        .atividades-lista {
+            display: grid;
+            gap: 12px;
+        }
+
 
         .atividade-item {
-            border: 1px solid #e4e8ef;
-            border-radius: 10px;
-            padding: 18px;
-            margin-bottom: 12px;
+            border: 1px solid #e4e7ee;
+            border-radius: 12px;
+            padding: 17px;
         }
 
-        .atividade-topo {
+
+        .atividade-cabecalho {
             display: flex;
             justify-content: space-between;
             align-items: flex-start;
             gap: 15px;
         }
 
-        .atividade-item h3 {
-            margin-bottom: 6px;
+
+        .atividade-titulo {
+            font-weight: bold;
+            font-size: 16px;
         }
 
-        .atividade-item p {
-            color: #687386;
-            font-size: 14px;
-            margin-bottom: 5px;
+
+        .atividade-meta {
+            color: #777;
+            font-size: 13px;
+            margin-top: 7px;
         }
+
+
+        .atividade-descricao {
+            color: #666;
+            margin-top: 10px;
+            line-height: 1.5;
+            white-space: pre-wrap;
+        }
+
 
         .atividade-acoes {
             display: flex;
-            gap: 7px;
-            flex-shrink: 0;
+            gap: 8px;
+            margin-top: 13px;
+            flex-wrap: wrap;
         }
+
+
+        .botao-pequeno {
+            border: none;
+            padding: 8px 12px;
+            border-radius: 7px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+
+        .botao-editar {
+            background: #eef1f8;
+            color: #163075;
+        }
+
+
+        .botao-excluir {
+            background: #fdecec;
+            color: #c82623;
+        }
+
+
+        /* ==========================================
+           CARDS DASHBOARD
+        ========================================== */
+
+        .dashboard-cards {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+
+        .dashboard-card {
+            background: white;
+            border-radius: 14px;
+            padding: 22px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+        }
+
+
+        .dashboard-card .numero {
+            font-size: 30px;
+            font-weight: bold;
+            margin-top: 8px;
+        }
+
+
+        .dashboard-card .texto {
+            color: #777;
+            font-size: 14px;
+            margin-top: 5px;
+        }
+
+
+        /* ==========================================
+           MENSAGEM
+        ========================================== */
 
         .mensagem {
-            padding: 12px 15px;
-            border-radius: 7px;
-            margin-top: 15px;
-            display: none;
-            font-size: 14px;
-        }
-
-        .mensagem.sucesso {
-            display: block;
-            background: #e8f7ee;
-            color: #16794c;
-        }
-
-        .mensagem.erro {
-            display: block;
-            background: #fce8e8;
-            color: #b42318;
-        }
-
-        /* FLASHCARDS */
-
-        .flashcards-area {
-            grid-column: 1 / -1;
-            display: none;
-            border: 1px solid #dce3ed;
-            background: #f8fafc;
-            border-radius: 12px;
-            padding: 20px;
-        }
-
-        .flashcards-area.visivel {
-            display: block;
-        }
-
-        .flashcards-cabecalho {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 20px;
-            margin-bottom: 18px;
-        }
-
-        .flashcards-cabecalho h3 {
-            color: #0b1f3a;
-            margin-bottom: 5px;
-        }
-
-        .flashcards-cabecalho p {
-            color: #687386;
-            font-size: 14px;
-        }
-
-        .botao-adicionar-card {
-            border: none;
-            background: #0b1f3a;
-            color: white;
-            padding: 10px 15px;
-            border-radius: 7px;
-            cursor: pointer;
-            font-weight: 600;
-            white-space: nowrap;
-        }
-
-        .botao-adicionar-card:hover {
-            background: #142f55;
-        }
-
-        .lista-flashcards {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-        }
-
-        .flashcard-item {
-            background: white;
-            border: 1px solid #dce3ed;
+            background: #f5f7fb;
             border-radius: 10px;
-            padding: 15px;
+            padding: 18px;
+            color: #666;
         }
 
-        .flashcard-topo {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 12px;
+
+        .erro {
+            color: #c82623;
         }
 
-        .flashcard-numero {
-            font-weight: bold;
-            color: #0b1f3a;
+
+        .sucesso {
+            color: #218838;
         }
 
-        .flashcard-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 15px;
-        }
 
-        .flashcard-campo {
-            display: flex;
-            flex-direction: column;
-            gap: 7px;
-        }
+        /* ==========================================
+           RODAPÉ
+        ========================================== */
 
-        .flashcard-campo label {
-            font-size: 13px;
-            font-weight: 600;
-            color: #526075;
-        }
-
-        .flashcard-campo input,
-        .flashcard-campo textarea {
-            border: 1px solid #d8dee8;
-            border-radius: 7px;
-            padding: 10px;
-            font-family: inherit;
+        footer {
+            text-align: center;
+            padding: 30px 20px;
+            color: #777;
             font-size: 14px;
-            outline: none;
         }
 
-        .flashcard-campo textarea {
-            min-height: 70px;
-            resize: vertical;
-        }
 
-        .flashcard-campo input:focus,
-        .flashcard-campo textarea:focus {
-            border-color: #0b1f3a;
-        }
-
-        .botao-remover-card {
-            border: none;
-            background: #fce8e8;
-            color: #b42318;
-            padding: 6px 10px;
-            border-radius: 6px;
-            cursor: pointer;
-            font-size: 12px;
-            font-weight: 600;
-        }
-
-        .botao-remover-card:hover {
-            background: #f8d4d4;
-        }
-
-        .sem-conteudo {
-            color: #687386;
-            padding: 10px 0;
-        }
+        /* ==========================================
+           MOBILE
+        ========================================== */
 
         @media (max-width: 900px) {
-            .cards-dashboard {
+
+            .menu {
+                grid-template-columns: repeat(3, 1fr);
+            }
+
+            .dashboard-cards {
                 grid-template-columns: repeat(2, 1fr);
             }
 
-            .formulario {
-                grid-template-columns: 1fr;
-            }
-
-            .campo-completo,
-            .flashcards-area,
-            .botoes-formulario {
-                grid-column: 1;
-            }
         }
 
-        @media (max-width: 600px) {
+
+        @media (max-width: 650px) {
+
             header {
-                padding: 15px 20px;
+                padding: 18px 5%;
             }
 
-            .container {
-                padding: 20px;
+            .professor-name {
+                display: none;
             }
 
-            .cards-dashboard {
+            .layout {
+                padding: 30px 18px;
+            }
+
+            .menu {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .form-grid {
                 grid-template-columns: 1fr;
             }
 
-            .flashcards-cabecalho {
+            .campo.full {
+                grid-column: auto;
+            }
+
+            .dashboard-cards {
+                grid-template-columns: 1fr;
+            }
+
+            .aluno-item {
                 flex-direction: column;
                 align-items: flex-start;
             }
 
-            .flashcard-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .atividade-topo {
+            .atividade-cabecalho {
                 flex-direction: column;
             }
+
         }
+
     </style>
+
 </head>
+
 
 <body>
 
-<header>
-    <div class="logo">GUTALKS</div>
 
-    <div class="professor-info">
-        <span id="nomeProfessor">Professor</span>
-        <button class="botao-sair" onclick="logout()">Sair</button>
-    </div>
-</header>
+    <header>
 
-<div class="container">
-
-    <div class="titulo-pagina">
-        <h1>Painel do Professor</h1>
-        <p>Gerencie seus alunos e organize a programação das aulas.</p>
-    </div>
-
-    <div class="cards-dashboard">
-
-        <div class="card-dashboard">
-            <div class="numero" id="totalAlunos">0</div>
-            <div class="descricao">Alunos</div>
+        <div class="logo">
+            GUTALKS
         </div>
 
-        <div class="card-dashboard">
-            <div class="numero" id="totalAtividades">0</div>
-            <div class="descricao">Atividades</div>
+
+        <div class="header-right">
+
+            <span
+                class="professor-name"
+                id="nomeProfessor">
+
+                Carregando...
+
+            </span>
+
+
+            <button
+                class="logout"
+                onclick="logout()">
+
+                Sair
+
+            </button>
+
         </div>
 
-        <div class="card-dashboard">
-            <div class="numero" id="totalConcluidas">0</div>
-            <div class="descricao">Concluídas</div>
-        </div>
+    </header>
 
-        <div class="card-dashboard">
-            <div class="numero" id="cicloSemana">-</div>
-            <div class="descricao">Ciclo / Semana</div>
-        </div>
 
-    </div>
+    <main class="layout">
 
-    <div class="menu">
 
-        <button
-            class="ativo"
-            onclick="mostrarSecao('alunos', this)"
-        >
-            Alunos
-        </button>
+        <!-- ==========================================
+             BOAS-VINDAS
+        ========================================== -->
 
-        <button
-            onclick="mostrarSecao('programacao', this)"
-        >
-            Programação
-        </button>
+        <section class="welcome">
 
-        <button
-            onclick="mostrarSecao('aulas', this)"
-        >
-            Aulas
-        </button>
+            <h1>
+                Painel do Professor 👨‍🏫
+            </h1>
 
-        <button
-            onclick="mostrarSecao('materiais', this)"
-        >
-            Materiais
-        </button>
+            <p>
+                Gerencie seus alunos e organize o conteúdo
+                do Gutalks.
+            </p>
 
-        <button
-            onclick="mostrarSecao('progresso', this)"
-        >
-            Progresso
-        </button>
+        </section>
 
-    </div>
 
-    <!-- ALUNOS -->
+        <!-- ==========================================
+             CARDS
+        ========================================== -->
 
-    <section id="secao-alunos" class="secao ativa">
+        <section class="dashboard-cards">
 
-        <div class="painel">
+            <div class="dashboard-card">
 
-            <h2>Meus alunos</h2>
+                <div>
+                    👥 Alunos
+                </div>
 
-            <div
-                id="listaAlunos"
-                class="lista-alunos"
-            >
+                <div
+                    class="numero"
+                    id="totalAlunos">
+
+                    0
+
+                </div>
+
+                <div class="texto">
+                    alunos cadastrados
+                </div>
+
             </div>
 
-        </div>
 
-    </section>
+            <div class="dashboard-card">
+
+                <div>
+                    📅 Atividades
+                </div>
+
+                <div
+                    class="numero"
+                    id="totalAtividades">
+
+                    0
+
+                </div>
+
+                <div class="texto">
+                    atividades cadastradas
+                </div>
+
+            </div>
 
 
-    <!-- PROGRAMAÇÃO -->
+            <div class="dashboard-card">
 
-    <section id="secao-programacao" class="secao">
+                <div>
+                    ✅ Concluídas
+                </div>
 
-        <div class="painel">
+                <div
+                    class="numero"
+                    id="totalConcluidas">
 
-            <h2>
-                Programação do aluno:
-                <span id="nomeAlunoProgramacao">
-                    Nenhum aluno selecionado
-                </span>
-            </h2>
+                    0
 
-            <div id="areaFormulario">
+                </div>
+
+                <div class="texto">
+                    atividades concluídas
+                </div>
+
+            </div>
+
+
+            <div class="dashboard-card">
+
+                <div>
+                    📚 Ciclo / Semana
+                </div>
+
+                <div
+                    class="numero"
+                    id="resumoCiclo">
+
+                    -
+
+                </div>
+
+                <div class="texto">
+                    aluno selecionado
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- ==========================================
+             MENU
+        ========================================== -->
+
+        <nav class="menu">
+
+            <button
+                class="ativo"
+                onclick="mostrarSecao('alunos', this)">
+
+                👥 Alunos
+
+            </button>
+
+
+            <button
+                onclick="mostrarSecao('programacao', this)">
+
+                📅 Programação
+
+            </button>
+
+
+            <button
+                onclick="mostrarSecao('aulas', this)">
+
+                📚 Aulas
+
+            </button>
+
+
+            <button
+                onclick="mostrarSecao('materiais', this)">
+
+                📖 Materiais
+
+            </button>
+
+
+            <button
+                onclick="mostrarSecao('progresso', this)">
+
+                📊 Progresso
+
+            </button>
+
+        </nav>
+
+
+        <!-- ==========================================
+             ALUNOS
+        ========================================== -->
+
+        <section
+            id="secao-alunos"
+            class="secao ativa">
+
+            <div class="painel">
+
+                <h2>
+                    👥 Meus alunos
+                </h2>
+
+                <p class="subtitulo">
+                    Selecione um aluno para gerenciar a programação.
+                </p>
+
+
+                <div
+                    id="alunosLista"
+                    class="alunos-lista">
+
+                    <div class="mensagem">
+                        Carregando alunos...
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- ==========================================
+             PROGRAMAÇÃO
+        ========================================== -->
+
+        <section
+            id="secao-programacao"
+            class="secao">
+
+
+            <div class="painel">
+
+                <h2>
+                    📅 Programação semanal
+                </h2>
+
+                <p class="subtitulo">
+                    Crie atividades específicas para o aluno,
+                    ciclo e semana selecionados.
+                </p>
+
+
+                <div
+                    id="alunoSelecionado"
+                    class="aluno-selecionado">
+
+                    <strong>
+                        Nenhum aluno selecionado
+                    </strong>
+
+                    <span>
+                        Volte em "Alunos" e selecione um aluno.
+                    </span>
+
+                </div>
+
+
+                <!-- FORMULÁRIO -->
 
                 <form
-                    id="formAtividade"
-                    class="formulario"
-                    onsubmit="salvarAtividade(event)"
-                >
+                    id="atividadeForm"
+                    onsubmit="salvarAtividade(event)">
+
 
                     <input
                         type="hidden"
                         id="atividadeId"
                     >
 
-                    <div class="campo">
 
-                        <label for="ciclo">
-                            Ciclo
-                        </label>
+                    <div class="form-grid">
 
-                        <input
-                            type="number"
-                            id="ciclo"
-                            min="1"
-                            required
-                        >
+
+                        <div class="campo">
+
+                            <label for="ciclo">
+                                Ciclo
+                            </label>
+
+                            <input
+                                type="number"
+                                id="ciclo"
+                                min="1"
+                                value="1"
+                                required
+                            >
+
+                        </div>
+
+
+                        <div class="campo">
+
+                            <label for="semana">
+                                Semana
+                            </label>
+
+                            <input
+                                type="number"
+                                id="semana"
+                                min="1"
+                                value="1"
+                                required
+                            >
+
+                        </div>
+
+
+                        <div class="campo">
+
+                            <label for="diaSemana">
+                                Dia da semana
+                            </label>
+
+                            <select
+                                id="diaSemana"
+                                required
+                            >
+
+                                <option value="1">
+                                    Segunda-feira
+                                </option>
+
+                                <option value="2">
+                                    Terça-feira
+                                </option>
+
+                                <option value="3">
+                                    Quarta-feira
+                                </option>
+
+                                <option value="4">
+                                    Quinta-feira
+                                </option>
+
+                                <option value="5">
+                                    Sexta-feira
+                                </option>
+
+                                <option value="6">
+                                    Sábado
+                                </option>
+
+                                <option value="7">
+                                    Domingo
+                                </option>
+
+                            </select>
+
+                        </div>
+
+
+                        <div class="campo">
+
+                            <label for="tipo">
+                                Tipo
+                            </label>
+
+                            <select
+                                id="tipo"
+                                required
+                            >
+
+                                <option value="flashcards">
+                                    Flashcards
+                                </option>
+
+                                <option value="pratica_oral">
+                                    Prática oral
+                                </option>
+
+                                <option value="listening">
+                                    Listening
+                                </option>
+
+                                <option value="reading">
+                                    Reading
+                                </option>
+
+                                <option value="revisao">
+                                    Revisão
+                                </option>
+
+                                <option value="pronuncia">
+                                    Pronúncia
+                                </option>
+
+                                <option value="escrita">
+                                    Escrita
+                                </option>
+
+                                <option value="conversacao">
+                                    Conversação
+                                </option>
+
+                                <option value="midia">
+                                    Mídia
+                                </option>
+
+                            </select>
+
+                        </div>
+
+
+                        <div class="campo full">
+
+                            <label for="titulo">
+                                Título da atividade
+                            </label>
+
+                            <input
+                                type="text"
+                                id="titulo"
+                                placeholder="Ex.: Prática de pronúncia"
+                                required
+                            >
+
+                        </div>
+
+
+                        <div class="campo full">
+
+                            <label for="descricao">
+                                Descrição
+                            </label>
+
+                            <textarea
+                                id="descricao"
+                                placeholder="Explique ao aluno o que ele deve fazer."
+                            ></textarea>
+
+                        </div>
+
+
+                        <div class="campo">
+
+                            <label for="link">
+                                Link
+                            </label>
+
+                            <input
+                                type="url"
+                                id="link"
+                                placeholder="https://..."
+                            >
+
+                        </div>
+
+
+                        <div class="campo">
+
+                            <label for="tempo">
+                                Tempo estimado (minutos)
+                            </label>
+
+                            <input
+                                type="number"
+                                id="tempo"
+                                min="1"
+                                placeholder="Ex.: 20"
+                            >
+
+                        </div>
 
                     </div>
 
-
-                    <div class="campo">
-
-                        <label for="semana">
-                            Semana
-                        </label>
-
-                        <input
-                            type="number"
-                            id="semana"
-                            min="1"
-                            required
-                        >
-
-                    </div>
-
-
-                    <div class="campo">
-
-                        <label for="diaSemana">
-                            Dia da semana
-                        </label>
-
-                        <select
-                            id="diaSemana"
-                            required
-                        >
-
-                            <option value="1">
-                                Segunda-feira
-                            </option>
-
-                            <option value="2">
-                                Terça-feira
-                            </option>
-
-                            <option value="3">
-                                Quarta-feira
-                            </option>
-
-                            <option value="4">
-                                Quinta-feira
-                            </option>
-
-                            <option value="5">
-                                Sexta-feira
-                            </option>
-
-                            <option value="6">
-                                Sábado
-                            </option>
-
-                            <option value="7">
-                                Domingo
-                            </option>
-
-                        </select>
-
-                    </div>
-
-
-                    <div class="campo">
-
-                        <label for="tipo">
-                            Tipo de atividade
-                        </label>
-
-                        <select
-                            id="tipo"
-                            onchange="alternarCamposFlashcards()"
-                            required
-                        >
-
-                            <option value="flashcards">
-                                Flashcards
-                            </option>
-
-                            <option value="pratica_oral">
-                                Prática oral
-                            </option>
-
-                            <option value="listening">
-                                Listening
-                            </option>
-
-                            <option value="reading">
-                                Reading
-                            </option>
-
-                            <option value="revisao">
-                                Revisão
-                            </option>
-
-                            <option value="pronuncia">
-                                Pronúncia
-                            </option>
-
-                            <option value="escrita">
-                                Escrita
-                            </option>
-
-                            <option value="conversacao">
-                                Conversação
-                            </option>
-
-                            <option value="midia">
-                                Mídia
-                            </option>
-
-                        </select>
-
-                    </div>
-
-
-                    <div class="campo campo-completo">
-
-                        <label for="titulo">
-                            Título
-                        </label>
-
-                        <input
-                            type="text"
-                            id="titulo"
-                            placeholder="Ex.: Flashcards da semana 1"
-                            required
-                        >
-
-                    </div>
-
-
-                    <div class="campo campo-completo">
-
-                        <label for="descricao">
-                            Descrição
-                        </label>
-
-                        <textarea
-                            id="descricao"
-                            placeholder="Descreva a atividade..."
-                        ></textarea>
-
-                    </div>
-
-
-                    <div class="campo">
-
-                        <label for="link">
-                            Link
-                        </label>
-
-                        <input
-                            type="url"
-                            id="link"
-                            placeholder="https://..."
-                        >
-
-                    </div>
-
-
-                    <div class="campo">
-
-                        <label for="tempo">
-                            Tempo (minutos)
-                        </label>
-
-                        <input
-                            type="number"
-                            id="tempo"
-                            min="0"
-                            placeholder="Ex.: 20"
-                        >
-
-                    </div>
-
-
-                    <!-- FLASHCARDS -->
 
                     <div
-                        id="flashcardsContainer"
-                        class="flashcards-area"
-                    >
-
-                        <div class="flashcards-cabecalho">
-
-                            <div>
-
-                                <h3>
-                                    🧠 Flashcards
-                                </h3>
-
-                                <p>
-                                    Adicione as palavras ou expressões
-                                    que entrarão no banco de revisão
-                                    deste aluno.
-                                </p>
-
-                            </div>
-
-                            <button
-                                type="button"
-                                class="botao-adicionar-card"
-                                onclick="adicionarFlashcard()"
-                            >
-                                + Adicionar flashcard
-                            </button>
-
-                        </div>
-
-                        <div
-                            id="listaFlashcards"
-                            class="lista-flashcards"
-                        >
-                        </div>
-
-                    </div>
+                        id="mensagemFormulario"
+                        style="
+                            margin-top: 15px;
+                            min-height: 20px;
+                        "
+                    ></div>
 
 
-                    <div class="botoes-formulario">
+                    <div class="acoes-formulario">
 
                         <button
                             type="submit"
-                            class="botao botao-principal"
-                        >
-                            Salvar atividade
+                            class="botao-principal"
+                            id="salvarButton">
+
+                            💾 Salvar atividade
+
                         </button>
+
 
                         <button
                             type="button"
-                            class="botao botao-secundario"
-                            onclick="limparFormulario()"
-                        >
-                            Limpar
+                            class="
+                                botao-principal
+                                botao-verde
+                            "
+                            onclick="limparFormulario()">
+
+                            ➕ Nova atividade
+
                         </button>
 
                     </div>
 
                 </form>
 
+            </div>
+
+
+            <!-- LISTA -->
+
+            <div class="painel">
+
+                <h2>
+                    Atividades cadastradas
+                </h2>
+
+
                 <div
-                    id="mensagemFormulario"
-                    class="mensagem"
-                >
-                </div>
-
-            </div>
-
-        </div>
-
-
-        <div class="painel">
-
-            <h2>
-                Atividades cadastradas
-            </h2>
-
-            <div id="listaAtividades">
-
-                <div class="sem-conteudo">
-                    Selecione um aluno para visualizar a programação.
-                </div>
-
-            </div>
-
-        </div>
-
-    </section>
-
-
-    <!-- AULAS -->
-
-    <section
-        id="secao-aulas"
-        class="secao"
-    >
-
-        <div class="painel">
-
-            <h2>Aulas</h2>
-
-            <p class="sem-conteudo">
-                Área de aulas em desenvolvimento.
-            </p>
-
-        </div>
-
-    </section>
-
-
-    <!-- MATERIAIS -->
-
-    <section
-        id="secao-materiais"
-        class="secao"
-    >
-
-        <div class="painel">
-
-            <h2>Materiais</h2>
-
-            <p class="sem-conteudo">
-                Área de materiais em desenvolvimento.
-            </p>
-
-        </div>
-
-    </section>
-
-
-    <!-- PROGRESSO -->
-
-    <section
-        id="secao-progresso"
-        class="secao"
-    >
-
-        <div class="painel">
-
-            <h2>Progresso</h2>
-
-            <p class="sem-conteudo">
-                Área de progresso em desenvolvimento.
-            </p>
-
-        </div>
-
-    </section>
-
-</div>
-
-
-<script>
-
-    let usuarioProfessor = null;
-    let alunoSelecionado = null;
-    let professorAtual = null;
-
-
-    // ==========================================
-    // SEGURANÇA / HTML
-    // ==========================================
-
-    function escaparHTML(texto) {
-
-        if (texto === null || texto === undefined) {
-            return "";
-        }
-
-        return String(texto)
-            .replace(/&/g, "&amp;")
-            .replace(/</g, "&lt;")
-            .replace(/>/g, "&gt;")
-            .replace(/"/g, "&quot;")
-            .replace(/'/g, "&#039;");
-    }
-
-
-    // ==========================================
-    // NAVEGAÇÃO
-    // ==========================================
-
-    function mostrarSecao(nome, botao) {
-
-        document
-            .querySelectorAll(".secao")
-            .forEach(secao => {
-                secao.classList.remove("ativa");
-            });
-
-        const secao = document.getElementById(
-            "secao-" + nome
-        );
-
-        if (secao) {
-            secao.classList.add("ativa");
-        }
-
-        document
-            .querySelectorAll(".menu button")
-            .forEach(button => {
-                button.classList.remove("ativo");
-            });
-
-        if (botao) {
-            botao.classList.add("ativo");
-        }
-
-    }
-
-
-    // ==========================================
-    // CARREGAR ALUNOS
-    // ==========================================
-
-    async function carregarAlunos() {
-
-        const lista = document.getElementById("listaAlunos");
-
-        lista.innerHTML =
-            "<p class='sem-conteudo'>Carregando alunos...</p>";
-
-        const {
-            data,
-            error
-        } = await supabase
-            .from("Alunos")
-            .select(
-                "id, user_id, nome, email, semana_atual, ciclo_atual"
-            )
-            .order("nome");
-
-        if (error) {
-
-            console.error(error);
-
-            lista.innerHTML =
-                "<p class='sem-conteudo'>Erro ao carregar alunos.</p>";
-
-            return;
-        }
-
-        document.getElementById("totalAlunos").textContent =
-            data.length;
-
-        if (!data.length) {
-
-            lista.innerHTML =
-                "<p class='sem-conteudo'>Nenhum aluno cadastrado.</p>";
-
-            return;
-        }
-
-        lista.innerHTML = "";
-
-        data.forEach(aluno => {
-
-            const card =
-                document.createElement("div");
-
-            card.className =
-                "aluno-card";
-
-            card.innerHTML = `
-
-                <h3>
-                    ${escaparHTML(aluno.nome)}
-                </h3>
-
-                <p>
-                    ${escaparHTML(aluno.email || "")}
-                </p>
-
-                <p>
-                    Ciclo:
-                    ${escaparHTML(aluno.ciclo_atual || "-")}
-                </p>
-
-                <p>
-                    Semana:
-                    ${escaparHTML(aluno.semana_atual || "-")}
-                </p>
-
-                <br>
-
-                <button
-                    class="botao botao-principal"
-                    onclick="selecionarAluno('${aluno.id}')"
-                >
-                    Gerenciar
-                </button>
-
-            `;
-
-            lista.appendChild(card);
-
-        });
-
-    }
-
-
-    // ==========================================
-    // SELECIONAR ALUNO
-    // ==========================================
-
-    async function selecionarAluno(id) {
-
-        const {
-            data: aluno,
-            error
-        } = await supabase
-            .from("Alunos")
-            .select(
-                "id, user_id, nome, email, semana_atual, ciclo_atual"
-            )
-            .eq("id", id)
-            .single();
-
-        if (error) {
-
-            console.error(error);
-
-            alert("Não foi possível carregar o aluno.");
-
-            return;
-        }
-
-        alunoSelecionado = aluno;
-
-        document.getElementById(
-            "nomeAlunoProgramacao"
-        ).textContent = aluno.nome;
-
-        document.getElementById("ciclo").value =
-            aluno.ciclo_atual || 1;
-
-        document.getElementById("semana").value =
-            aluno.semana_atual || 1;
-
-        mostrarProgramacao();
-
-    }
-
-
-    // ==========================================
-    // MOSTRAR PROGRAMAÇÃO
-    // ==========================================
-
-    function mostrarProgramacao() {
-
-        mostrarSecao(
-            "programacao",
-            document.querySelectorAll(".menu button")[1]
-        );
-
-        carregarAtividades();
-
-    }
-
-
-    // ==========================================
-    // CARREGAR ATIVIDADES
-    // ==========================================
-
-    async function carregarAtividades() {
-
-        const lista =
-            document.getElementById("listaAtividades");
-
-        if (!alunoSelecionado) {
-
-            lista.innerHTML =
-                "<p class='sem-conteudo'>Selecione um aluno.</p>";
-
-            return;
-        }
-
-        const ciclo =
-            Number(document.getElementById("ciclo").value);
-
-        const semana =
-            Number(document.getElementById("semana").value);
-
-        lista.innerHTML =
-            "<p class='sem-conteudo'>Carregando atividades...</p>";
-
-        const {
-            data,
-            error
-        } = await supabase
-            .from("programacao_semanal")
-            .select("*")
-            .eq(
-                "user_id",
-                alunoSelecionado.user_id
-            )
-            .eq("ciclo", ciclo)
-            .eq("semana", semana)
-            .order("dia_semana", {
-                ascending: true
-            });
-
-        if (error) {
-
-            console.error(error);
-
-            lista.innerHTML =
-                "<p class='sem-conteudo'>Erro ao carregar atividades.</p>";
-
-            return;
-        }
-
-        document.getElementById("totalAtividades").textContent =
-            data.length;
-
-        if (!data.length) {
-
-            lista.innerHTML =
-                "<p class='sem-conteudo'>Nenhuma atividade cadastrada para esta semana.</p>";
-
-            return;
-        }
-
-        lista.innerHTML = "";
-
-        data.forEach(atividade => {
-
-            const item =
-                document.createElement("div");
-
-            item.className =
-                "atividade-item";
-
-            item.innerHTML = `
-
-                <div class="atividade-topo">
-
-                    <div>
-
-                        <h3>
-                            ${escaparHTML(atividade.titulo)}
-                        </h3>
-
-                        <p>
-                            <strong>Dia:</strong>
-                            ${obterNomeDia(atividade.dia_semana)}
-                        </p>
-
-                        <p>
-                            <strong>Tipo:</strong>
-                            ${obterNomeTipo(atividade.tipo)}
-                        </p>
-
-                        ${
-                            atividade.descricao
-                            ? `
-                                <p>
-                                    ${escaparHTML(
-                                        atividade.descricao
-                                    )}
-                                </p>
-                            `
-                            : ""
-                        }
-
-                        ${
-                            atividade.tempo_minutos
-                            ? `
-                                <p>
-                                    <strong>Tempo:</strong>
-                                    ${atividade.tempo_minutos} minutos
-                                </p>
-                            `
-                            : ""
-                        }
-
-                    </div>
-
-                    <div class="atividade-acoes">
-
-                        <button
-                            class="botao botao-secundario"
-                            onclick="editarAtividade('${atividade.id}')"
-                        >
-                            Editar
-                        </button>
-
-                        <button
-                            class="botao botao-perigo"
-                            onclick="excluirAtividade('${atividade.id}')"
-                        >
-                            Excluir
-                        </button>
-
+                    id="atividadesLista"
+                    class="atividades-lista">
+
+                    <div class="mensagem">
+                        Selecione um aluno para visualizar as atividades.
                     </div>
 
                 </div>
 
-            `;
-
-            lista.appendChild(item);
-
-        });
-
-    }
-
-
-    // ==========================================
-    // NOMES
-    // ==========================================
-
-    function obterNomeDia(dia) {
-
-        const dias = {
-            1: "Segunda-feira",
-            2: "Terça-feira",
-            3: "Quarta-feira",
-            4: "Quinta-feira",
-            5: "Sexta-feira",
-            6: "Sábado",
-            7: "Domingo"
-        };
-
-        return dias[dia] || "-";
-
-    }
-
-
-    function obterNomeTipo(tipo) {
-
-        const tipos = {
-
-            flashcards: "Flashcards",
-            pratica_oral: "Prática oral",
-            listening: "Listening",
-            reading: "Reading",
-            revisao: "Revisão",
-            pronuncia: "Pronúncia",
-            escrita: "Escrita",
-            conversacao: "Conversação",
-            midia: "Mídia"
-
-        };
-
-        return tipos[tipo] || tipo;
-
-    }
-
-
-    // ==========================================
-    // FLASHCARDS
-    // ==========================================
-
-    function alternarCamposFlashcards() {
-
-        const tipo =
-            document.getElementById("tipo").value;
-
-        const container =
-            document.getElementById(
-                "flashcardsContainer"
-            );
-
-        if (tipo === "flashcards") {
-
-            container.classList.add("visivel");
-
-            const lista =
-                document.getElementById(
-                    "listaFlashcards"
-                );
-
-            if (lista.children.length === 0) {
-
-                adicionarFlashcard();
-
-            }
-
-        } else {
-
-            container.classList.remove("visivel");
-
-        }
-
-    }
-
-
-    function adicionarFlashcard(
-        frente = "",
-        verso = ""
-    ) {
-
-        const lista =
-            document.getElementById(
-                "listaFlashcards"
-            );
-
-        const item =
-            document.createElement("div");
-
-        item.className =
-            "flashcard-item";
-
-        item.innerHTML = `
-
-            <div class="flashcard-topo">
-
-                <span class="flashcard-numero">
-                    Flashcard
-                </span>
-
-                <button
-                    type="button"
-                    class="botao-remover-card"
-                    onclick="removerFlashcard(this)"
-                >
-                    Remover
-                </button>
-
             </div>
 
-            <div class="flashcard-grid">
+        </section>
 
-                <div class="flashcard-campo">
 
-                    <label>
-                        Frente
-                    </label>
+        <!-- ==========================================
+             AULAS
+        ========================================== -->
 
-                    <input
-                        type="text"
-                        class="flashcard-frente"
-                        placeholder="Ex.: although"
-                        value="${escaparHTML(frente)}"
-                    >
+        <section
+            id="secao-aulas"
+            class="secao">
 
-                </div>
+            <div class="painel">
 
-                <div class="flashcard-campo">
+                <h2>
+                    📚 Aulas
+                </h2>
 
-                    <label>
-                        Verso
-                    </label>
+                <p class="subtitulo">
+                    Área preparada para você organizar suas aulas.
+                </p>
 
-                    <textarea
-                        class="flashcard-verso"
-                        placeholder="Ex.: embora"
-                    >${escaparHTML(verso)}</textarea>
-
+                <div class="mensagem">
+                    🚧 O gerenciamento de aulas será conectado
+                    aqui na próxima etapa.
                 </div>
 
             </div>
 
-        `;
+        </section>
 
-        lista.appendChild(item);
 
-        atualizarNumeracaoFlashcards();
+        <!-- ==========================================
+             MATERIAIS
+        ========================================== -->
 
-    }
+        <section
+            id="secao-materiais"
+            class="secao">
 
+            <div class="painel">
 
-    function removerFlashcard(botao) {
+                <h2>
+                    📖 Materiais
+                </h2>
 
-        const item =
-            botao.closest(".flashcard-item");
+                <p class="subtitulo">
+                    Aqui você poderá disponibilizar PDFs,
+                    apresentações, links e outros materiais.
+                </p>
 
-        if (item) {
-            item.remove();
-        }
+                <div class="mensagem">
+                    🚧 O gerenciamento de materiais será conectado
+                    aqui na próxima etapa.
+                </div>
 
-        atualizarNumeracaoFlashcards();
+            </div>
 
-    }
+        </section>
 
 
-    function atualizarNumeracaoFlashcards() {
+        <!-- ==========================================
+             PROGRESSO
+        ========================================== -->
 
-        const itens =
-            document.querySelectorAll(
-                ".flashcard-item"
-            );
+        <section
+            id="secao-progresso"
+            class="secao">
 
-        itens.forEach((item, index) => {
+            <div class="painel">
 
-            const numero =
-                item.querySelector(
-                    ".flashcard-numero"
-                );
+                <h2>
+                    📊 Progresso dos alunos
+                </h2>
 
-            numero.textContent =
-                `Flashcard ${index + 1}`;
+                <p class="subtitulo">
+                    Veja o desempenho e a evolução de cada aluno.
+                </p>
 
-        });
+                <div class="mensagem">
+                    🚧 O painel detalhado de progresso será conectado
+                    aqui na próxima etapa.
+                </div>
 
-    }
+            </div>
 
+        </section>
 
-    function obterFlashcardsFormulario() {
 
-        const itens =
-            document.querySelectorAll(
-                ".flashcard-item"
-            );
+    </main>
 
-        const cards = [];
 
-        itens.forEach(item => {
+    <footer>
 
-            const frente =
-                item
-                    .querySelector(".flashcard-frente")
-                    .value
-                    .trim();
+        © 2026 Gutalks — Painel do Professor
 
-            const verso =
-                item
-                    .querySelector(".flashcard-verso")
-                    .value
-                    .trim();
+    </footer>
 
-            if (frente && verso) {
 
-                cards.push({
-                    frente,
-                    verso
-                });
+    <script>
 
-            }
+        // ==========================================
+        // VARIÁVEIS
+        // ==========================================
 
-        });
+        let usuarioProfessor = null;
 
-        return cards;
+        let alunoSelecionado = null;
 
-    }
-
-
-    // ==========================================
-    // SALVAR FLASHCARDS NO SUPABASE
-    // ==========================================
-
-    async function salvarFlashcards(cards) {
-
-        if (!cards.length) {
-            return {
-                sucesso: true
-            };
-        }
-
-        const dadosFlashcards =
-            cards.map(card => ({
-
-                user_id:
-                    alunoSelecionado.user_id,
-
-                frente:
-                    card.frente,
-
-                verso:
-                    card.verso,
-
-                intervalo:
-                    0,
-
-                facilidade:
-                    2.5,
-
-                revisoes:
-                    0,
-
-                proxima_revisao:
-                    null,
-
-                data_introducao:
-                    null
-
-            }));
-
-
-        const {
-            data,
-            error
-        } = await supabase
-            .from("flashcards")
-            .insert(dadosFlashcards)
-            .select();
-
-        if (error) {
-
-            console.error(
-                "Erro ao salvar flashcards:",
-                error
-            );
-
-            return {
-                sucesso: false,
-                erro: error
-            };
-
-        }
-
-        console.log(
-            "Flashcards salvos:",
-            data
-        );
-
-        return {
-            sucesso: true,
-            data
-        };
-
-    }
-
-
-    function limparFlashcards() {
-
-        document.getElementById(
-            "listaFlashcards"
-        ).innerHTML = "";
-
-    }
-
-
-    // ==========================================
-    // SALVAR ATIVIDADE
-    // ==========================================
-
-    async function salvarAtividade(event) {
-
-        event.preventDefault();
-
-        if (!alunoSelecionado) {
-
-            mostrarMensagemFormulario(
-                "Selecione um aluno antes de salvar.",
-                "erro"
-            );
-
-            return;
-        }
-
-        const atividadeId =
-            document.getElementById(
-                "atividadeId"
-            ).value;
-
-        const ciclo =
-            Number(
-                document.getElementById(
-                    "ciclo"
-                ).value
-            );
-
-        const semana =
-            Number(
-                document.getElementById(
-                    "semana"
-                ).value
-            );
-
-        const diaSemana =
-            Number(
-                document.getElementById(
-                    "diaSemana"
-                ).value
-            );
-
-        const tipo =
-            document.getElementById(
-                "tipo"
-            ).value;
-
-        const titulo =
-            document.getElementById(
-                "titulo"
-            ).value.trim();
-
-        const descricao =
-            document.getElementById(
-                "descricao"
-            ).value.trim();
-
-        const link =
-            document.getElementById(
-                "link"
-            ).value.trim();
-
-        const tempo =
-            document.getElementById(
-                "tempo"
-            ).value;
-
-
-        // Se for flashcards,
-        // coleta os cards do formulário
-
-        let cards = [];
-
-        if (tipo === "flashcards") {
-
-            cards =
-                obterFlashcardsFormulario();
-
-            if (!cards.length) {
-
-                mostrarMensagemFormulario(
-                    "Adicione pelo menos um flashcard preenchido.",
-                    "erro"
-                );
-
-                return;
-            }
-
-        }
-
-
-        const dados = {
-
-            user_id:
-                alunoSelecionado.user_id,
-
-            ciclo,
-
-            semana,
-
-            dia_semana:
-                diaSemana,
-
-            titulo,
-
-            tipo,
-
-            descricao:
-                descricao || null,
-
-            link:
-                link || null,
-
-            tempo_minutos:
-                tempo
-                    ? Number(tempo)
-                    : null
-
-        };
-
-
-        let resultado;
+        let professorAtual = null;
 
 
         // ==========================================
-        // EDITAR
+        // ESCAPAR HTML
         // ==========================================
 
-        if (atividadeId) {
-
-            resultado =
-                await supabase
-                    .from(
-                        "programacao_semanal"
-                    )
-                    .update(dados)
-                    .eq(
-                        "id",
-                        atividadeId
-                    )
-                    .select()
-                    .single();
-
-        }
-
-        // ==========================================
-        // NOVA ATIVIDADE
-        // ==========================================
-
-        else {
-
-            resultado =
-                await supabase
-                    .from(
-                        "programacao_semanal"
-                    )
-                    .insert(dados)
-                    .select()
-                    .single();
-
-        }
-
-
-        if (resultado.error) {
-
-            console.error(
-                resultado.error
-            );
-
-            mostrarMensagemFormulario(
-                "Erro ao salvar atividade: " +
-                resultado.error.message,
-                "erro"
-            );
-
-            return;
-
-        }
-
-
-        // ==========================================
-        // NOVOS FLASHCARDS
-        // ==========================================
-
-        /*
-            Os flashcards são adicionados ao banco
-            apenas quando estamos criando uma nova
-            atividade.
-
-            Ao editar uma atividade existente,
-            não criamos novamente os cards.
-        */
-
-        if (
-            tipo === "flashcards" &&
-            !atividadeId
-        ) {
-
-            const resultadoFlashcards =
-                await salvarFlashcards(cards);
+        function escaparHTML(texto) {
 
             if (
-                !resultadoFlashcards.sucesso
+                texto === null ||
+                texto === undefined
             ) {
+                return "";
+            }
 
-                mostrarMensagemFormulario(
-                    "A atividade foi salva, mas ocorreu um erro ao salvar os flashcards: " +
-                    resultadoFlashcards.erro.message,
-                    "erro"
+
+            return String(texto)
+
+                .replace(
+                    /&/g,
+                    "&amp;"
+                )
+
+                .replace(
+                    /</g,
+                    "&lt;"
+                )
+
+                .replace(
+                    />/g,
+                    "&gt;"
+                )
+
+                .replace(
+                    /"/g,
+                    "&quot;"
+                )
+
+                .replace(
+                    /'/g,
+                    "&#039;"
                 );
+
+        }
+
+
+        // ==========================================
+        // MENU
+        // ==========================================
+
+        function mostrarSecao(
+            nome,
+            botao
+        ) {
+
+            document
+                .querySelectorAll(".secao")
+                .forEach(
+                    secao => {
+
+                        secao.classList.remove(
+                            "ativa"
+                        );
+
+                    }
+                );
+
+
+            document
+                .querySelectorAll(".menu button")
+                .forEach(
+                    item => {
+
+                        item.classList.remove(
+                            "ativo"
+                        );
+
+                    }
+                );
+
+
+            document
+                .getElementById(
+                    "secao-" + nome
+                )
+                .classList.add(
+                    "ativa"
+                );
+
+
+            botao.classList.add(
+                "ativo"
+            );
+
+
+            if (
+                nome === "programacao" &&
+                alunoSelecionado
+            ) {
 
                 carregarAtividades();
 
-                return;
-
             }
 
         }
 
 
-        mostrarMensagemFormulario(
-            atividadeId
-                ? "Atividade atualizada com sucesso!"
-                : "Atividade criada com sucesso!",
-            "sucesso"
-        );
+        // ==========================================
+        // CARREGAR ALUNOS
+        // ==========================================
+
+        async function carregarAlunos() {
+
+            const container =
+                document.getElementById(
+                    "alunosLista"
+                );
 
 
-        limparFormulario();
+            const {
+                data,
+                error
+            } = await supabaseClient
 
-        carregarAtividades();
+                .from("Alunos")
 
-    }
+                .select(
+                    "id, user_id, nome, email, semana_atual, ciclo_atual"
+                )
+
+                .order(
+                    "nome",
+                    {
+                        ascending: true
+                    }
+                );
 
 
-    // ==========================================
-    // EDITAR ATIVIDADE
-    // ==========================================
+            if (error) {
 
-    async function editarAtividade(id) {
+                console.error(
+                    "Erro ao carregar alunos:",
+                    error
+                );
 
-        const {
-            data,
-            error
-        } = await supabase
-            .from(
-                "programacao_semanal"
-            )
-            .select("*")
-            .eq("id", id)
-            .single();
 
-        if (error) {
+                container.innerHTML = `
 
-            console.error(error);
+                    <div class="mensagem erro">
 
-            alert(
-                "Não foi possível carregar a atividade."
-            );
+                        Não foi possível carregar os alunos.
 
-            return;
+                        <br><br>
+
+                        ${escaparHTML(
+                            error.message
+                        )}
+
+                    </div>
+
+                `;
+
+                return;
+
+            }
+
+
+            const alunos =
+                data || [];
+
+
+            document.getElementById(
+                "totalAlunos"
+            ).textContent =
+                alunos.length;
+
+
+            if (
+                alunos.length === 0
+            ) {
+
+                container.innerHTML = `
+
+                    <div class="mensagem">
+
+                        Nenhum aluno cadastrado.
+
+                    </div>
+
+                `;
+
+                return;
+
+            }
+
+
+            container.innerHTML =
+
+                alunos
+                    .map(
+                        aluno => `
+
+                            <div class="aluno-item">
+
+                                <div class="aluno-info">
+
+                                    <div class="aluno-nome">
+
+                                        ${escaparHTML(
+                                            aluno.nome
+                                        )}
+
+                                    </div>
+
+                                    <div class="aluno-email">
+
+                                        ${escaparHTML(
+                                            aluno.email
+                                        )}
+
+                                    </div>
+
+                                    <div class="aluno-status">
+
+                                        Ciclo ${Number(
+                                            aluno.ciclo_atual
+                                        ) || 1}
+
+                                        •
+
+                                        Semana ${Number(
+                                            aluno.semana_atual
+                                        ) || 1}
+
+                                    </div>
+
+                                </div>
+
+
+                                <button
+                                    class="botao-principal"
+                                    onclick="
+                                        selecionarAluno(
+                                            '${String(
+                                                aluno.id
+                                            ).replace(
+                                                /'/g,
+                                                "\\'"
+                                            )}'
+                                        )
+                                    "
+                                >
+
+                                    Gerenciar
+
+                                </button>
+
+                            </div>
+
+                        `
+                    )
+                    .join("");
 
         }
 
 
-        document.getElementById(
-            "atividadeId"
-        ).value =
-            data.id;
+        // ==========================================
+        // SELECIONAR ALUNO
+        // ==========================================
 
-        document.getElementById(
-            "ciclo"
-        ).value =
-            data.ciclo;
+        async function selecionarAluno(
+            alunoId
+        ) {
 
-        document.getElementById(
-            "semana"
-        ).value =
-            data.semana;
+            const {
+                data: aluno,
+                error
+            } = await supabaseClient
 
-        document.getElementById(
-            "diaSemana"
-        ).value =
-            data.dia_semana;
+                .from("Alunos")
 
-        document.getElementById(
-            "tipo"
-        ).value =
-            data.tipo;
+                .select(
+                    "id, user_id, nome, email, semana_atual, ciclo_atual"
+                )
 
-        document.getElementById(
-            "titulo"
-        ).value =
-            data.titulo || "";
+                .eq(
+                    "id",
+                    alunoId
+                )
 
-        document.getElementById(
-            "descricao"
-        ).value =
-            data.descricao || "";
-
-        document.getElementById(
-            "link"
-        ).value =
-            data.link || "";
-
-        document.getElementById(
-            "tempo"
-        ).value =
-            data.tempo_minutos || "";
+                .single();
 
 
-        limparFlashcards();
+            if (error) {
 
-        alternarCamposFlashcards();
-
-        window.scrollTo({
-            top: 0,
-            behavior: "smooth"
-        });
-
-    }
+                console.error(
+                    "Erro ao selecionar aluno:",
+                    error
+                );
 
 
-    // ==========================================
-    // EXCLUIR ATIVIDADE
-    // ==========================================
+                alert(
+                    "Não foi possível selecionar o aluno."
+                );
 
-    async function excluirAtividade(id) {
+                return;
 
-        const confirmar =
-            confirm(
-                "Tem certeza que deseja excluir esta atividade?"
-            );
-
-        if (!confirmar) {
-            return;
-        }
+            }
 
 
-        const {
-            error
-        } = await supabase
-            .from(
-                "programacao_semanal"
-            )
-            .delete()
-            .eq(
-                "id",
-                id
-            );
+            alunoSelecionado =
+                aluno;
 
-
-        if (error) {
-
-            console.error(error);
-
-            alert(
-                "Erro ao excluir atividade."
-            );
-
-            return;
-
-        }
-
-
-        carregarAtividades();
-
-    }
-
-
-    // ==========================================
-    // LIMPAR FORMULÁRIO
-    // ==========================================
-
-    function limparFormulario() {
-
-        document.getElementById(
-            "formAtividade"
-        ).reset();
-
-        document.getElementById(
-            "atividadeId"
-        ).value = "";
-
-
-        limparFlashcards();
-
-        alternarCamposFlashcards();
-
-
-        if (alunoSelecionado) {
 
             document.getElementById(
                 "ciclo"
             ).value =
-                alunoSelecionado.ciclo_atual || 1;
+                Number(
+                    aluno.ciclo_atual
+                ) || 1;
+
 
             document.getElementById(
                 "semana"
             ).value =
-                alunoSelecionado.semana_atual || 1;
+                Number(
+                    aluno.semana_atual
+                ) || 1;
+
+
+            document.getElementById(
+                "alunoSelecionado"
+            ).innerHTML = `
+
+                <strong>
+
+                    ${escaparHTML(
+                        aluno.nome
+                    )}
+
+                </strong>
+
+                <span>
+
+                    ${escaparHTML(
+                        aluno.email
+                    )}
+
+                    •
+
+                    Ciclo atual:
+                    ${Number(
+                        aluno.ciclo_atual
+                    ) || 1}
+
+                    •
+
+                    Semana atual:
+                    ${Number(
+                        aluno.semana_atual
+                    ) || 1}
+
+                </span>
+
+            `;
+
+
+            document.getElementById(
+                "resumoCiclo"
+            ).textContent =
+
+                `${Number(
+                    aluno.ciclo_atual
+                ) || 1}/${Number(
+                    aluno.semana_atual
+                ) || 1}`;
+
+
+            mostrarProgramacao();
+
+
+            await carregarAtividades();
 
         }
 
-    }
+
+        // ==========================================
+        // MOSTRAR PROGRAMAÇÃO
+        // ==========================================
+
+        function mostrarProgramacao() {
+
+            document
+                .querySelectorAll(".secao")
+                .forEach(
+                    secao => {
+
+                        secao.classList.remove(
+                            "ativa"
+                        );
+
+                    }
+                );
 
 
-    // ==========================================
-    // MENSAGEM
-    // ==========================================
+            document
+                .querySelectorAll(".menu button")
+                .forEach(
+                    botao => {
 
-    function mostrarMensagemFormulario(
-        mensagem,
-        tipo
-    ) {
+                        botao.classList.remove(
+                            "ativo"
+                        );
 
-        const elemento =
+                    }
+                );
+
+
+            document
+                .getElementById(
+                    "secao-programacao"
+                )
+                .classList.add(
+                    "ativa"
+                );
+
+
+            const botoes =
+                document.querySelectorAll(
+                    ".menu button"
+                );
+
+
+            botoes[1].classList.add(
+                "ativo"
+            );
+
+        }
+
+
+        // ==========================================
+        // CARREGAR ATIVIDADES
+        // ==========================================
+
+        async function carregarAtividades() {
+
+            const container =
+                document.getElementById(
+                    "atividadesLista"
+                );
+
+
+            if (
+                !alunoSelecionado
+            ) {
+
+                container.innerHTML = `
+
+                    <div class="mensagem">
+
+                        Selecione um aluno.
+
+                    </div>
+
+                `;
+
+                return;
+
+            }
+
+
+            const ciclo =
+                Number(
+                    document.getElementById(
+                        "ciclo"
+                    ).value
+                ) || 1;
+
+
+            const semana =
+                Number(
+                    document.getElementById(
+                        "semana"
+                    ).value
+                ) || 1;
+
+
+            const {
+                data,
+                error
+            } = await supabaseClient
+
+                .from(
+                    "programacao_semanal"
+                )
+
+                .select("*")
+
+                .eq(
+                    "user_id",
+                    alunoSelecionado.user_id
+                )
+
+                .eq(
+                    "ciclo",
+                    ciclo
+                )
+
+                .eq(
+                    "semana",
+                    semana
+                )
+
+                .order(
+                    "dia_semana",
+                    {
+                        ascending: true
+                    }
+                );
+
+
+            if (error) {
+
+                console.error(
+                    "Erro ao carregar atividades:",
+                    error
+                );
+
+
+                container.innerHTML = `
+
+                    <div class="mensagem erro">
+
+                        Não foi possível carregar
+                        as atividades.
+
+                        <br><br>
+
+                        ${escaparHTML(
+                            error.message
+                        )}
+
+                    </div>
+
+                `;
+
+                return;
+
+            }
+
+
+            const atividades =
+                data || [];
+
+
+            document.getElementById(
+                "totalAtividades"
+            ).textContent =
+                atividades.length;
+
+
+            document.getElementById(
+                "totalConcluidas"
+            ).textContent =
+                atividades.filter(
+                    atividade =>
+                        atividade.concluida
+                ).length;
+
+
+            if (
+                atividades.length === 0
+            ) {
+
+                container.innerHTML = `
+
+                    <div class="mensagem">
+
+                        Nenhuma atividade cadastrada
+                        para o Ciclo ${ciclo},
+                        Semana ${semana}.
+
+                    </div>
+
+                `;
+
+                return;
+
+            }
+
+
+            container.innerHTML =
+
+                atividades
+
+                    .map(
+                        atividade => `
+
+                            <div class="atividade-item">
+
+                                <div class="atividade-cabecalho">
+
+                                    <div>
+
+                                        <div
+                                            class="atividade-titulo"
+                                        >
+
+                                            ${escaparHTML(
+                                                atividade.titulo
+                                            )}
+
+                                        </div>
+
+                                        <div
+                                            class="atividade-meta"
+                                        >
+
+                                            ${obterNomeDia(
+                                                atividade.dia_semana
+                                            )}
+
+                                            •
+
+                                            ${obterNomeTipo(
+                                                atividade.tipo
+                                            )}
+
+                                            ${
+                                                atividade.tempo_minutos
+                                                    ?
+
+                                                    ` • ${atividade.tempo_minutos} min`
+
+                                                    :
+
+                                                    ""
+                                            }
+
+                                            •
+
+                                            ${
+                                                atividade.concluida
+                                                    ?
+
+                                                    "✅ Concluída"
+
+                                                    :
+
+                                                    "⏳ Pendente"
+                                            }
+
+                                        </div>
+
+                                    </div>
+
+                                </div>
+
+
+                                ${
+                                    atividade.descricao
+                                        ?
+
+                                        `
+                                            <div
+                                                class="atividade-descricao"
+                                            >
+
+                                                ${escaparHTML(
+                                                    atividade.descricao
+                                                )}
+
+                                            </div>
+                                        `
+
+                                        :
+
+                                        ""
+                                }
+
+
+                                <div
+                                    class="atividade-acoes"
+                                >
+
+                                    <button
+                                        class="
+                                            botao-pequeno
+                                            botao-editar
+                                        "
+                                        onclick="
+                                            editarAtividade(
+                                                ${atividade.id}
+                                            )
+                                        "
+                                    >
+
+                                        ✏️ Editar
+
+                                    </button>
+
+
+                                    <button
+                                        class="
+                                            botao-pequeno
+                                            botao-excluir
+                                        "
+                                        onclick="
+                                            excluirAtividade(
+                                                ${atividade.id}
+                                            )
+                                        "
+                                    >
+
+                                        🗑️ Excluir
+
+                                    </button>
+
+                                </div>
+
+                            </div>
+
+                        `
+                    )
+                    .join("");
+
+        }
+
+
+        // ==========================================
+        // NOME DO DIA
+        // ==========================================
+
+        function obterNomeDia(
+            dia
+        ) {
+
+            const dias = {
+
+                1: "Segunda-feira",
+                2: "Terça-feira",
+                3: "Quarta-feira",
+                4: "Quinta-feira",
+                5: "Sexta-feira",
+                6: "Sábado",
+                7: "Domingo"
+
+            };
+
+
+            return dias[Number(dia)] ||
+                "Dia";
+
+        }
+
+
+        // ==========================================
+        // NOME DO TIPO
+        // ==========================================
+
+        function obterNomeTipo(
+            tipo
+        ) {
+
+            const tipos = {
+
+                flashcards: "Flashcards",
+                pratica_oral: "Prática oral",
+                listening: "Listening",
+                reading: "Reading",
+                revisao: "Revisão",
+                pronuncia: "Pronúncia",
+                escrita: "Escrita",
+                conversacao: "Conversação",
+                midia: "Mídia"
+
+            };
+
+
+            return tipos[tipo] ||
+                "Atividade";
+
+        }
+
+
+        // ==========================================
+        // SALVAR ATIVIDADE
+        // ==========================================
+
+        async function salvarAtividade(
+            event
+        ) {
+
+            event.preventDefault();
+
+
+            if (
+                !alunoSelecionado
+            ) {
+
+                mostrarMensagemFormulario(
+                    "Selecione um aluno antes de salvar.",
+                    true
+                );
+
+                return;
+
+            }
+
+
+            const ciclo =
+                Number(
+                    document.getElementById(
+                        "ciclo"
+                    ).value
+                );
+
+
+            const semana =
+                Number(
+                    document.getElementById(
+                        "semana"
+                    ).value
+                );
+
+
+            const diaSemana =
+                Number(
+                    document.getElementById(
+                        "diaSemana"
+                    ).value
+                );
+
+
+            const tipo =
+                document.getElementById(
+                    "tipo"
+                ).value;
+
+
+            const titulo =
+                document.getElementById(
+                    "titulo"
+                ).value.trim();
+
+
+            const descricao =
+                document.getElementById(
+                    "descricao"
+                ).value.trim();
+
+
+            const link =
+                document.getElementById(
+                    "link"
+                ).value.trim();
+
+
+            const tempo =
+                document.getElementById(
+                    "tempo"
+                ).value;
+
+
+            const atividadeId =
+                document.getElementById(
+                    "atividadeId"
+                ).value;
+
+
+            if (
+                !ciclo ||
+                !semana ||
+                !diaSemana ||
+                !titulo
+            ) {
+
+                mostrarMensagemFormulario(
+                    "Preencha os campos obrigatórios.",
+                    true
+                );
+
+                return;
+
+            }
+
+
+            const dados = {
+
+                user_id:
+                    alunoSelecionado.user_id,
+
+                ciclo:
+                    ciclo,
+
+                semana:
+                    semana,
+
+                dia_semana:
+                    diaSemana,
+
+                titulo:
+                    titulo,
+
+                tipo:
+                    tipo,
+
+                descricao:
+                    descricao || null,
+
+                link:
+                    link || null,
+
+                tempo_minutos:
+                    tempo
+                        ? Number(tempo)
+                        : null
+
+            };
+
+
+            const button =
+                document.getElementById(
+                    "salvarButton"
+                );
+
+
+            button.disabled = true;
+
+            button.textContent =
+                "Salvando...";
+
+
+            let error;
+
+
+            if (
+                atividadeId
+            ) {
+
+                const resposta =
+                    await supabaseClient
+
+                        .from(
+                            "programacao_semanal"
+                        )
+
+                        .update(
+                            dados
+                        )
+
+                        .eq(
+                            "id",
+                            atividadeId
+                        )
+
+                        .eq(
+                            "user_id",
+                            alunoSelecionado.user_id
+                        );
+
+
+                error =
+                    resposta.error;
+
+            }
+
+            else {
+
+                const resposta =
+                    await supabaseClient
+
+                        .from(
+                            "programacao_semanal"
+                        )
+
+                        .insert(
+                            dados
+                        );
+
+
+                error =
+                    resposta.error;
+
+            }
+
+
+            if (error) {
+
+                console.error(
+                    "Erro ao salvar atividade:",
+                    error
+                );
+
+
+                mostrarMensagemFormulario(
+                    error.message,
+                    true
+                );
+
+
+                button.disabled = false;
+
+                button.textContent =
+                    "💾 Salvar atividade";
+
+                return;
+
+            }
+
+
+            mostrarMensagemFormulario(
+                "Atividade salva com sucesso!",
+                false
+            );
+
+
+            limparFormulario();
+
+
+            await carregarAtividades();
+
+
+            button.disabled = false;
+
+            button.textContent =
+                "💾 Salvar atividade";
+
+        }
+
+
+        // ==========================================
+        // EDITAR ATIVIDADE
+        // ==========================================
+
+        async function editarAtividade(
+            id
+        ) {
+
+            if (
+                !alunoSelecionado
+            ) {
+
+                return;
+
+            }
+
+
+            const {
+                data: atividade,
+                error
+            } = await supabaseClient
+
+                .from(
+                    "programacao_semanal"
+                )
+
+                .select("*")
+
+                .eq(
+                    "id",
+                    id
+                )
+
+                .eq(
+                    "user_id",
+                    alunoSelecionado.user_id
+                )
+
+                .single();
+
+
+            if (error) {
+
+                alert(
+                    "Não foi possível carregar a atividade."
+                );
+
+                return;
+
+            }
+
+
+            document.getElementById(
+                "atividadeId"
+            ).value =
+                atividade.id;
+
+
+            document.getElementById(
+                "ciclo"
+            ).value =
+                atividade.ciclo;
+
+
+            document.getElementById(
+                "semana"
+            ).value =
+                atividade.semana;
+
+
+            document.getElementById(
+                "diaSemana"
+            ).value =
+                atividade.dia_semana;
+
+
+            document.getElementById(
+                "tipo"
+            ).value =
+                atividade.tipo;
+
+
+            document.getElementById(
+                "titulo"
+            ).value =
+                atividade.titulo || "";
+
+
+            document.getElementById(
+                "descricao"
+            ).value =
+                atividade.descricao || "";
+
+
+            document.getElementById(
+                "link"
+            ).value =
+                atividade.link || "";
+
+
+            document.getElementById(
+                "tempo"
+            ).value =
+                atividade.tempo_minutos || "";
+
+
+            document.getElementById(
+                "salvarButton"
+            ).textContent =
+                "💾 Atualizar atividade";
+
+
+            mostrarMensagemFormulario(
+                "Editando atividade.",
+                false
+            );
+
+        }
+
+
+        // ==========================================
+        // EXCLUIR ATIVIDADE
+        // ==========================================
+
+        async function excluirAtividade(
+            id
+        ) {
+
+            if (
+                !alunoSelecionado
+            ) {
+
+                return;
+
+            }
+
+
+            const confirmar =
+                confirm(
+                    "Deseja realmente excluir esta atividade?"
+                );
+
+
+            if (!confirmar) {
+
+                return;
+
+            }
+
+
+            const {
+                error
+            } = await supabaseClient
+
+                .from(
+                    "programacao_semanal"
+                )
+
+                .delete()
+
+                .eq(
+                    "id",
+                    id
+                )
+
+                .eq(
+                    "user_id",
+                    alunoSelecionado.user_id
+                );
+
+
+            if (error) {
+
+                console.error(
+                    "Erro ao excluir atividade:",
+                    error
+                );
+
+
+                alert(
+                    "Não foi possível excluir a atividade."
+                );
+
+                return;
+
+            }
+
+
+            await carregarAtividades();
+
+        }
+
+
+        // ==========================================
+        // LIMPAR FORMULÁRIO
+        // ==========================================
+
+        function limparFormulario() {
+
+            document.getElementById(
+                "atividadeForm"
+            ).reset();
+
+
+            document.getElementById(
+                "atividadeId"
+            ).value =
+                "";
+
+
+            if (
+                alunoSelecionado
+            ) {
+
+                document.getElementById(
+                    "ciclo"
+                ).value =
+                    Number(
+                        alunoSelecionado.ciclo_atual
+                    ) || 1;
+
+
+                document.getElementById(
+                    "semana"
+                ).value =
+                    Number(
+                        alunoSelecionado.semana_atual
+                    ) || 1;
+
+            }
+
+            else {
+
+                document.getElementById(
+                    "ciclo"
+                ).value =
+                    1;
+
+
+                document.getElementById(
+                    "semana"
+                ).value =
+                    1;
+
+            }
+
+
+            document.getElementById(
+                "diaSemana"
+            ).value =
+                1;
+
+
+            document.getElementById(
+                "tipo"
+            ).value =
+                "flashcards";
+
+
             document.getElementById(
                 "mensagemFormulario"
-            );
-
-        elemento.textContent =
-            mensagem;
-
-        elemento.className =
-            "mensagem " + tipo;
+            ).textContent =
+                "";
 
 
-        setTimeout(() => {
+            document.getElementById(
+                "salvarButton"
+            ).textContent =
+                "💾 Salvar atividade";
+
+        }
+
+
+        // ==========================================
+        // MENSAGEM DO FORMULÁRIO
+        // ==========================================
+
+        function mostrarMensagemFormulario(
+            texto,
+            erro
+        ) {
+
+            const elemento =
+                document.getElementById(
+                    "mensagemFormulario"
+                );
+
+
+            elemento.textContent =
+                texto;
+
 
             elemento.className =
-                "mensagem";
-
-        }, 5000);
-
-    }
-
-
-    // ==========================================
-    // VERIFICAR PROFESSOR
-    // ==========================================
-
-    async function verificarProfessor() {
-
-        const {
-            data: {
-                user
-            },
-            error
-        } = await supabase.auth.getUser();
-
-
-        if (
-            error ||
-            !user
-        ) {
-
-            window.location.href =
-                "login.html";
-
-            return;
+                erro
+                    ? "erro"
+                    : "sucesso";
 
         }
 
 
-        usuarioProfessor =
-            user;
+        // ==========================================
+        // VERIFICAR PROFESSOR
+        // ==========================================
+
+        async function verificarProfessor() {
+
+            try {
+
+                const {
+                    data: {
+                        session
+                    },
+                    error: sessionError
+                } =
+                    await supabaseClient
+                        .auth
+                        .getSession();
 
 
-        const {
-            data: professor,
-            error: erroProfessor
-        } = await supabase
-            .from("Professores")
-            .select("*")
-            .eq(
-                "user_id",
-                user.id
-            )
-            .single();
+                if (
+                    sessionError ||
+                    !session
+                ) {
+
+                    window.location.href =
+                        "login.html";
+
+                    return;
+
+                }
 
 
-        if (
-            erroProfessor ||
-            !professor
-        ) {
+                usuarioProfessor =
+                    session.user;
 
-            console.error(
-                erroProfessor
-            );
 
-            alert(
-                "Usuário não autorizado como professor."
-            );
+                const {
+                    data: professor,
+                    error: professorError
+                } =
+                    await supabaseClient
 
-            await supabase.auth.signOut();
+                        .from(
+                            "Professores"
+                        )
 
-            window.location.href =
-                "login.html";
+                        .select(
+                            "id, nome, email, ativo"
+                        )
 
-            return;
+                        .eq(
+                            "user_id",
+                            session.user.id
+                        )
+
+                        .maybeSingle();
+
+
+                if (
+                    professorError ||
+                    !professor
+                ) {
+
+                    await supabaseClient
+                        .auth
+                        .signOut();
+
+
+                    window.location.href =
+                        "login.html";
+
+                    return;
+
+                }
+
+
+                if (
+                    professor.ativo !== true
+                ) {
+
+                    await supabaseClient
+                        .auth
+                        .signOut();
+
+
+                    alert(
+                        "Seu acesso de professor está desativado."
+                    );
+
+
+                    window.location.href =
+                        "login.html";
+
+                    return;
+
+                }
+
+
+                professorAtual =
+                    professor;
+
+
+                document.getElementById(
+                    "nomeProfessor"
+                ).textContent =
+                    professor.nome ||
+                    professor.email;
+
+
+                await carregarAlunos();
+
+            }
+
+            catch (erro) {
+
+                console.error(
+                    "Erro ao verificar professor:",
+                    erro
+                );
+
+
+                alert(
+                    "Ocorreu um erro ao carregar o painel."
+                );
+
+
+                window.location.href =
+                    "login.html";
+
+            }
 
         }
 
 
-        professorAtual =
-            professor;
+        // ==========================================
+        // LOGOUT
+        // ==========================================
+
+        async function logout() {
+
+            await supabaseClient
+                .auth
+                .signOut();
 
 
-        document.getElementById(
-            "nomeProfessor"
-        ).textContent =
-            professor.nome ||
-            user.email;
+            window.location.href =
+                "login.html";
+
+        }
 
 
-        carregarAlunos();
+        // ==========================================
+        // INICIAR
+        // ==========================================
 
-    }
+        verificarProfessor();
 
-
-    // ==========================================
-    // LOGOUT
-    // ==========================================
-
-    async function logout() {
-
-        await supabase.auth.signOut();
-
-        window.location.href =
-            "login.html";
-
-    }
-
-
-    // ==========================================
-    // INICIALIZAÇÃO
-    // ==========================================
-
-    verificarProfessor();
-
-</script>
+    </script>
 
 </body>
+
 </html>
 ```
