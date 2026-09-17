@@ -1800,6 +1800,8 @@
 
         let semanaAtualAluno = 1;
 
+        let cicloAtualAluno = 1;
+
         let programacaoCache = {};
 
 
@@ -3853,6 +3855,10 @@
                 obterDiaSemanaAtual();
 
 
+            const hoje =
+                obterDataHoje();
+
+
             document.getElementById(
                 "dataHoje"
             ).textContent =
@@ -3878,13 +3884,8 @@
                     usuarioLogado.id
                 )
 
-                .eq(
-                    "semana",
-                    semanaAtualAluno
-                )
-
                 .order(
-                    "dia_semana",
+                    "data_atividade",
                     {
                         ascending: true
                     }
@@ -3942,8 +3943,149 @@
             }
 
 
-            const atividades =
+            const todasAtividades =
                 data || [];
+
+
+            // ==========================================
+            // DETERMINAR CICLO E SEMANA ATUAIS
+            // PELA DATA DA ATIVIDADE
+            // ==========================================
+
+            const atividadesComData =
+                todasAtividades.filter(
+
+                    atividade =>
+                        atividade.data_atividade
+
+                );
+
+
+            const atividadesPassadasOuHoje =
+                atividadesComData.filter(
+
+                    atividade =>
+                        atividade.data_atividade <= hoje
+
+                );
+
+
+            let atividadeAtual = null;
+
+
+            if (
+                atividadesPassadasOuHoje.length > 0
+            ) {
+
+                atividadesPassadasOuHoje.sort(
+
+                    (a, b) =>
+
+                        a.data_atividade.localeCompare(
+                            b.data_atividade
+                        )
+
+                );
+
+
+                atividadeAtual =
+                    atividadesPassadasOuHoje[
+                        atividadesPassadasOuHoje.length - 1
+                    ];
+
+            }
+
+            else if (
+                atividadesComData.length > 0
+            ) {
+
+                atividadesComData.sort(
+
+                    (a, b) =>
+
+                        a.data_atividade.localeCompare(
+                            b.data_atividade
+                        )
+
+                );
+
+
+                atividadeAtual =
+                    atividadesComData[0];
+
+            }
+
+
+            if (atividadeAtual) {
+
+                cicloAtualAluno =
+                    Number(
+                        atividadeAtual.ciclo
+                    ) || 1;
+
+
+                semanaAtualAluno =
+                    Number(
+                        atividadeAtual.semana
+                    ) || 1;
+
+
+                console.log(
+                    "Ciclo atual:",
+                    cicloAtualAluno
+                );
+
+
+                console.log(
+                    "Semana atual:",
+                    semanaAtualAluno
+                );
+
+
+                console.log(
+                    "Atividade usada para determinar o período atual:",
+                    atividadeAtual
+                );
+
+            }
+
+
+            // ==========================================
+            // CARREGAR SOMENTE O CICLO E SEMANA ATUAIS
+            // ==========================================
+
+            const atividades =
+                todasAtividades
+
+                    .filter(
+
+                        atividade =>
+
+                            Number(
+                                atividade.ciclo
+                            ) === cicloAtualAluno
+
+                            &&
+
+                            Number(
+                                atividade.semana
+                            ) === semanaAtualAluno
+
+                    )
+
+                    .sort(
+
+                        (a, b) =>
+
+                            Number(
+                                a.dia_semana
+                            ) -
+
+                            Number(
+                                b.dia_semana
+                            )
+
+                    );
 
 
             programacaoCache = {};
@@ -3970,9 +4112,7 @@
 
                     atividade =>
 
-                        Number(
-                            atividade.dia_semana
-                        ) === diaAtual
+                        atividade.data_atividade === hoje
 
                 );
 
@@ -4058,7 +4198,7 @@
                     )
 
                     .select(
-                        "nome, email, semana_atual"
+                        "nome, email"
                     )
 
                     .eq(
@@ -4158,23 +4298,6 @@
                     aluno.email ||
                     session.user.email ||
                     "";
-
-
-                // ==========================================
-                // SEMANA ATUAL
-                // ==========================================
-
-                semanaAtualAluno =
-
-                    Number(
-                        aluno.semana_atual
-                    ) || 1;
-
-
-                console.log(
-                    "Semana atual do aluno:",
-                    semanaAtualAluno
-                );
 
 
                 // ==========================================
