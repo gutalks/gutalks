@@ -293,6 +293,31 @@
     let perfilSelecionado = "aluno";
 
 
+    /*
+    ==========================================
+    TESTE DE CONEXÃO COM O SUPABASE
+    ==========================================
+    */
+
+    fetch("https://ddwzuqtnkkdacturmndu.supabase.co")
+        .then(function(response) {
+
+            console.log(
+                "TESTE DE CONEXÃO COM SUPABASE:",
+                response
+            );
+
+        })
+        .catch(function(error) {
+
+            console.error(
+                "ERRO NO TESTE DE CONEXÃO COM SUPABASE:",
+                error
+            );
+
+        });
+
+
     function selecionarPerfil(perfil) {
 
         perfilSelecionado = perfil;
@@ -382,9 +407,7 @@
 
                 /*
                 ==========================================
-                ALTERAÇÃO:
-                Agora mostramos o erro REAL retornado
-                pelo Supabase.
+                MOSTRAR O ERRO REAL DO SUPABASE
                 ==========================================
                 */
 
