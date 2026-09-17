@@ -1,3 +1,4 @@
+```html
 <!DOCTYPE html>
 
 <html lang="pt-BR">
@@ -379,10 +380,23 @@
                         });
 
 
+                /*
+                ==========================================
+                ALTERAÇÃO:
+                Agora mostramos o erro REAL retornado
+                pelo Supabase.
+                ==========================================
+                */
+
                 if (error) {
 
+                    console.error(
+                        "ERRO REAL DO SUPABASE:",
+                        error
+                    );
+
                     throw new Error(
-                        "E-mail ou senha incorretos."
+                        error.message
                     );
 
                 }
@@ -594,3 +608,4 @@
 </body>
 
 </html>
+```
