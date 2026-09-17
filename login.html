@@ -1,3 +1,4 @@
+```html
 <!DOCTYPE html>
 
 <html lang="pt-BR">
@@ -294,27 +295,47 @@
 
     /*
     ==========================================
-    TESTE DE CONEXÃO COM O SUPABASE
+    TESTE DE CONEXÃO COM A API REST
+    DO SUPABASE
     ==========================================
     */
 
-    fetch("https://ddwzuqtnkkdacturmndu.supabase.co")
-        .then(function(response) {
+    fetch(
+        "https://ddwzuqtnkkdacturmndu.supabase.co/rest/v1/",
+        {
+            method: "GET",
 
-            console.log(
-                "TESTE DE CONEXÃO COM SUPABASE:",
-                response
-            );
+            headers: {
+                "apikey": SUPABASE_KEY
+            }
+        }
+    )
+    .then(function(response) {
 
-        })
-        .catch(function(error) {
+        console.log(
+            "STATUS DA API REST DO SUPABASE:",
+            response.status
+        );
 
-            console.error(
-                "ERRO NO TESTE DE CONEXÃO COM SUPABASE:",
-                error
-            );
+        return response.text();
 
-        });
+    })
+    .then(function(resultado) {
+
+        console.log(
+            "RESPOSTA DA API REST DO SUPABASE:",
+            resultado
+        );
+
+    })
+    .catch(function(error) {
+
+        console.error(
+            "ERRO NO TESTE DA API REST DO SUPABASE:",
+            error
+        );
+
+    });
 
 
     function selecionarPerfil(perfil) {
@@ -629,3 +650,5 @@
 
 </body>
 
+</html>
+```
