@@ -1,653 +1,429 @@
-
 <!DOCTYPE html>
-
 <html lang="pt-BR">
-
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GUTALKS | Login</title>
 
-<meta charset="UTF-8">
-
-<meta
-    name="viewport"
-    content="width=device-width, initial-scale=1.0"
->
-
-<title>Gutalks | Login</title>
-
-
-<style>
-
-    * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-        font-family: Arial, sans-serif;
-    }
-
-    body {
-        min-height: 100vh;
-        background: #163075;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        padding: 20px;
-    }
-
-    .login-container {
-        background: #ffffff;
-        width: 100%;
-        max-width: 460px;
-        padding: 45px 35px;
-        border-radius: 16px;
-        box-shadow:
-            0 10px 30px rgba(0, 0, 0, 0.2);
-    }
-
-    .logo {
-        text-align: center;
-        color: #163075;
-        font-size: 32px;
-        font-weight: bold;
-        margin-bottom: 10px;
-    }
-
-    .subtitle {
-        text-align: center;
-        color: #666;
-        margin-bottom: 30px;
-    }
-
-    .perfil-titulo {
-        text-align: center;
-        color: #163075;
-        font-weight: bold;
-        margin-bottom: 15px;
-    }
-
-    .perfil-opcoes {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 12px;
-        margin-bottom: 25px;
-    }
-
-    .perfil-opcao {
-        border: 2px solid #e1e4eb;
-        background: white;
-        border-radius: 12px;
-        padding: 18px 10px;
-        text-align: center;
-        cursor: pointer;
-        transition: 0.2s;
-    }
-
-    .perfil-opcao:hover {
-        border-color: #163075;
-    }
-
-    .perfil-opcao.selecionado {
-        border-color: #163075;
-        background: #eef1f8;
-    }
-
-    .perfil-icone {
-        font-size: 30px;
-        margin-bottom: 8px;
-    }
-
-    .perfil-nome {
-        color: #163075;
-        font-weight: bold;
-    }
-
-    label {
-        display: block;
-        margin-bottom: 8px;
-        color: #163075;
-        font-weight: bold;
-    }
-
-    input {
-        width: 100%;
-        padding: 14px;
-        margin-bottom: 20px;
-        border: 1px solid #ddd;
-        border-radius: 8px;
-        font-size: 16px;
-    }
-
-    input:focus {
-        outline: none;
-        border-color: #163075;
-    }
-
-    #loginButton {
-        width: 100%;
-        padding: 15px;
-        border: none;
-        border-radius: 8px;
-        background: #c82623;
-        color: white;
-        font-size: 17px;
-        font-weight: bold;
-        cursor: pointer;
-    }
-
-    #loginButton:hover {
-        opacity: 0.9;
-    }
-
-    #loginButton:disabled {
-        opacity: 0.6;
-        cursor: not-allowed;
-    }
-
-    #mensagem {
-        margin-top: 20px;
-        text-align: center;
-        font-size: 14px;
-        line-height: 1.5;
-        min-height: 20px;
-    }
-
-    .voltar {
-        display: block;
-        text-align: center;
-        margin-top: 25px;
-        color: #163075;
-        text-decoration: none;
-    }
-
-    .voltar:hover {
-        text-decoration: underline;
-    }
-
-    @media (max-width: 500px) {
-
-        .login-container {
-            padding: 35px 22px;
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
 
-    }
+        body {
+            font-family: Arial, sans-serif;
+            background: #f5f5f5;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
 
-</style>
+        .login-container {
+            background: white;
+            width: 90%;
+            max-width: 420px;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 5px 25px rgba(0,0,0,0.1);
+        }
 
+        .logo {
+            text-align: center;
+            margin-bottom: 30px;
+        }
 
+        .logo h1 {
+            color: #c82623;
+            font-size: 42px;
+            margin-bottom: 5px;
+        }
+
+        .logo p {
+            color: #163075;
+            font-size: 14px;
+        }
+
+        .profile-selector {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 25px;
+        }
+
+        .profile-btn {
+            flex: 1;
+            padding: 12px;
+            border: 2px solid #163075;
+            background: white;
+            color: #163075;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: 0.3s;
+        }
+
+        .profile-btn.active {
+            background: #163075;
+            color: white;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #333;
+            font-weight: bold;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            font-size: 15px;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: #163075;
+        }
+
+        .login-btn {
+            width: 100%;
+            padding: 14px;
+            background: #c82623;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .login-btn:hover {
+            background: #a91f1c;
+        }
+
+        .login-btn:disabled {
+            background: #999;
+            cursor: not-allowed;
+        }
+
+        .error-message {
+            margin-top: 15px;
+            padding: 12px;
+            background: #ffe5e5;
+            color: #b00000;
+            border-radius: 8px;
+            display: none;
+            font-size: 14px;
+        }
+
+        .success-message {
+            margin-top: 15px;
+            padding: 12px;
+            background: #e5f7e5;
+            color: #146b14;
+            border-radius: 8px;
+            display: none;
+            font-size: 14px;
+        }
+
+        .back-link {
+            display: block;
+            text-align: center;
+            margin-top: 20px;
+            color: #163075;
+            text-decoration: none;
+            font-size: 14px;
+        }
+
+        .back-link:hover {
+            text-decoration: underline;
+        }
+    </style>
 </head>
 
 <body>
 
+    <div class="login-container">
 
-<div class="login-container">
+        <div class="logo">
+            <h1>GUTALKS</h1>
+            <p>Speak more. Fear less.</p>
+        </div>
 
-    <div class="logo">
-        GUTALKS
-    </div>
-
-    <p class="subtitle">
-        Acesse sua área na plataforma
-    </p>
-
-
-    <div class="perfil-titulo">
-        Como você deseja entrar?
-    </div>
-
-
-    <div class="perfil-opcoes">
-
-        <div
-            id="perfilAluno"
-            class="perfil-opcao selecionado"
-            onclick="selecionarPerfil('aluno')"
-        >
-
-            <div class="perfil-icone">
-                👨‍🎓
-            </div>
-
-            <div class="perfil-nome">
+        <div class="profile-selector">
+            <button type="button" class="profile-btn active" id="alunoBtn">
                 Aluno
-            </div>
+            </button>
 
-        </div>
-
-
-        <div
-            id="perfilProfessor"
-            class="perfil-opcao"
-            onclick="selecionarPerfil('professor')"
-        >
-
-            <div class="perfil-icone">
-                👨‍🏫
-            </div>
-
-            <div class="perfil-nome">
+            <button type="button" class="profile-btn" id="professorBtn">
                 Professor
+            </button>
+        </div>
+
+        <form id="loginForm">
+
+            <div class="form-group">
+                <label for="email">E-mail</label>
+                <input
+                    type="email"
+                    id="email"
+                    placeholder="Digite seu e-mail"
+                    required
+                >
             </div>
 
-        </div>
+            <div class="form-group">
+                <label for="senha">Senha</label>
+                <input
+                    type="password"
+                    id="senha"
+                    placeholder="Digite sua senha"
+                    required
+                >
+            </div>
+
+            <button type="submit" class="login-btn" id="loginBtn">
+                Entrar
+            </button>
+
+        </form>
+
+        <div class="error-message" id="errorMessage"></div>
+
+        <div class="success-message" id="successMessage"></div>
+
+        <a href="index.html" class="back-link">
+            ← Voltar para a página inicial
+        </a>
 
     </div>
 
+    <!-- Supabase -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="js/supabase.js"></script>
 
-    <form id="loginForm">
+    <!-- TESTE DE CONEXÃO DO CLIENTE SUPABASE -->
+    <script>
+        console.log("=== TESTE GUTALKS / SUPABASE ===");
+        console.log("supabaseClient:", supabaseClient);
 
-        <label for="email">
-            E-mail
-        </label>
+        supabaseClient.auth.getSession()
+            .then(function(resultado) {
+                console.log("TESTE GET SESSION:", resultado);
+            })
+            .catch(function(error) {
+                console.error("ERRO GET SESSION:", error);
+            });
+    </script>
 
-        <input
-            type="email"
-            id="email"
-            placeholder="Digite seu e-mail"
-            autocomplete="email"
-            required
-        >
+    <script>
+        let perfilSelecionado = "aluno";
 
+        const alunoBtn = document.getElementById("alunoBtn");
+        const professorBtn = document.getElementById("professorBtn");
+        const loginForm = document.getElementById("loginForm");
+        const loginBtn = document.getElementById("loginBtn");
+        const errorMessage = document.getElementById("errorMessage");
+        const successMessage = document.getElementById("successMessage");
 
-        <label for="senha">
-            Senha
-        </label>
+        alunoBtn.addEventListener("click", function() {
+            perfilSelecionado = "aluno";
 
-        <input
-            type="password"
-            id="senha"
-            placeholder="Digite sua senha"
-            autocomplete="current-password"
-            required
-        >
+            alunoBtn.classList.add("active");
+            professorBtn.classList.remove("active");
 
+            limparMensagens();
+        });
 
-        <button
-            type="submit"
-            id="loginButton"
-        >
-            Entrar
-        </button>
+        professorBtn.addEventListener("click", function() {
+            perfilSelecionado = "professor";
 
-    </form>
+            professorBtn.classList.add("active");
+            alunoBtn.classList.remove("active");
 
+            limparMensagens();
+        });
 
-    <div id="mensagem"></div>
-
-
-    <a
-        href="index.html"
-        class="voltar"
-    >
-        ← Voltar para a página inicial
-    </a>
-
-</div>
-
-
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
-<script src="js/supabase.js"></script>
-
-
-<script>
-
-    let perfilSelecionado = "aluno";
-
-
-    /*
-    ==========================================
-    TESTE DE CONEXÃO COM A API REST
-    DO SUPABASE
-    ==========================================
-    */
-
-    fetch(
-        "https://ddwzuqtnkkdacturmndu.supabase.co/rest/v1/",
-        {
-            method: "GET",
-
-            headers: {
-                "apikey": SUPABASE_KEY
-            }
+        function limparMensagens() {
+            errorMessage.style.display = "none";
+            successMessage.style.display = "none";
+            errorMessage.textContent = "";
+            successMessage.textContent = "";
         }
-    )
-    .then(function(response) {
 
-        console.log(
-            "STATUS DA API REST DO SUPABASE:",
-            response.status
-        );
-
-        return response.text();
-
-    })
-    .then(function(resultado) {
-
-        console.log(
-            "RESPOSTA DA API REST DO SUPABASE:",
-            resultado
-        );
-
-    })
-    .catch(function(error) {
-
-        console.error(
-            "ERRO NO TESTE DA API REST DO SUPABASE:",
-            error
-        );
-
-    });
-
-
-    function selecionarPerfil(perfil) {
-
-        perfilSelecionado = perfil;
-
-        document
-            .getElementById("perfilAluno")
-            .classList.toggle(
-                "selecionado",
-                perfil === "aluno"
-            );
-
-        document
-            .getElementById("perfilProfessor")
-            .classList.toggle(
-                "selecionado",
-                perfil === "professor"
-            );
-    }
-
-
-    const loginForm =
-        document.getElementById("loginForm");
-
-    const loginButton =
-        document.getElementById("loginButton");
-
-    const mensagem =
-        document.getElementById("mensagem");
-
-
-    loginForm.addEventListener(
-        "submit",
-        async function(event) {
+        loginForm.addEventListener("submit", async function(event) {
 
             event.preventDefault();
 
+            limparMensagens();
 
-            const email =
-                document
-                    .getElementById("email")
-                    .value
-                    .trim();
+            const email = document.getElementById("email").value.trim();
+            const senha = document.getElementById("senha").value;
 
-
-            const senha =
-                document
-                    .getElementById("senha")
-                    .value;
-
-
-            mensagem.textContent =
-                "Entrando...";
-
-            mensagem.style.color =
-                "#163075";
-
-
-            loginButton.disabled =
-                true;
-
-            loginButton.textContent =
-                "Entrando...";
-
+            loginBtn.disabled = true;
+            loginBtn.textContent = "Entrando...";
 
             try {
 
-                /*
-                ==========================================
-                1. AUTENTICAÇÃO
-                ==========================================
-                */
+                console.log("=== INÍCIO DO LOGIN ===");
+                console.log("E-mail:", email);
+                console.log("Perfil:", perfilSelecionado);
 
-                const {
-                    data,
-                    error
-                } =
-                    await supabaseClient
-                        .auth
-                        .signInWithPassword({
-
-                            email: email,
-
-                            password: senha
-
-                        });
-
-
-                /*
-                ==========================================
-                MOSTRAR O ERRO REAL DO SUPABASE
-                ==========================================
-                */
+                const { data, error } =
+                    await supabaseClient.auth.signInWithPassword({
+                        email: email,
+                        password: senha
+                    });
 
                 if (error) {
-
-                    console.error(
-                        "ERRO REAL DO SUPABASE:",
-                        error
-                    );
-
-                    throw new Error(
-                        error.message
-                    );
-
+                    console.error("ERRO REAL DO SUPABASE:", error);
+                    throw new Error(error.message);
                 }
 
+                console.log("LOGIN REALIZADO:", data);
 
-                if (
-                    !data ||
-                    !data.user
-                ) {
+                const user = data.user;
 
-                    throw new Error(
-                        "Usuário não encontrado."
-                    );
-
+                if (!user) {
+                    throw new Error("Usuário não encontrado após o login.");
                 }
 
+                const userId = user.id;
 
-                const userId =
-                    data.user.id;
-
+                console.log("USER ID:", userId);
 
                 /*
-                ==========================================
-                2. ALUNO
-                ==========================================
-                */
+                 * =====================================================
+                 * ALUNO
+                 * =====================================================
+                 */
 
-                if (
-                    perfilSelecionado ===
-                    "aluno"
-                ) {
+                if (perfilSelecionado === "aluno") {
 
-                    const {
-                        data: aluno,
-                        error: alunoError
-                    } =
+                    console.log("Buscando aluno na tabela Alunos...");
+
+                    const { data: aluno, error: alunoError } =
                         await supabaseClient
                             .from("Alunos")
                             .select("id")
-                            .eq(
-                                "user_id",
-                                userId
-                            )
+                            .eq("user_id", userId)
                             .maybeSingle();
-
-
-                    console.log(
-                        "Resultado aluno:",
-                        aluno
-                    );
-
-                    console.log(
-                        "Erro aluno:",
-                        alunoError
-                    );
-
 
                     if (alunoError) {
+                        console.error(
+                            "ERRO AO BUSCAR ALUNO:",
+                            alunoError
+                        );
 
                         throw new Error(
-                            "O login foi realizado, mas não foi possível verificar seu cadastro de aluno. Erro: " +
+                            "Erro ao verificar o cadastro do aluno: " +
                             alunoError.message
                         );
-
                     }
-
 
                     if (!aluno) {
-
                         throw new Error(
-                            "Esta conta não está cadastrada como aluno."
+                            "Este usuário está autenticado, mas não foi encontrado como aluno."
                         );
-
                     }
 
+                    console.log("ALUNO ENCONTRADO:", aluno);
 
-                    mensagem.textContent =
-                        "Login realizado com sucesso!";
+                    successMessage.textContent =
+                        "Login realizado! Redirecionando...";
 
+                    successMessage.style.display = "block";
 
-                    mensagem.style.color =
-                        "#218838";
-
-
-                    window.location.href =
-                        "aluno.html";
-
-
-                    return;
+                    setTimeout(function() {
+                        window.location.href = "aluno.html";
+                    }, 500);
                 }
 
-
                 /*
-                ==========================================
-                3. PROFESSOR
-                ==========================================
-                */
+                 * =====================================================
+                 * PROFESSOR
+                 * =====================================================
+                 */
 
-                if (
-                    perfilSelecionado ===
-                    "professor"
-                ) {
-
-                    const {
-                        data: professor,
-                        error: professorError
-                    } =
-                        await supabaseClient
-                            .from("Professores")
-                            .select(
-                                "id, ativo"
-                            )
-                            .eq(
-                                "user_id",
-                                userId
-                            )
-                            .maybeSingle();
-
+                else {
 
                     console.log(
-                        "Resultado professor:",
+                        "Buscando professor na tabela Professores..."
+                    );
+
+                    const { data: professor, error: professorError } =
+                        await supabaseClient
+                            .from("Professores")
+                            .select("id, ativo")
+                            .eq("user_id", userId)
+                            .maybeSingle();
+
+                    if (professorError) {
+                        console.error(
+                            "ERRO AO BUSCAR PROFESSOR:",
+                            professorError
+                        );
+
+                        throw new Error(
+                            "Erro ao verificar o cadastro do professor: " +
+                            professorError.message
+                        );
+                    }
+
+                    if (!professor) {
+                        throw new Error(
+                            "Este usuário está autenticado, mas não foi encontrado como professor."
+                        );
+                    }
+
+                    if (professor.ativo === false) {
+                        throw new Error(
+                            "Este professor está com o acesso desativado."
+                        );
+                    }
+
+                    console.log(
+                        "PROFESSOR ENCONTRADO:",
                         professor
                     );
 
-                    console.log(
-                        "Erro professor:",
-                        professorError
-                    );
+                    successMessage.textContent =
+                        "Login realizado! Redirecionando...";
 
+                    successMessage.style.display = "block";
 
-                    if (professorError) {
-
-                        throw new Error(
-                            "O login foi realizado, mas não foi possível verificar seu cadastro de professor. Erro: " +
-                            professorError.message
-                        );
-
-                    }
-
-
-                    if (!professor) {
-
-                        throw new Error(
-                            "Esta conta não está cadastrada como professor."
-                        );
-
-                    }
-
-
-                    if (
-                        professor.ativo !== true
-                    ) {
-
-                        throw new Error(
-                            "Seu acesso de professor está desativado."
-                        );
-
-                    }
-
-
-                    mensagem.textContent =
-                        "Login realizado com sucesso!";
-
-
-                    mensagem.style.color =
-                        "#218838";
-
-
-                    window.location.href =
-                        "professor.html";
-
-
-                    return;
+                    setTimeout(function() {
+                        window.location.href = "professor.html";
+                    }, 500);
                 }
 
+            } catch (error) {
+
+                console.error("=== ERRO FINAL DO LOGIN ===");
+                console.error(error);
+
+                errorMessage.textContent =
+                    error.message || "Erro ao realizar login.";
+
+                errorMessage.style.display = "block";
+
+            } finally {
+
+                loginBtn.disabled = false;
+                loginBtn.textContent = "Entrar";
             }
 
-            catch (error) {
-
-                console.error(
-                    "Erro completo no login:",
-                    error
-                );
-
-
-                mensagem.textContent =
-                    error.message ||
-                    "Não foi possível entrar.";
-
-
-                mensagem.style.color =
-                    "#c82623";
-
-
-                loginButton.disabled =
-                    false;
-
-                loginButton.textContent =
-                    "Entrar";
-
-            }
-
-        }
-    );
-
-</script>
-
+        });
+    </script>
 
 </body>
-
 </html>
